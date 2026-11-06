@@ -1,4 +1,4 @@
-# XRainier portal
+# XRainier Portal
 
 Static website for **xrainier.com**: the XRainier home page and one page per product (SkyAbove first).
 No build step: plain HTML, CSS and JavaScript.
