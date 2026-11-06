@@ -111,3 +111,5 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--mut);fon
 .promo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:26px 0 0;padding:14px 16px;border-radius:12px;background:linear-gradient(90deg,rgba(34,225,255,.12),rgba(168,85,247,.14));border:1px solid rgba(34,225,255,.4);box-shadow:0 0 30px rgba(34,225,255,.12)}
 .promo[hidden]{display:none}.promo .pz{font-size:26px}.promo b{display:block}.promo small{color:#b9c3df}.promo code{font:700 13px "JetBrains Mono",ui-monospace,monospace;color:var(--cy);background:rgba(34,225,255,.1);padding:2px 6px;border-radius:4px}
 .promo .btn{margin-left:auto}
+
+.betatag{position:fixed;left:50%;top:0;transform:translateX(-50%);z-index:200;background:#ffb900;color:#1f1f1f;font:700 11px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.12em;padding:4px 12px 5px;border-radius:0 0 4px 4px;box-shadow:0 1px 4px rgba(0,0,0,.35);pointer-events:none}

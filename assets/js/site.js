@@ -1,5 +1,12 @@
 // XRainier portal: menu, scroll reveal, screenshots (with placeholders), lightbox, section highlight.
 (() => {
+  // beta.xrainier.com (or any address with "beta" in it) uses the beta SkyAbove server and shows a BETA tag
+  const BETA = /(^|[.-])beta([.-]|$)/.test(location.hostname);
+  if (BETA) {
+    const m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m);
+    document.querySelectorAll('a[href^="https://skyabove.xrainier.com"]').forEach((a) => (a.href = a.href.replace('://skyabove.', '://beta.skyabove.')));
+    const b = document.createElement('div'); b.className = 'betatag'; b.textContent = 'BETA'; document.body.appendChild(b); document.title = '[BETA] ' + document.title;
+  }
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   // mobile menu
   const menu = $('.menu'), links = $('.links');
@@ -34,10 +41,10 @@
   $$('[data-year]').forEach((el) => (el.textContent = new Date().getFullYear()));
   // featured SkyAbove promotion (set in the SkyAbove admin, Promotions tab → ★)
   const slots = $$('[data-promo]');
-  if (slots.length) fetch('https://api.skyabove.xrainier.com/promo/featured').then((r) => r.json()).then((f) => {
+  if (slots.length) fetch((BETA ? 'https://api-beta.skyabove.xrainier.com' : 'https://api.skyabove.xrainier.com') + '/promo/featured').then((r) => r.json()).then((f) => {
     if (!f || !f.code) return;
     const esc = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const until = f.ends ? new Date(f.ends).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
-    slots.forEach((el) => { el.innerHTML = `<span class="pz">🎁</span><span><b>${esc(f.banner || f.label)}</b><small>Use code <code>${esc(f.code)}</code>${until ? ' · until ' + until : ''}</small></span><a class="btn pri" href="https://skyabove.xrainier.com/?promo=${encodeURIComponent(f.code)}">Get the offer</a>`; el.hidden = false; });
+    slots.forEach((el) => { el.innerHTML = `<span class="pz">🎁</span><span><b>${esc(f.banner || f.label)}</b><small>Use code <code>${esc(f.code)}</code>${until ? ' · until ' + until : ''}</small></span><a class="btn pri" href="https://${BETA ? 'beta.' : ''}skyabove.xrainier.com/?promo=${encodeURIComponent(f.code)}">Get the offer</a>`; el.hidden = false; });
   }).catch(() => {});
 })();
