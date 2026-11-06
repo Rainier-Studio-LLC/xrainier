@@ -1,0 +1,7 @@
+{
+  "name": "xrainier-tools",
+  "private": true,
+  "type": "module",
+  "scripts": { "capture": "node capture.mjs" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}
