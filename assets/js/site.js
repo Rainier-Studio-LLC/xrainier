@@ -32,4 +32,12 @@
     sub.forEach((a) => { const t = document.querySelector(a.getAttribute('href')); if (t) so.observe(t); });
   }
   $$('[data-year]').forEach((el) => (el.textContent = new Date().getFullYear()));
+  // featured SkyAbove promotion (set in the SkyAbove admin, Promotions tab → ★)
+  const slots = $$('[data-promo]');
+  if (slots.length) fetch('https://api.skyabove.xrainier.com/promo/featured').then((r) => r.json()).then((f) => {
+    if (!f || !f.code) return;
+    const esc = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const until = f.ends ? new Date(f.ends).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+    slots.forEach((el) => { el.innerHTML = `<span class="pz">🎁</span><span><b>${esc(f.banner || f.label)}</b><small>Use code <code>${esc(f.code)}</code>${until ? ' · until ' + until : ''}</small></span><a class="btn pri" href="https://skyabove.xrainier.com/?promo=${encodeURIComponent(f.code)}">Get the offer</a>`; el.hidden = false; });
+  }).catch(() => {});
 })();

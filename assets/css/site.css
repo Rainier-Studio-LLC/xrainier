@@ -106,3 +106,8 @@ footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--mut);fon
 .appid{display:flex;align-items:center;gap:18px;margin-bottom:22px}.appid img{width:84px;height:84px;border-radius:20px;box-shadow:0 12px 34px rgba(0,120,215,.5)}
 .subnav{position:sticky;top:64px;z-index:40;background:rgba(4,6,14,.75);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .subnav .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;height:48px;align-items:center}.subnav a{white-space:nowrap;color:#aab6d8;font-size:14px;padding:6px 12px;border-radius:6px}.subnav a:hover,.subnav a.on{color:#fff;background:rgba(120,170,255,.1)}
+
+/* featured promotion */
+.promo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:26px 0 0;padding:14px 16px;border-radius:12px;background:linear-gradient(90deg,rgba(34,225,255,.12),rgba(168,85,247,.14));border:1px solid rgba(34,225,255,.4);box-shadow:0 0 30px rgba(34,225,255,.12)}
+.promo[hidden]{display:none}.promo .pz{font-size:26px}.promo b{display:block}.promo small{color:#b9c3df}.promo code{font:700 13px "JetBrains Mono",ui-monospace,monospace;color:var(--cy);background:rgba(34,225,255,.1);padding:2px 6px;border-radius:4px}
+.promo .btn{margin-left:auto}
