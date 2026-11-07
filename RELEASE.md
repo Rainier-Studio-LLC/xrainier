@@ -1,10 +1,10 @@
 # Releasing (beta → main)
 
-- **beta** = where you work and test. **main** = live. Cloudflare deploys whatever is on each branch.
+- **beta** = where you work and test. The repo's **default branch** (main, or **master** in the skyabove repo) = live. Cloudflare deploys whatever is on each branch.
 - **Checks** run by themselves on every push to beta or main and on pull requests (Actions tab → Checks).
 
 ## Release
-1. GitHub → this repo → **Actions** → **Release (beta → main)** → **Run workflow**.
+1. GitHub → this repo → **Actions** → **Release (beta → live)** → **Run workflow**.
 2. Type `RELEASE`, optionally add a note, and press **Run workflow**.
 3. The checks run on beta. If they pass, main moves forward to the exact beta commit you tested, and the release is tagged (for example `v2026.11.06`). The run's summary lists every change that went out.
 4. Cloudflare deploys main. Open the live site and press Ctrl+F5.
