@@ -57,6 +57,8 @@ h3{font-size:20px;font-weight:700}
 @keyframes ping{0%,100%{opacity:.35;transform:scale(.8)}10%{opacity:1;transform:scale(1.2)}40%{opacity:.8;transform:scale(1)}}
 .radar .center{position:absolute;left:50%;top:50%;width:62px;margin:-36px 0 0 -31px;filter:drop-shadow(0 0 10px rgba(34,225,255,.6))}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* the home-page radar keeps sweeping (slower) even with reduced motion: it is the portal's signature and moves gently */
+@media (prefers-reduced-motion:reduce){.radar .sweep{animation:spin 8s linear infinite!important}.blip{animation:ping 8s infinite!important}}
 /* products */
 .grid{display:grid;gap:20px}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
 @media(max-width:920px){.g3{grid-template-columns:1fr 1fr}}@media(max-width:620px){.g3,.g2{grid-template-columns:1fr}}
