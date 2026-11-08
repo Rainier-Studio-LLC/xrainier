@@ -5,6 +5,8 @@
 //   SITE=https://skyabove.xrainier.com   LAT=47.45 LON=-122.30 (where the radar looks; default: near Seattle–Tacoma airport)
 //   SKYLINK=<id>      a Sky Link id to capture link.html (optional)
 //   HEADED=1          show the browser while it works
+//   TOKEN=<token>     your SkyAbove sign-in token (Pro), so 2D/3D replay is captured too. In SkyAbove on your PC: F12 → Console →
+//                     copy(localStorage.getItem('skyabove.token'))   then paste it after TOKEN=
 import { chromium, devices } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -22,6 +24,7 @@ const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ---- desktop ----
 const desk = await browser.newContext({ ...ctxOpts, viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.5 });
+if (process.env.TOKEN) await desk.addInitScript((t) => { try { localStorage.setItem('skyabove.token', t); } catch (e) {} }, process.env.TOKEN.trim());
 const page = await desk.newPage();
 let replayHref = null;
 
@@ -57,7 +60,7 @@ await step('showcase.jpg', async () => {
 });
 
 await step('replay2d.jpg + replay3d.jpg', async () => {
-  if (!replayHref) throw new Error('no replay link found in the flight panel');
+  if (!replayHref) throw new Error(process.env.TOKEN ? 'no replay link found in the flight panel' : 'replay is Pro: run again with TOKEN=… (see the top of this file)');
   const u = new URL(replayHref, SITE + '/').href;
   await page.goto(u, { waitUntil: 'domcontentloaded' });
   await pause(9000);
