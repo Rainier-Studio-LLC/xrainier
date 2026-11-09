@@ -47,4 +47,31 @@
     const until = f.ends ? new Date(f.ends).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
     slots.forEach((el) => { el.innerHTML = `<span class="pz">🎁</span><span><b>${esc(f.banner || f.label)}</b><small>Use code <code>${esc(f.code)}</code>${until ? ' · until ' + until : ''}</small></span><a class="btn pri" href="https://${BETA ? 'beta.' : ''}skyabove.xrainier.com/?promo=${encodeURIComponent(f.code)}">Get the offer</a>`; el.hidden = false; });
   }).catch(() => {});
+  // products on the site: chosen in the XRainier admin (admin.xrainier.com → Website; beta.xrainier.com uses admin-beta).
+  // A hidden product leaves the top menu, header buttons, footer and home-page cards on every page; its own page still works.
+  // The last known setting is applied at once (no flicker), then the latest one. If it can't be loaded, everything shows.
+  const PKEY = 'xr.products' + (BETA ? '.beta' : ''), PAPI = (BETA ? 'https://admin-beta.xrainier.com' : 'https://admin.xrainier.com') + '/api/products';
+  const WORDS = ['No products', 'One product', 'Two products', 'Three products', 'Four products', 'Five products', 'Six products', 'Seven products', 'Eight products', 'Nine products'];
+  const prodOf = (el) => {
+    if (el.dataset.product) return el.dataset.product;
+    const h = el.getAttribute('href') || '', m = /^\/([a-z0-9-]+)\.html(?:[?#].*)?$/i.exec(h) || /^https?:\/\/(?:beta\.)?([a-z0-9-]+)\.xrainier\.com\/?(?:[?#].*)?$/i.exec(h);
+    return m ? m[1].toLowerCase() : null;
+  };
+  const applyProducts = (c) => {
+    if (!c || !Array.isArray(c.products) || !c.products.length) return;
+    const show = {}, ord = {}; c.products.forEach((p, i) => { show[p.id] = !!p.show; ord[p.id] = i; });
+    const shown = new Set();
+    $$('[data-product], header a[href], nav a[href], footer a[href]').forEach((el) => {
+      const id = prodOf(el); if (!id || !(id in show)) return;
+      el.style.display = show[id] ? '' : 'none'; if (show[id] && el.matches('[data-product]')) shown.add(id);
+    });
+    const g = $('#products .grid');
+    if (g) { const cards = [...g.children].filter((e) => e.dataset.product), rest = [...g.children].filter((e) => !e.dataset.product);
+      cards.sort((a, b) => (ord[a.dataset.product] ?? 99) - (ord[b.dataset.product] ?? 99)); [...cards, ...rest].forEach((e) => g.appendChild(e)); }
+    const n = [...shown].length;
+    $$('[data-live-count]').forEach((e) => (e.textContent = n));
+    $$('[data-live-words]').forEach((e) => (e.textContent = WORDS[n] || n + ' products'));
+  };
+  try { applyProducts(JSON.parse(localStorage.getItem(PKEY))); } catch (e) {}
+  fetch(PAPI).then((r) => (r.ok ? r.json() : null)).then((c) => { if (c && c.products) { try { localStorage.setItem(PKEY, JSON.stringify(c)); } catch (e) {} applyProducts(c); } }).catch(() => {});
 })();

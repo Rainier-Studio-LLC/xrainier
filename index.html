@@ -92,16 +92,6 @@
  <span>© <span data-year>2026</span> Rainier Studio LLC<br><small style="color:#6f7a99">XRainier is a trademark of Rainier Studio LLC.</small></span><span class="sp"></span>
  <a href="/skyabove.html" data-product="skyabove">SkyAbove</a><a href="/tankwar.html" data-product="tankwar">TankWar</a><a href="https://skyabove.xrainier.com/privacy.html">Privacy</a><a href="mailto:support@xrainier.com">Support</a>
 </div></footer>
-<script>/* Products shown here are set in the SkyAbove owner dashboard (Website tab). Last known setting first (no flicker), then the latest. */
-(function(){var B=/(^|[.-])beta([.-]|$)/.test(location.hostname),API=B?'https://api-beta.skyabove.xrainier.com':'https://api.skyabove.xrainier.com',K='xr.products'+(B?'.beta':'');
-var W=['No products','One product','Two products','Three products','Four products','Five products','Six products','Seven products','Eight products','Nine products'];
-function apply(c){if(!c||!c.products||!c.products.length)return;var show={},ord={};c.products.forEach(function(p,i){show[p.id]=!!p.show;ord[p.id]=i});
- var shown={};[].forEach.call(document.querySelectorAll('[data-product]'),function(el){var id=el.getAttribute('data-product');if(!(id in show))return;el.style.display=show[id]?'':'none';if(show[id])shown[id]=1});
- var g=document.querySelector('#products .grid');if(g){var cards=[].filter.call(g.children,function(e){return e.hasAttribute('data-product')}),tail=[].filter.call(g.children,function(e){return!e.hasAttribute('data-product')});
-  cards.sort(function(a,b){var x=ord[a.getAttribute('data-product')],y=ord[b.getAttribute('data-product')];return(x==null?99:x)-(y==null?99:y)});cards.concat(tail).forEach(function(e){g.appendChild(e)})}
- var n=Object.keys(shown).length;[].forEach.call(document.querySelectorAll('[data-live-count]'),function(e){e.textContent=n});[].forEach.call(document.querySelectorAll('[data-live-words]'),function(e){e.textContent=W[n]||(n+' products')})}
-try{apply(JSON.parse(localStorage.getItem(K)))}catch(e){}
-fetch(API+'/site/products').then(function(r){return r.ok?r.json():null}).then(function(c){if(c&&c.products){try{localStorage.setItem(K,JSON.stringify(c))}catch(e){}apply(c)}}).catch(function(){})})();</script>
 <script src="/assets/js/site.js" defer></script>
 
 </body></html>
