@@ -3,5 +3,15 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()
   X-Frame-Options: SAMEORIGIN
-/assets/*
+# Scripts and styles: browsers re-check on every visit (a quick 304 when unchanged), so a deploy shows up without Ctrl+F5.
+/assets/js/*
+  Cache-Control: no-cache
+/assets/css/*
+  Cache-Control: no-cache
+# Pictures rarely change: keep them for a day.
+/assets/img/*
+  Cache-Control: public, max-age=86400
+/assets/og/*
+  Cache-Control: public, max-age=86400
+/assets/shots/*
   Cache-Control: public, max-age=86400
