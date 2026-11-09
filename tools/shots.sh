@@ -30,8 +30,8 @@ npx playwright install chromium >/dev/null 2>&1 || npx playwright install --with
 node capture.mjs
 cd ..
 
-ls -la assets/shots/
-git add assets/shots
+ls -la web/assets/shots/
+git add web/assets/shots
 if git diff --cached --quiet; then echo "No new pictures to publish."; exit 0; fi
 git commit -q -m "Product page: real SkyAbove screenshots"
 git push -q origin beta

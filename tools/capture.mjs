@@ -1,4 +1,4 @@
-// Takes real screenshots of SkyAbove for the XRainier site and saves them to ../assets/shots/.
+// Takes real screenshots of SkyAbove for the XRainier site and saves them to ../web/assets/shots/.
 // One-time setup (in this tools folder):  npm install   then   npx playwright install --with-deps chromium
 // Run:  node capture.mjs
 // Options (environment variables):
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const SITE = (process.env.SITE || 'https://skyabove.xrainier.com').replace(/\/$/, '');
 const LAT = +(process.env.LAT || 47.45), LON = +(process.env.LON || -122.30);
-const OUT = fileURLToPath(new URL('../assets/shots/', import.meta.url));
+const OUT = fileURLToPath(new URL('../web/assets/shots/', import.meta.url));
 await mkdir(OUT, { recursive: true });
 
 const browser = await chromium.launch({ headless: !process.env.HEADED, args: ['--use-gl=angle', '--enable-webgl', '--ignore-gpu-blocklist'] });
@@ -91,4 +91,4 @@ await step('radar-phone.jpg', async () => {
 });
 
 await browser.close();
-console.log("\nDone. Check the pictures in assets/shots/, retake any you don't like (HEADED=1 shows the browser), then commit them.");
+console.log("\nDone. Check the pictures in web/assets/shots/, retake any you don't like (HEADED=1 shows the browser), then commit them.");

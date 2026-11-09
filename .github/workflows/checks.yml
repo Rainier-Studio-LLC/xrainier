@@ -18,6 +18,6 @@ jobs:
         with:
           node-version: 20
       - name: Site script compiles
-        run: node --check assets/js/site.js
+        run: node --check web/assets/js/site.js
       - name: Pages load without errors
-        run: node tools/check-pages.mjs .
+        run: node tools/check-pages.mjs web

@@ -1,0 +1,6 @@
+// Live site: xrainier.com and www.xrainier.com (Worker "xrainier", builds from main). Only web/ is published.
+{
+  "name": "xrainier",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./web", "not_found_handling": "404-page" }
+}

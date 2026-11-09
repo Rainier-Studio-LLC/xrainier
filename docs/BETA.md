@@ -49,7 +49,7 @@ Make a second project for each site, connected to the same repo, with **producti
 - **skyabove-beta** (Pages): repo `skyabove`, build command empty, output `web`, custom domain `beta.skyabove.xrainier.com`.
 - **skyabove-admin-beta**: same kind as your live admin. As a Pages project: output `admin`. As a Worker: deploy command
   `npx wrangler deploy --assets=./admin --name=skyabove-admin-beta --compatibility-date=2026-11-04`. Custom domain `beta-admin.skyabove.xrainier.com`.
-- **xrainier-beta** (Pages): repo `xrainier`, build command empty, output `/`, custom domain `beta.xrainier.com`.
+- **xrainier-beta** (Worker): repo `xrainier`, branch `beta`, deploy command `npx wrangler deploy -c wrangler.beta.jsonc` (publishes `web/`), custom domain `beta.xrainier.com`.
 
 Set the production branch under Settings → Builds → Branch control. In the **live** projects, keep production = `main`
 and set preview deployments to **None**, so beta pushes don't create extra previews there.
