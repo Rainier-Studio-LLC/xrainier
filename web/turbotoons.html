@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04060e"><link rel="icon" type="image/png" href="/assets/img/favicon.png"><link rel="apple-touch-icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&family=Lilita+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="preload" as="image" href="/assets/img/turbotoons/hero.jpg" fetchpriority="high">
+<title>TurboToons · Cartoon racing in your browser · XRainier</title>
+<meta name="description" content="TurboToons is a free cartoon racing game in your browser. Drift to boost, draft for speed and race up to 8 players online across 4 Pacific-Northwest worlds, or share any track as a 10-character code. Go Pro for all 8 cars and private lobbies.">
+<meta property="og:title" content="TurboToons · Cartoon racing in your browser"><meta property="og:description" content="Cartoon cars, real racing: drift to boost, race 8 players online and share any track as a 10-character code. Play free in your browser.">
+<meta property="og:image" content="https://xrainier.com/assets/img/turbotoons/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Cartoon cars drifting on a mountain road below Mount Rainier at sunset, with the TurboToons logo">
+<meta property="og:url" content="https://xrainier.com/turbotoons.html"><meta property="og:type" content="website"><meta property="og:site_name" content="XRainier">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="TurboToons · Cartoon racing in your browser"><meta name="twitter:description" content="Drift to boost, race 8 players online across 4 Pacific-Northwest worlds and share tracks as codes. Play free in your browser."><meta name="twitter:image" content="https://xrainier.com/assets/img/turbotoons/og.jpg">
+<link rel="canonical" href="https://xrainier.com/turbotoons.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"TurboToons","url":"https://xrainier.com/turbotoons.html","sameAs":"https://turbotoons.xrainier.com/","image":"https://xrainier.com/assets/img/turbotoons/og.jpg","description":"Free cartoon racing in the browser. Drift to boost, slipstream and jump across 4 Pacific-Northwest worlds, race up to 8 players online, duel friends' ghosts and share any track as a 10-character code.","genre":["Racing","Arcade"],"gamePlatform":"Web Browser","applicationCategory":"Game","operatingSystem":"Any modern browser with WebGL2","playMode":["SinglePlayer","MultiPlayer"],"numberOfPlayers":{"@type":"QuantitativeValue","minValue":1,"maxValue":12},"publisher":{"@type":"Organization","name":"Rainier Studio LLC","url":"https://xrainier.com/","email":"support@xrainier.com"},"offers":[{"@type":"Offer","name":"TurboToons Free","price":"0","priceCurrency":"USD","url":"https://turbotoons.xrainier.com/play.html"},{"@type":"Offer","name":"TurboToons Pro","price":"14.99","priceCurrency":"USD","url":"https://turbotoons.xrainier.com/pro.html","priceSpecification":{"@type":"UnitPriceSpecification","price":"14.99","priceCurrency":"USD","unitText":"year","billingDuration":"P1Y"}}]}</script>
+<style>
+.tt{--or:#ff6b2c;--or2:#ffa36b;--mg:#ff3d81;--mg2:#ff8ab4;--sun:#ffc23d;--ink:#eef2ff;--mut2:#9aa6c4;--line:rgba(160,190,255,.14);--card:rgba(12,17,32,.72);--grad:linear-gradient(100deg,#ff6b2c,#ff3d81);overflow-x:clip}
+.tt *{box-sizing:border-box}
+.tt img{max-width:100%;display:block}
+.tt a:focus-visible,.tt summary:focus-visible{outline:2px solid var(--sun);outline-offset:3px;border-radius:6px}
+.tt .tt-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tt .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.tt .tt-sec{padding:96px 0;position:relative}
+.tt .tt-sec h2{font-family:Orbitron,Inter,sans-serif;font-weight:800;letter-spacing:.02em;font-size:clamp(28px,4.2vw,46px);line-height:1.08;margin:14px 0 14px;color:var(--ink)}
+.tt .tt-sec .lead{max-width:760px}
+.tt .tt-or{color:var(--or)}
+.tt .tt-gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tt .kick.tt-k{color:var(--or)}
+.tt .tt-k::before{content:"";display:inline-block;width:22px;height:2px;background:linear-gradient(90deg,var(--or),var(--mg));vertical-align:middle;margin-right:10px;opacity:.9}
+
+/* hero */
+.tt-hero{position:relative;min-height:min(92vh,900px);display:grid;align-items:end;isolation:isolate;overflow:hidden;padding:140px 0 70px}
+.tt-hero .bg{position:absolute;inset:0;z-index:-2}
+.tt-hero .bg img{width:100%;height:100%;object-fit:cover;object-position:22% 60%;transform-origin:60% 65%;animation:ttzoom 28s ease-in-out infinite alternate}
+.tt-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(4,6,14,.92) 0%,rgba(4,6,14,.68) 34%,rgba(4,6,14,.22) 54%,rgba(4,6,14,.04) 68%,rgba(4,6,14,.12) 100%),linear-gradient(0deg,#04060e 0%,rgba(4,6,14,0) 38%),linear-gradient(180deg,rgba(4,6,14,.85) 0%,rgba(4,6,14,0) 22%)}
+.tt-speed{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.tt-speed i{position:absolute;height:2px;border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75));opacity:0;animation:ttline 2.6s linear infinite}
+.tt-speed i:nth-child(1){top:22%;width:200px}.tt-speed i:nth-child(2){top:38%;width:130px;animation-delay:.8s;animation-duration:2.1s}
+.tt-speed i:nth-child(3){top:55%;width:240px;animation-delay:1.4s;background:linear-gradient(90deg,rgba(255,107,44,0),rgba(255,150,90,.85))}
+.tt-speed i:nth-child(4){top:71%;width:170px;animation-delay:.4s;animation-duration:1.9s;background:linear-gradient(90deg,rgba(255,61,129,0),rgba(255,120,170,.85))}
+.tt-hero>.wrap{min-width:0}
+.tt-hero h1{font-family:"Lilita One",Inter,sans-serif;font-weight:400;font-size:clamp(46px,11vw,140px);overflow-wrap:anywhere;line-height:.9;letter-spacing:.02em;margin:18px 0 12px;color:var(--ink);text-shadow:0 5px 0 rgba(150,30,70,.85),0 10px 44px rgba(0,0,0,.55)}
+.tt-hero h1 b{font-weight:400;background:linear-gradient(180deg,#ffd23d 0%,#ff8a2c 55%,#ff4f6e 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tt-hero .sub{font-size:clamp(20px,2.4vw,28px);font-weight:700;color:var(--ink);margin:0 0 14px;max-width:640px;line-height:1.25}
+.tt-hero .lead{max-width:560px;color:#d3daec}
+.tt-hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.tt-hero .tags{margin-top:22px}
+.tt-hud{position:absolute;inset:96px 28px 28px;pointer-events:none;z-index:-1}
+.tt-hud .rd{position:absolute;right:14px;top:14px;text-align:right;font:600 11px/1.7 "JetBrains Mono",monospace;letter-spacing:.14em;color:rgba(238,242,255,.8);text-transform:uppercase;background:rgba(4,6,14,.45);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
+.tt-hud .rd b{color:var(--sun)}
+.tt-hud .lt{display:inline-block;width:8px;height:8px;border-radius:50%;background:#4ee6a6;margin-right:8px;animation:ttblink 1.6s steps(2) infinite}
+.tt-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(255,107,44,.08),rgba(255,61,129,.07));position:relative}
+.tt-strip ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.tt-strip li{padding:22px 18px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.tt-strip li:first-child{border-left:0}
+.tt-strip b{font-family:Orbitron,Inter,sans-serif;font-size:clamp(24px,3vw,34px);color:var(--ink)}
+.tt-strip span{font:600 11px/1.4 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+
+/* how it plays */
+.tt-how{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.tt-feat{padding:22px;border-radius:16px;background:var(--card);border:1px solid var(--line);transition:transform .25s ease,border-color .25s ease}
+.tt-feat:hover{transform:translateY(-3px);border-color:rgba(255,107,44,.45)}
+.tt-feat svg{width:26px;height:26px;stroke:var(--or);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tt-feat h3{font-size:17px;margin:12px 0 6px;color:var(--ink)}
+.tt-feat p{margin:0;font-size:14px;color:#b4bed6;line-height:1.55}
+.tt-sparks{display:flex;gap:6px;margin-top:12px}
+.tt-sparks span{font:600 10px/1 "JetBrains Mono",monospace;letter-spacing:.12em;padding:5px 7px;border-radius:6px;background:rgba(4,6,14,.6)}
+.tt-sparks .s1{color:#8fd8ff;border:1px solid rgba(79,195,255,.5)}.tt-sparks .s2{color:var(--or2);border:1px solid rgba(255,107,44,.5)}.tt-sparks .s3{color:#c9a6ff;border:1px solid rgba(170,110,255,.5)}
+
+/* worlds */
+.tt-fields{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.tt-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;transition:transform .25s ease,border-color .25s ease}
+.tt-card:hover{transform:translateY(-3px);border-color:rgba(255,107,44,.45)}
+.tt-card figure{margin:0}
+.tt-card .ph{aspect-ratio:4/3;overflow:hidden;background:#0b1020}
+.tt-card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.tt-card:hover .ph img{transform:scale(1.04)}
+.tt-card .bd{padding:18px 20px 22px}
+.tt-card h3{font-size:19px;margin:0 0 6px;color:var(--ink)}
+.tt-card p{margin:0;color:#b9c3da;font-size:15px;line-height:1.55}
+.tt-card .wx{display:block;margin-top:12px;color:#7f8bab;font-size:12px}
+.tt-lbl{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+.tt-letter{position:absolute;top:12px;left:12px;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font:700 15px "JetBrains Mono",monospace;background:rgba(4,6,14,.75);border:1px solid rgba(255,107,44,.6);color:var(--or2)}
+
+/* track codes */
+.tt-codes{margin-top:44px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:34px;align-items:center}
+.tt-code{display:flex;flex-wrap:wrap;gap:8px;font:600 clamp(28px,4.4vw,52px)/1 "JetBrains Mono",monospace;color:var(--ink)}
+.tt-code span{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 14px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.tt-code span:nth-child(1){border-color:rgba(255,107,44,.6);color:var(--or2)}
+.tt-code span:nth-child(2),.tt-code span:nth-child(3),.tt-code span:nth-child(4){border-color:rgba(255,194,61,.45);color:var(--sun)}
+.tt-code span.dash{background:none;border:0;padding:16px 0 12px;color:var(--mut2)}
+.tt-code span:last-child{border-color:rgba(255,61,129,.55);color:var(--mg2);letter-spacing:.06em}
+.tt-code small{font:600 10px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+.tt-codes ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px}
+.tt-codes li{display:flex;gap:12px;align-items:flex-start;color:#d0d8ea;line-height:1.5}
+.tt-codes li svg{flex:none;width:22px;height:22px;stroke:var(--mg);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+
+/* garage */
+.tt-shot{position:relative;margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4)}
+.tt-shot img{width:100%;height:auto}
+.tt-shot.tt-garage{margin-top:40px;background:#d9dde6}
+.tt-shot.tt-garage img{aspect-ratio:16/7;object-fit:cover;object-position:50% 58%}
+.tt-cars{list-style:none;padding:0;margin:22px 0 0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.tt-cars li{position:relative;padding:14px 12px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--c)}
+.tt-cars b{display:block;color:var(--ink);font-size:15px}
+.tt-cars span{display:block;font-size:12px;color:#9aa6c4;margin-top:2px}
+.tt-badge{display:inline-block;margin-top:8px;font:700 9px/1 "JetBrains Mono",monospace;letter-spacing:.14em;padding:5px 6px;border-radius:5px;background:rgba(4,6,14,.75);border:1px solid rgba(160,190,255,.3);color:#cfd7ea}
+.tt-badge.free{border-color:rgba(134,239,172,.6);color:#86efac}
+.tt-badge.pro{border-color:rgba(255,61,129,.6);color:var(--mg2)}
+
+/* online */
+.tt-online{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:center}
+.tt-feats{margin-top:26px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tt-big{font-family:Orbitron,Inter,sans-serif;font-size:clamp(46px,6vw,74px);line-height:1;color:var(--ink);letter-spacing:.02em}
+.tt-big small{font-size:.38em;color:var(--mut2);letter-spacing:.12em;margin:0 .2em}
+
+/* gallery */
+.tt-gal{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:200px;gap:14px}
+.tt-gal figure{margin:0;position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b1020}
+.tt-gal img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.tt-gal figure:hover img{transform:scale(1.04)}
+.tt-gal .w2{grid-column:span 2}.tt-gal .h2{grid-row:span 2}
+.tt-gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(0deg,rgba(4,6,14,.92),rgba(4,6,14,0));font-size:13px;color:#e6ebf7;line-height:1.35}
+.tt-gal figcaption b{display:block;font:600 10px/1.4 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--or2)}
+
+/* plans */
+.tt-plans{margin-top:40px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
+.tt-plans table{width:100%;border-collapse:collapse;font-size:15px}
+.tt-plans caption{text-align:left;padding:0;height:0;overflow:hidden}
+.tt-plans th,.tt-plans td{padding:16px 22px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;color:#d0d8ea}
+.tt-plans thead th{padding:26px 22px;vertical-align:top;border-bottom:1px solid rgba(160,190,255,.22)}
+.tt-plans thead th:first-child{color:var(--mut2);font:600 11px "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;vertical-align:bottom}
+.tt-plans .pn{display:block;font-family:Orbitron,Inter,sans-serif;font-size:22px;color:var(--ink)}
+.tt-plans .pp{display:block;margin-top:6px;font-size:28px;font-weight:800;color:var(--ink)}
+.tt-plans .pp small{font-size:14px;font-weight:500;color:var(--mut2)}
+.tt-plans .pt{display:block;margin-top:4px;font-size:13px;color:#86efac}
+.tt-plans .pro{background:linear-gradient(180deg,rgba(255,61,129,.12),rgba(255,107,44,.03))}
+.tt-plans thead .pro{box-shadow:inset 0 3px 0 var(--mg)}
+.tt-plans tbody th{font-weight:600;color:var(--ink);width:40%}
+.tt-plans tr:last-child td,.tt-plans tr:last-child th{border-bottom:0}
+.tt-plans .y{color:#86efac;font-weight:700;font-size:19px}
+.tt-plans .no{color:#5f6a86}
+.tt-plans .btn{margin-top:14px}
+.tt-plans .hint{font-size:13px;color:var(--mut2)}
+
+/* faq */
+.tt-faq{margin-top:34px;display:grid;gap:12px;max-width:880px}
+.tt-faq details{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 22px}
+.tt-faq summary{cursor:pointer;list-style:none;padding:20px 30px 20px 0;font-weight:700;color:var(--ink);position:relative;font-size:17px}
+.tt-faq summary::-webkit-details-marker{display:none}
+.tt-faq summary::after{content:"+";position:absolute;right:0;top:50%;transform:translateY(-50%);font:600 22px "JetBrains Mono",monospace;color:var(--or)}
+.tt-faq details[open] summary::after{content:"−"}
+.tt-faq details p{margin:0 0 20px;color:#c0c9de;line-height:1.6}
+
+/* final */
+.tt-final{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,107,44,.35);padding:clamp(40px,7vw,90px) clamp(24px,5vw,70px);isolation:isolate;text-align:center}
+.tt-final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;object-position:50% 60%}
+.tt-final::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 60%,rgba(4,6,14,.5),rgba(4,6,14,.92) 75%)}
+.tt-final h2{margin-top:6px}
+.tt-final p{max-width:560px;margin:0 auto;color:#d0d8ea}
+.tt-final .cta{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}
+
+.tt .btn.tt-go{background:linear-gradient(180deg,#ff8a4c,#ff3d81);color:#fff;border-color:transparent;box-shadow:0 10px 30px rgba(255,61,129,.3)}
+.tt .btn.tt-go:hover{filter:brightness(1.07)}
+
+@keyframes ttzoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes ttblink{50%{opacity:.15}}
+@keyframes ttline{0%{left:105%;opacity:0}10%{opacity:.85}70%{opacity:.45}100%{left:-30%;opacity:0}}
+
+@media (max-width:1000px){
+ .tt-codes,.tt-online{grid-template-columns:1fr}
+ .tt-how,.tt-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tt-cars{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .tt-gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:180px}
+}
+@media (max-width:700px){
+ .tt .tt-sec{padding:70px 0}
+ .tt-hero{min-height:auto;padding:min(78vw,330px) 0 44px}
+ .tt-hero .bg{bottom:auto;height:min(118vw,520px)}
+ .tt-hero .bg img{object-position:58% 70%}
+ .tt-hero::before{background:linear-gradient(0deg,#04060e 0%,#04060e calc(100% - min(118vw,520px)),rgba(4,6,14,.55) calc(100% - min(78vw,330px)),rgba(4,6,14,.1) 100%)}
+ .tt-hud,.tt-speed{display:none}
+ .tt-strip ul{grid-template-columns:repeat(2,1fr)}
+ .tt-strip li:nth-child(3){border-left:0}
+ .tt-strip li:nth-child(n+3){border-top:1px solid var(--line)}
+ .tt-how,.tt-feats{grid-template-columns:1fr}
+ .tt-cars{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tt-shot.tt-garage img{aspect-ratio:16/9}
+ .tt-code span{padding:12px 9px 10px}
+ .tt-gal{grid-template-columns:1fr 1fr;grid-auto-rows:150px}
+ .tt-gal .w2{grid-column:span 2}
+ .tt-plans th,.tt-plans td{padding:12px 12px;font-size:14px}
+ .tt-plans thead th{padding:18px 12px}
+ .tt-plans .pn{font-size:16px}.tt-plans .pp{font-size:20px}
+ .tt-plans tbody th{width:auto}
+ .tt-plans .btn{padding:8px 10px;font-size:13px}
+}
+@media (max-width:440px){.tt-fields{grid-template-columns:1fr}.tt-card .ph{aspect-ratio:16/9}.tt-code{gap:5px}.tt-code small{font-size:8px;letter-spacing:.08em}}
+@media (prefers-reduced-motion:reduce){
+ .tt *,.tt *::before,.tt *::after{animation:none!important;transition:none!important}
+ .tt-speed{display:none}
+ .tt-card:hover,.tt-feat:hover{transform:none}
+ .tt-card:hover .ph img,.tt-gal figure:hover img{transform:none}
+}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol><symbol id="i-car" viewBox="0 0 24 24"><path d="M3 16v-3l2-5h11l3 5h2v3z"/><circle cx="7.5" cy="16.5" r="2"/><circle cx="16.5" cy="16.5" r="2"/><path d="M6.5 13h12"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.6c2.7.2 4.5 2.1 4.5 5"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-device" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="10" rx="2"/><rect x="17" y="8" width="5" height="11" rx="1.5"/><path d="M6 19h6"/></symbol>
+<symbol id="i-ghost" viewBox="0 0 24 24"><path d="M5 21V11a7 7 0 0 1 14 0v10l-2.5-2-2.3 2-2.2-2-2.2 2-2.3-2z"/><circle cx="9.5" cy="11" r="1"/><circle cx="14.5" cy="11" r="1"/></symbol>
+<symbol id="i-drift" viewBox="0 0 24 24"><path d="M4 18c4 0 5-3 8-6s5-6 8-6"/><path d="M15 6h5v5"/><circle cx="5" cy="18" r="1.5"/></symbol>
+<symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h8"/></symbol>
+<symbol id="i-jump" viewBox="0 0 24 24"><path d="M3 19h6l9-8h3"/><path d="M12 6c2-2 5-2 7 0"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/></symbol></svg>
+<header class="nav"><div class="wrap">
+ <a class="logo" href="/" aria-label="XRainier home"><img src="/assets/img/xr-emblem.png" alt=""><span>XRAINIER</span></a>
+ <nav class="links" id="links" aria-label="Main">
+  <a href="/#products" data-k="products">Products</a><a href="/skyabove.html" data-k="skyabove" data-product="skyabove">SkyAbove</a><a href="/tankwar.html" data-k="tankwar" data-product="tankwar">TankWar</a><a href="/turbotoons.html" data-k="turbotoons" data-product="turbotoons" aria-current="page">TurboToons</a><a href="/#lab" data-k="lab">Lab</a><a href="/#about" data-k="about">About</a><a href="/#contact" data-k="contact">Contact</a>
+ </nav>
+ <a class="btn pri" href="https://turbotoons.xrainier.com/play.html" style="padding:8px 14px"><svg><use href="#i-car"/></svg>Play TurboToons</a>
+ <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="links">☰</button>
+</div></header>
+
+<main class="tt">
+<section class="tt-hero" aria-labelledby="tt-title">
+ <div class="bg"><img src="/assets/img/turbotoons/hero.jpg" width="1920" height="1080" alt="Three cartoon cars, red, blue and orange, drift through a mountain curve below snow-capped Mount Rainier at sunset" fetchpriority="high"></div>
+ <div class="tt-speed" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+ <div class="tt-hud" aria-hidden="true"><div class="rd"><span class="lt"></span>Lap 2 / 3<br><b>Rainier Summit</b><br>Track R573-K2Q9X</div></div>
+ <div class="wrap">
+  <div class="kick tt-k">XRainier · Games</div>
+  <h1 id="tt-title">TURBO<b>TOONS</b></h1>
+  <p class="sub">Cartoon cars. Real racing. Right in your browser.</p>
+  <p class="lead">Drift into boost, tuck into a slipstream and fly off the hills across four Pacific-Northwest worlds. Race up to eight players online in seconds, duel your friends' ghosts and share any track as a 10-character code. No download, no account.</p>
+  <div class="cta"><a class="btn pri tt-go" href="https://turbotoons.xrainier.com/play.html">Race now, free <svg><use href="#i-arrow"/></svg></a><a class="btn ghost" href="https://turbotoons.xrainier.com/play.html?mode=daily">Today's track</a></div>
+  <div class="tags"><span class="tag live">WEB</span><span class="tag">PHONE · TABLET · PC</span><span class="tag">ONLINE 8</span><span class="tag">NEW</span></div>
+ </div>
+</section>
+
+<div class="tt-strip"><div class="wrap"><ul>
+ <li><b>8</b><span>Cartoon cars</span></li><li><b>4</b><span>Worlds</span></li><li><b>8</b><span>Players online</span></li><li><b>∞</b><span>Track codes</span></li>
+</ul></div></div>
+
+<section class="tt-sec" id="play" aria-labelledby="h-play"><div class="wrap">
+ <div class="kick tt-k">How it plays</div>
+ <h2 id="h-play">Easy to pick up, <span class="tt-gt">wild to master</span></h2>
+ <p class="lead">Arcade handling on top of real physics. Every boost is earned on the track, never bought.</p>
+ <div class="tt-how">
+  <article class="tt-feat reveal"><svg aria-hidden="true"><use href="#i-drift"/></svg><h3>Drift → boost</h3><p>Hold a drift through a corner to charge sparks, then release for a burst of speed. The longer the drift, the bigger the boost.</p><div class="tt-sparks" aria-hidden="true"><span class="s1">BLUE</span><span class="s2">ORANGE</span><span class="s3">PURPLE</span></div></article>
+  <article class="tt-feat reveal"><svg aria-hidden="true"><use href="#i-wind"/></svg><h3>Slipstream</h3><p>Sit right behind a rival for a moment and the draft slingshots you past. Leading is never safe.</p></article>
+  <article class="tt-feat reveal"><svg aria-hidden="true"><use href="#i-jump"/></svg><h3>Jumps</h3><p>Hills turn into ramps. Hit the crest straight and you fly; land crooked and you lose the line.</p></article>
+  <article class="tt-feat reveal"><svg aria-hidden="true"><use href="#i-shield"/></svg><h3>No weapons</h3><p>No shells, no bananas, no paid speed. Every car has the same top speed, so the best line wins.</p></article>
+ </div>
+</div></section>
+
+<section class="tt-sec" id="worlds" aria-labelledby="h-worlds" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">Worlds</div>
+ <h2 id="h-worlds">Race the Pacific Northwest</h2>
+ <p class="lead">Four worlds from XRainier's home turf, each with its own weather that changes how much grip you have. Rain and snow make the road slippery; the forest is dirt.</p>
+ <div class="tt-fields">
+  <article class="tt-card reveal"><figure><div class="ph"><img src="/assets/img/turbotoons/theme-rainier.jpg" width="1200" height="800" loading="lazy" alt="A red hatchback and a green rally car on an alpine road through wildflowers, with Mount Rainier behind"></div></figure><span class="tt-letter" aria-hidden="true">R</span><div class="bd"><div class="tt-lbl">Alpine</div><h3>Rainier Summit</h3><p>Switchbacks and meadows under the big mountain.</p><span class="wx mono">CLEAR · SNOW · SUNSET</span></div></article>
+  <article class="tt-card reveal"><figure><div class="ph"><img src="/assets/img/turbotoons/theme-city.jpg" width="1200" height="800" loading="lazy" alt="A purple GT and a blue coupe splash through a rainy, neon-lit waterfront at night below a city skyline with a needle-shaped tower"></div></figure><span class="tt-letter" aria-hidden="true">S</span><div class="bd"><div class="tt-lbl">City</div><h3>Emerald City</h3><p>Neon streets, wet asphalt and a skyline with a famous tower.</p><span class="wx mono">RAIN · NIGHT · CLEAR</span></div></article>
+  <article class="tt-card reveal"><figure><div class="ph"><img src="/assets/img/turbotoons/theme-coast.jpg" width="1200" height="800" loading="lazy" alt="An orange pickup and a yellow buggy race along a coastal road past sea stacks, with a ferry on the water"></div></figure><span class="tt-letter" aria-hidden="true">C</span><div class="bd"><div class="tt-lbl">Coast</div><h3>Olympic Coast</h3><p>Ocean roads, sea stacks and the ferry on the horizon.</p><span class="wx mono">CLEAR · FOG · SUNSET</span></div></article>
+  <article class="tt-card reveal"><figure><div class="ph"><img src="/assets/img/turbotoons/theme-forest.jpg" width="1200" height="800" loading="lazy" alt="A green rally car and a navy van splash through mud on a trail between giant mossy trees"></div></figure><span class="tt-letter" aria-hidden="true">F</span><div class="bd"><div class="tt-lbl">Rainforest</div><h3>Hoh Rainforest</h3><p>Muddy dirt trails between giant, moss-covered trees.</p><span class="wx mono">FOG · RAIN · CLEAR</span></div></article>
+ </div>
+</div></section>
+
+<section class="tt-sec" id="codes" aria-labelledby="h-codes" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">Track codes</div>
+ <h2 id="h-codes">Every track fits in 10 characters</h2>
+ <p class="lead">A track code is a whole circuit: world, length, twist, hills and a seed. The same code builds the same track on every device, so you share tracks as text. Paste one in a chat and your friends are on the grid.</p>
+ <div class="tt-codes">
+  <div class="tt-code reveal" role="img" aria-label="Track code R573-K2Q9X: world R, length 5, twist 7, hills 3, seed K2Q9X">
+   <span aria-hidden="true">R<small>World</small></span><span aria-hidden="true">5<small>Length</small></span><span aria-hidden="true">7<small>Twist</small></span><span aria-hidden="true">3<small>Hills</small></span><span class="dash" aria-hidden="true">-<small>&nbsp;</small></span><span aria-hidden="true">K2Q9X<small>Seed</small></span>
+  </div>
+  <div class="reveal">
+   <div class="tt-lbl">Track Maker</div>
+   <ul>
+    <li><svg aria-hidden="true"><use href="#i-dice"/></svg><span><b>Four sliders and a dice</b>: pick a world, set length, twist and hills from 1 to 9, roll a seed. Millions of tracks.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-cal"/></svg><span><b>Track of the Day</b>: one new code for everyone at midnight UTC, with its own leaderboard.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-share"/></svg><span><b>Share a link</b>: any code opens straight into a race. Free players save 3 tracks, Pro saves unlimited.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-ghost"/></svg><span><b>Ghost Duels</b>: send a link with your lap inside it; your friend races your ghost on the same track and weather.</span></li>
+   </ul>
+  </div>
+ </div>
+</div></section>
+
+<section class="tt-sec" id="garage" aria-labelledby="h-garage" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">The garage</div>
+ <h2 id="h-garage">Eight cars, one top speed</h2>
+ <p class="lead">Each car accelerates, grips and drifts its own way, but none of them is faster at the top end. Three are free to drive; Pro unlocks the whole garage with 12 paints and decals.</p>
+ <figure class="tt-shot tt-garage reveal"><img src="/assets/img/turbotoons/cars.jpg" width="1600" height="900" loading="lazy" alt="The eight TurboToons cars lined up: a red hatchback, blue coupe, orange pickup, purple GT, yellow buggy, navy van, green rally car and white prototype"></figure>
+ <ul class="tt-cars">
+  <li style="--c:#ff5a4e"><b>Pip</b><span>Hatchback</span><span class="tt-badge free">FREE</span></li>
+  <li style="--c:#2f8cff"><b>Comet</b><span>Coupe</span><span class="tt-badge free">FREE</span></li>
+  <li style="--c:#ffb020"><b>Bruno</b><span>Pickup</span><span class="tt-badge free">FREE</span></li>
+  <li style="--c:#9b5cff"><b>Nova</b><span>GT</span><span class="tt-badge pro">PRO</span></li>
+  <li style="--c:#ffe14d"><b>Wasp</b><span>Buggy</span><span class="tt-badge pro">PRO</span></li>
+  <li style="--c:#3a5272"><b>Orca</b><span>Van</span><span class="tt-badge pro">PRO</span></li>
+  <li style="--c:#2fbf71"><b>Fern</b><span>Rally</span><span class="tt-badge pro">PRO</span></li>
+  <li style="--c:#e9f3ff"><b>Rainier</b><span>Prototype</span><span class="tt-badge pro">PRO</span></li>
+ </ul>
+</div></section>
+
+<section class="tt-sec" id="online" aria-labelledby="h-online" style="padding-top:30px"><div class="wrap tt-online">
+ <div>
+  <div class="kick tt-k">Online &amp; fair play</div>
+  <h2 id="h-online">Hit Quick Race. You're on the grid.</h2>
+  <div class="tt-big" aria-hidden="true">8<small>racers</small></div>
+  <p class="lead" style="margin-top:14px">Quick Race puts you in a live 8-player race on today's track in about 30 seconds, and bots fill any empty spots. Want just your crew? Pro players open private lobbies for up to 12 with custom laps and weather, and anyone with the link can join.</p>
+  <div class="tt-feats">
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-users"/></svg><h3>8-player Quick Race</h3><p>Matched by the minute. No lobbies to browse.</p></div>
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-lock"/></svg><h3>Private lobbies</h3><p>Up to 12 racers with custom laps, weather and collisions (Pro).</p></div>
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-bolt"/></svg><h3>Peer-to-peer</h3><p>Cars talk to each other directly for low latency, with no game server in the middle.</p></div>
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-device"/></svg><h3>Phone, tablet, PC</h3><p>Touch, keyboard or gamepad, in any modern browser.</p></div>
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-shield"/></svg><h3>Never pay-to-win</h3><p>Same top speed for every car. Pro is cosmetics and creator tools.</p></div>
+   <div class="tt-feat"><svg aria-hidden="true"><use href="#i-cal"/></svg><h3>Verified times</h3><p>Every leaderboard lap is checked on the server before it counts.</p></div>
+  </div>
+ </div>
+ <figure class="tt-shot reveal"><img src="/assets/img/turbotoons/theme-city.jpg" width="1200" height="800" loading="lazy" alt="A purple GT and a blue coupe racing side by side on a rain-soaked, neon-lit city street at night"></figure>
+</div></section>
+
+<section class="tt-sec" id="gallery" aria-labelledby="h-gal" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">Gallery</div>
+ <h2 id="h-gal">Welcome to the toon Northwest</h2>
+ <p class="lead">Key art from the four worlds and the garage.</p>
+ <div class="tt-gal">
+  <figure class="w2 h2 reveal"><img src="/assets/img/turbotoons/hero.jpg" width="1920" height="1080" loading="lazy" alt="Three cartoon cars drifting below Mount Rainier at sunset"><figcaption><b>Rainier Summit</b>Sunset drift</figcaption></figure>
+  <figure class="w2 reveal"><img src="/assets/img/turbotoons/theme-city.jpg" width="1200" height="800" loading="lazy" alt="Two cars splashing through a neon city at night in the rain"><figcaption><b>Emerald City</b>Rain at night</figcaption></figure>
+  <figure class="reveal"><img src="/assets/img/turbotoons/theme-coast.jpg" width="1200" height="800" loading="lazy" alt="A pickup and a buggy on a coastal road past sea stacks"><figcaption><b>Olympic Coast</b>Sea stacks</figcaption></figure>
+  <figure class="reveal"><img src="/assets/img/turbotoons/theme-forest.jpg" width="1200" height="800" loading="lazy" alt="A rally car splashing through mud in a mossy rainforest"><figcaption><b>Hoh Rainforest</b>Mud season</figcaption></figure>
+  <figure class="w2 reveal"><img src="/assets/img/turbotoons/cars.jpg" width="1600" height="900" loading="lazy" alt="All eight TurboToons cars lined up on a white floor"><figcaption><b>Garage</b>The full line-up</figcaption></figure>
+  <figure class="w2 reveal"><img src="/assets/img/turbotoons/theme-rainier.jpg" width="1200" height="800" loading="lazy" alt="A red hatchback leading a green rally car on an alpine road with Mount Rainier behind"><figcaption><b>Rainier Summit</b>Wildflower switchbacks</figcaption></figure>
+ </div>
+</div></section>
+
+<section class="tt-sec" id="plans" aria-labelledby="h-plans" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">Plans</div>
+ <h2 id="h-plans">Free to race. Pro for style.</h2>
+ <p class="lead">Everything you need to race is free, with no account and no ads in races. Pro adds cars, colours and creator tools, never speed.</p>
+ <div class="tt-plans reveal">
+  <table>
+   <caption>TurboToons Free and TurboToons Pro compared</caption>
+   <thead><tr>
+    <th scope="col">Compare</th>
+    <th scope="col"><span class="pn">Free</span><span class="pp">$0</span><a class="btn ghost" href="https://turbotoons.xrainier.com/play.html">Race free</a></th>
+    <th scope="col" class="pro"><span class="pn">TurboToons <span class="tt-or">Pro</span></span><span class="pp">$14.99<small> / year</small></span><span class="pt">or $2.49 / month · 7-day free trial</span><a class="btn pri tt-go" href="https://turbotoons.xrainier.com/pro.html">See Pro</a></th>
+   </tr></thead>
+   <tbody>
+    <tr><th scope="row">Quick Race online (8 players)</th><td class="y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+    <tr><th scope="row">Track of the Day + leaderboard</th><td class="y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+    <tr><th scope="row">Ghost Duels</th><td class="y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+    <tr><th scope="row">Track Maker</th><td>Play &amp; share any code<br><span class="hint">Save 3 tracks</span></td><td class="pro">Unlimited saved tracks</td></tr>
+    <tr><th scope="row">Race leaderboard ghosts</th><td>#1 of the day</td><td class="pro">Any top-50 ghost</td></tr>
+    <tr><th scope="row">Cars</th><td>3 starters<br><span class="hint">Pip, Comet, Bruno</span></td><td class="pro">All 8 cars</td></tr>
+    <tr><th scope="row">Paints</th><td>4 paints</td><td class="pro">12 paints + decals</td></tr>
+    <tr><th scope="row">Private lobbies up to 12</th><td class="no"><span aria-hidden="true">–</span><span class="tt-sr">Not included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+    <tr><th scope="row">Replay theater + photo mode</th><td class="no"><span aria-hidden="true">–</span><span class="tt-sr">Not included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+    <tr><th scope="row">Pro badge &amp; early-access worlds</th><td class="no"><span aria-hidden="true">–</span><span class="tt-sr">Not included</span></td><td class="pro y"><span aria-hidden="true">✓</span><span class="tt-sr">Included</span></td></tr>
+   </tbody>
+  </table>
+ </div>
+</div></section>
+
+<section class="tt-sec" id="faq" aria-labelledby="h-faq" style="padding-top:30px"><div class="wrap">
+ <div class="kick tt-k">FAQ</div>
+ <h2 id="h-faq">Questions</h2>
+ <div class="tt-faq">
+  <details open><summary>What do I need to play?</summary><p>A modern browser with WebGL2: current Chrome, Edge, Safari or Firefox, on a phone, tablet or computer. Nothing to download or install. Open <a href="https://turbotoons.xrainier.com/play.html">turbotoons.xrainier.com</a> and race.</p></details>
+  <details><summary>Do I need an account?</summary><p>No. You race as a guest, and pick a name only if you want to show up on the leaderboards. No email needed.</p></details>
+  <details><summary>What's free and what's in Pro?</summary><p>Free gets you online Quick Race, Track of the Day with its leaderboard, Ghost Duels, the Track Maker and three cars: Pip, Comet and Bruno. TurboToons Pro adds all 8 cars, 12 paints and decals, private lobbies up to 12, unlimited saved tracks, any top-50 ghost and the replay theater for $14.99 a year or $2.49 a month.</p></details>
+  <details><summary>Can I cancel Pro?</summary><p>Yes, anytime. Pro starts with a 7-day free trial, and payments are handled by Stripe.</p></details>
+  <details><summary>Is Pro pay-to-win?</summary><p>No. Every car shares one top speed and boosts only come from drifting and slipstreams. Pro is cosmetics, private lobbies and creator conveniences.</p></details>
+  <details><summary>How does online racing work?</summary><p>Racers connect directly to each other, peer-to-peer, which keeps lag low. As in any WebRTC game, the other racers in your lobby can see your IP address. See the <a href="https://turbotoons.xrainier.com/privacy.html">TurboToons privacy policy</a>.</p></details>
+ </div>
+ <p class="lead" style="font-size:16px;margin-top:22px">Something else? <a class="mail" href="mailto:support@xrainier.com?subject=TurboToons">support@xrainier.com</a></p>
+</div></section>
+
+<section class="tt-sec" style="padding-top:20px" aria-labelledby="h-final"><div class="wrap">
+ <div class="tt-final reveal">
+  <img src="/assets/img/turbotoons/theme-coast.jpg" width="1200" height="800" loading="lazy" alt="">
+  <div class="kick tt-k" style="justify-content:center">Lights out</div>
+  <h2 id="h-final">The grid is filling up.</h2>
+  <p>Free in your browser, right now. No download, no account.</p>
+  <div class="cta"><a class="btn pri tt-go" href="https://turbotoons.xrainier.com/play.html">Race now, free <svg><use href="#i-arrow"/></svg></a><a class="btn ghost" href="https://turbotoons.xrainier.com/play.html?mode=daily">Today's track</a></div>
+ </div>
+</div></section>
+</main>
+<footer><div class="wrap">
+ <a class="logo" href="/"><img src="/assets/img/xr-emblem.png" alt="" style="width:26px"><span style="font-size:15px">XRAINIER</span></a>
+ <span>© <span data-year>2026</span> Rainier Studio LLC<br><small style="color:#6f7a99">XRainier is a trademark of Rainier Studio LLC.</small></span><span class="sp"></span>
+ <a href="/skyabove.html">SkyAbove</a><a href="/tankwar.html">TankWar</a><a href="/turbotoons.html">TurboToons</a><a href="https://turbotoons.xrainier.com/">Play</a><a href="mailto:support@xrainier.com">Support</a>
+</div></footer>
+<script src="/assets/js/turbotoons-links.js" defer></script>
+<script src="/assets/js/site.js" defer></script>
+
+</body></html>
