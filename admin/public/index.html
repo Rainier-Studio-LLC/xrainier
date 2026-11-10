@@ -17,12 +17,17 @@ h2{margin:0 0 4px;font-size:18px}h3{margin:0 0 10px;font-size:16px;display:flex;
 .btn:hover{border-color:#334166}.btn:disabled{opacity:.4;cursor:default}.btn.pri{background:linear-gradient(135deg,#0ea5e9,#6366f1);border-color:transparent;font-weight:600}
 input[type=text]{background:#0b1222;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 10px;font:inherit;font-size:14px}
 code{background:#0b1222;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:13px}.hid{color:var(--warn)}
+.tag{font:700 10px/1 system-ui;letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:5px;margin-left:6px;vertical-align:1px}.tag.new{background:rgba(74,222,128,.14);color:var(--ok)}.tag.nocard{background:rgba(251,191,36,.12);color:var(--warn)}
+#found{display:none;margin-top:12px;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;font-size:13px}#found .btn{padding:4px 10px;font-size:13px;margin:2px 4px 2px 0}
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer}.sw input{width:18px;height:18px;accent-color:var(--acc)}
 #login{display:none;min-height:80vh;align-items:center;justify-content:center}.lbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px 30px;text-align:center;max-width:380px}
 #gbtn{display:flex;justify-content:center;margin:18px 0 8px;min-height:44px}#lmsg{color:var(--bad);font-size:14px;min-height:20px}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#0b1222;border:1px solid var(--line);padding:10px 16px;border-radius:10px;display:none;z-index:9}
 #toast.bad{border-color:var(--bad);color:#fecaca}
 .pane{display:none}.pane.on{display:block}
+@media(max-width:640px){header{padding:12px 14px;gap:8px}.brand{letter-spacing:.08em;font-size:14px}.who{display:none}main{padding:18px 12px 50px}.card{padding:14px 12px}
+ h3{flex-wrap:wrap}th,td{padding:8px 4px}th:nth-child(3),td:nth-child(3){display:none}td:first-child{white-space:nowrap}td:first-child .btn{padding:5px 8px}th:first-child{width:auto!important}
+ td:last-child .btn{padding:5px 8px;font-size:12px}.tag{display:table;margin:4px 0 0}.sw{gap:5px}#found .btn{font-size:12px}}
 </style></head><body>
 <header><div class="brand">X<b>RAINIER</b> ADMIN</div><span class="env" id="env">LIVE</span><span class="sp"></span><span class="who" id="who"></span><button class="btn" id="out" hidden>Sign out</button></header>
 <div id="login"><div class="lbox"><h2>XRainier admin</h2><p class="muted" style="margin:6px 0 0">Owner sign-in only.</p><div id="gbtn"></div><div id="lmsg"></div></div></div>
@@ -30,10 +35,11 @@ code{background:#0b1222;border:1px solid var(--line);border-radius:5px;padding:1
  <div class="tabs"><button class="tab on" data-p="site">Website</button><button class="tab" data-p="log">Activity</button></div>
  <section class="pane on" id="p-site">
   <div class="card"><h3>Products on the home page<span class="sp"></span><a class="btn" id="open" target="_blank" rel="noopener">Open the site ↗</a><button class="btn pri" id="save" disabled>Save</button></h3>
-   <p class="muted" style="font-size:13px;margin:0 0 10px">Choose which products the home page shows and their order (top = first). Hidden products disappear from the product cards, the menu and the footer, and the "products live" count updates; their own pages still work for anyone with the link. The site picks up a change within about a minute.</p>
+   <p class="muted" style="font-size:13px;margin:0 0 10px">Choose which products the home page shows and their order (top = first). Hidden products disappear from the product cards, the menu and the footer, and the "products live" count updates; their own pages still work for anyone with the link. The site picks up a change within about a minute.<br><b style="color:var(--txt)">New products add themselves:</b> when a product card appears on the home page (data-product="id"), it's added here automatically, shown, at the end of the list. A product you remove isn't added back unless you add it.</p>
    <table><thead><tr><th style="width:90px">Order</th><th>Product</th><th>ID on the page</th><th>Home page</th><th></th></tr></thead><tbody id="rows"></tbody></table>
    <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><input type="text" id="nid" placeholder="id, e.g. newapp" style="width:150px" aria-label="New product id"><input type="text" id="nname" placeholder="Name" style="width:160px" aria-label="New product name"><button class="btn" id="add">+ Add product</button>
-    <span class="muted" style="font-size:12px">A new product appears once the home page has a card for it (data-product="id").</span></div>
+    <span class="muted" style="font-size:12px">Added by hand, a product appears once the home page has a card for it (data-product="id").</span></div>
+   <div id="found"></div>
    <p class="muted" id="at" style="font-size:12px;margin:12px 0 0"></p>
   </div>
  </section>
@@ -58,17 +64,21 @@ async function login(){$('login').style.display='flex';let cfg=null;try{cfg=awai
 function start(){$('login').style.display='none';$('app').hidden=false;$('out').hidden=false;$('who').textContent=sessionStorage.getItem('xa.email')||'';load().catch((e)=>toast(e.message,1))}
 document.querySelectorAll('.tab').forEach((b)=>b.onclick=()=>{document.querySelectorAll('.tab').forEach((x)=>x.classList.toggle('on',x===b));document.querySelectorAll('.pane').forEach((p)=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));if(b.dataset.p==='log')loadLog().catch((e)=>toast(e.message,1))});
 const dirty=(on)=>{$('save').disabled=!on};
-function draw(){const P=data.products;$('rows').innerHTML=P.map((p,i)=>`<tr><td><button class="btn" data-up="${i}" ${i?'':'disabled'} aria-label="Move ${esc(p.name)} up">↑</button> <button class="btn" data-dn="${i}" ${i<P.length-1?'':'disabled'} aria-label="Move ${esc(p.name)} down">↓</button></td><td><b>${esc(p.name)}</b></td><td><code>${esc(p.id)}</code></td>`
+function draw(){const P=data.products;$('rows').innerHTML=P.map((p,i)=>`<tr><td><button class="btn" data-up="${i}" ${i?'':'disabled'} aria-label="Move ${esc(p.name)} up">↑</button> <button class="btn" data-dn="${i}" ${i<P.length-1?'':'disabled'} aria-label="Move ${esc(p.name)} down">↓</button></td><td><b>${esc(p.name)}</b>${p.auto?'<span class="tag new" title="Added automatically from the home page">new</span>':''}${data.found&&!data.found.some((f)=>f.id===p.id)?'<span class="tag nocard" title="The home page has no card with this id yet, so nothing shows for it">no card yet</span>':''}</td><td><code>${esc(p.id)}</code></td>`
   +`<td><label class="sw"><input type="checkbox" data-show="${i}" ${p.show?'checked':''}>${p.show?'Shown':'<span class="hid">Hidden</span>'}</label></td><td>${data.defaults.some((d)=>d.id===p.id)?'':`<button class="btn" data-rm="${i}">Remove</button>`}</td></tr>`).join('');
  const T=$('rows'),sw=(i,j)=>{[P[i],P[j]]=[P[j],P[i]];draw();dirty(true)};
  T.querySelectorAll('[data-up]').forEach((b)=>b.onclick=()=>sw(+b.dataset.up,+b.dataset.up-1));T.querySelectorAll('[data-dn]').forEach((b)=>b.onclick=()=>sw(+b.dataset.dn,+b.dataset.dn+1));
- T.querySelectorAll('[data-show]').forEach((c)=>c.onchange=()=>{P[+c.dataset.show].show=c.checked;draw();dirty(true)});T.querySelectorAll('[data-rm]').forEach((b)=>b.onclick=()=>{P.splice(+b.dataset.rm,1);draw();dirty(true)})}
-async function load(){const j=await api('/api/products');data={products:j.products.map((p)=>({id:p.id,name:p.name,show:!!p.show})),defaults:j.defaults||[]};
+ T.querySelectorAll('[data-show]').forEach((c)=>c.onchange=()=>{P[+c.dataset.show].show=c.checked;draw();dirty(true)});T.querySelectorAll('[data-rm]').forEach((b)=>b.onclick=()=>{P.splice(+b.dataset.rm,1);draw();dirty(true)});
+ const back=(data.found||[]).filter((f)=>!P.some((p)=>p.id===f.id)),F=$('found');F.style.display=back.length?'block':'none';
+ F.innerHTML=back.length?'<span class="muted">On the home page but not in this list (removed): </span>'+back.map((f,i)=>`<button class="btn" data-back="${i}">+ ${esc(f.name)}</button>`).join(''):'';
+ F.querySelectorAll('[data-back]').forEach((b)=>b.onclick=()=>{const f=back[+b.dataset.back];P.push({id:f.id,name:f.name,show:true});draw();dirty(true)})}
+async function load(){const j=await api('/api/products');data={products:j.products.map((p)=>({id:p.id,name:p.name,show:!!p.show,auto:p.auto||0})),defaults:j.defaults||[],found:j.found||null};
+ if(j.added&&j.added.length)toast('✨ New on the home page, added automatically: '+j.products.filter((p)=>j.added.includes(p.id)).map((p)=>p.name).join(', '));
  $('at').textContent=j.at?'Last saved '+new Date(j.at).toLocaleString()+(j.by?' by '+j.by:''):'Not saved yet: the home page shows every product.';draw();dirty(false)}
 $('save').onclick=async()=>{if(!data.products.some((p)=>p.show)&&!confirm('Hide every product from the home page?'))return;$('save').disabled=true;
  try{await api('/api/products',{method:'PUT',body:JSON.stringify({products:data.products})});toast('✅ Saved. The home page updates within about a minute.');await load()}catch(e){toast(e.message,1);dirty(true)}};
 $('add').onclick=()=>{const id=$('nid').value.trim().toLowerCase(),name=$('nname').value.trim();if(!/^[a-z0-9][a-z0-9-]{0,29}$/.test(id))return toast('Product id: lowercase letters, numbers and -, e.g. newapp.',1);
- if(data.products.some((p)=>p.id===id))return toast('That product is already in the list.',1);data.products.push({id,name:name||id,show:false});$('nid').value=$('nname').value='';draw();dirty(true)};
+ if(data.products.some((p)=>p.id===id))return toast('That product is already in the list.',1);data.products.push({id,name:name||id,show:true});$('nid').value=$('nname').value='';draw();dirty(true)};
 async function loadLog(){const j=await api('/api/log');$('logRows').innerHTML=j.log.map((l)=>`<tr><td>${esc(new Date(l.t).toLocaleString())}</td><td>${esc(l.by)}</td><td>${esc(l.what)}</td></tr>`).join('')||'<tr><td colspan="3" class="muted">No changes yet.</td></tr>'}
 if(token)start();else login();
 </script>

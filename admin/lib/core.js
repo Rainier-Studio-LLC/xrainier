@@ -50,3 +50,37 @@ export async function readProducts(env) {
   const v = env.SITE ? await env.SITE.get("products", "json").catch(() => null) : null;
   return v && Array.isArray(v.products) ? v : { products: PRODUCTS_DEFAULT, at: null, by: null };
 }
+// Every id that has ever been in the list. A product the owner removes stays here, so it isn't added back automatically.
+export const knownIds = (v) => [...new Set([...(Array.isArray(v.known) ? v.known : []), ...v.products.map((p) => p.id), ...PRODUCTS_DEFAULT.map((p) => p.id)])];
+
+// ---- new products are picked up from the home page automatically
+// The site this admin controls: admin-beta → beta.xrainier.com, admin → xrainier.com (SITE_URL overrides).
+export const siteUrl = (env, req) => env.SITE_URL || (/(^|[.-])beta([.-]|$)/.test(new URL(req.url).hostname) ? "https://beta.xrainier.com/" : "https://xrainier.com/");
+// Products on the home page: every element with data-product="id"; the name is the text of its menu link.
+export function productsInPage(html) {
+  const found = new Map(), tag = /<[a-z][^>]*\sdata-product="([a-z0-9][a-z0-9-]{0,29})"[^>]*>([^<]*)/gi;
+  for (let m; (m = tag.exec(String(html || ""))); ) {
+    const id = m[1].toLowerCase(), name = m[2].replace(/&amp;/g, "&").replace(/\s+/g, " ").trim().slice(0, 40);
+    if (!found.has(id) || (!found.get(id) && name)) found.set(id, name);
+  }
+  return [...found].map(([id, name]) => ({ id, name: name || id }));
+}
+export async function readSiteProducts(env, req) {
+  const r = await fetch(siteUrl(env, req) + "?products-check=" + Math.floor(Date.now() / 60000), { headers: { "User-Agent": "xrainier-admin" }, cf: { cacheTtl: 0 } });
+  if (!r.ok) throw Error("home page " + r.status);
+  return productsInPage(await r.text());
+}
+// Adds products that are on the home page but have never been in the list (shown, at the end) and saves them.
+// Returns {v, found, added}. Never throws: if the home page can't be read, nothing changes.
+export async function syncProducts(env, req) {
+  const v = await readProducts(env); let found = null;
+  try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [] }; }
+  const known = new Set(knownIds(v)), added = found.filter((p) => !known.has(p.id)).slice(0, Math.max(0, 30 - v.products.length));
+  if (!added.length || !env.SITE) return { v, found, added: [] };
+  const t = Date.now(), nv = { ...v, products: [...v.products, ...added.map((p) => ({ id: p.id, name: p.name, show: true, auto: t }))], known: [...known, ...added.map((p) => p.id)], at: t, by: "automatic (new on the home page)" };
+  await env.SITE.put("products", JSON.stringify(nv));
+  const log = (await env.SITE.get("log", "json").catch(() => null)) || [];
+  log.unshift({ t, by: "automatic", what: "Added from the home page: " + added.map((p) => p.name).join(", ") });
+  await env.SITE.put("log", JSON.stringify(log.slice(0, 50)));
+  return { v: nv, found, added };
+}
