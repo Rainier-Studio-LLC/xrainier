@@ -1,6 +1,6 @@
 # XRainier Portal
 
-Website for **xrainier.com**: the XRainier home page and one page per product (SkyAbove, TankWar), plus its own admin.
+Website for **xrainier.com**: the XRainier home page and one page per product (SkyHere, TankWar), plus its own admin.
 XRainier is the trade name of Rainier Studio LLC. No build step: plain HTML, CSS and JavaScript.
 
 | Folder | What | Published as |
@@ -14,7 +14,7 @@ XRainier is the trade name of Rainier Studio LLC. No build step: plain HTML, CSS
 - `index.html`: home (products, lab, about, contact)
 - `skyabove.html`, `tankwar.html`: product pages
 - `404.html`: not found
-- `assets/`: styles, `js/site.js` (menu, screenshots, lightbox, promotions, product list), images, `shots/` (SkyAbove screenshots)
+- `assets/`: styles, `js/site.js` (menu, screenshots, lightbox, promotions, product list), images, `shots/` (SkyHere screenshots)
 
 ### Products shown on the site
 The admin decides which products appear and in what order. `web/assets/js/site.js` reads the list from
@@ -27,7 +27,7 @@ If the list can't be loaded, everything shows. Mark new product links with `data
 3. Add the page to `web/sitemap.xml`, then add the product in the admin.
 
 ### Screenshots
-`web/assets/shots/` holds the SkyAbove screenshots; missing ones show a placeholder.
+`web/assets/shots/` holds the SkyHere screenshots; missing ones show a placeholder.
 To retake them (a PC with internet, Node 18+): `bash tools/shots.sh`. It captures with `tools/capture.mjs`, then commits and pushes to beta.
 
 ## Admin (`admin/`)
@@ -49,5 +49,5 @@ Check before pushing: `node --check web/assets/js/site.js && node tools/check-pa
 Mail for xrainier.com keeps working: the website only adds web records; the MX record stays with Microsoft 365.
 
 ## Docs
-- [Beta: SkyAbove website, admin and www.xrainier.com](docs/BETA.md)
+- [Beta: SkyHere website, admin and www.xrainier.com](docs/BETA.md)
 - [Releasing (beta → main)](docs/RELEASE.md)

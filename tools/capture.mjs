@@ -1,11 +1,11 @@
-// Takes real screenshots of SkyAbove for the XRainier site and saves them to ../web/assets/shots/.
+// Takes real screenshots of SkyHere for the XRainier site and saves them to ../web/assets/shots/.
 // One-time setup (in this tools folder):  npm install   then   npx playwright install --with-deps chromium
 // Run:  node capture.mjs
 // Options (environment variables):
 //   SITE=https://skyabove.xrainier.com   LAT=47.45 LON=-122.30 (where the radar looks; default: near Seattle–Tacoma airport)
 //   SKYLINK=<id>      a Sky Link id to capture link.html (optional)
 //   HEADED=1          show the browser while it works
-//   TOKEN=<token>     your SkyAbove sign-in token (Pro), so 2D/3D replay is captured too. In SkyAbove on your PC: F12 → Console →
+//   TOKEN=<token>     your SkyHere sign-in token (Pro), so 2D/3D replay is captured too. In SkyHere on your PC: F12 → Console →
 //                     copy(localStorage.getItem('skyabove.token'))   then paste it after TOKEN=
 import { chromium, devices } from 'playwright';
 import { mkdir } from 'node:fs/promises';

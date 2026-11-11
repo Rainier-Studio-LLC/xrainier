@@ -1,8 +1,8 @@
-# Beta: SkyAbove website, admin and www.xrainier.com
+# Beta: SkyHere website, admin and www.xrainier.com
 
 | | Live (branch `main`) | Beta (branch `beta`) |
 |---|---|---|
-| SkyAbove website | skyabove.xrainier.com | **beta.skyabove.xrainier.com** |
+| SkyHere website | skyabove.xrainier.com | **beta.skyabove.xrainier.com** |
 | Admin | admin.skyabove.xrainier.com | **beta-admin.skyabove.xrainier.com** |
 | XRainier portal | www.xrainier.com | **beta.xrainier.com** |
 | API (proxy) | api.skyabove.xrainier.com · Worker `skyabove-proxy` | **api-beta.skyabove.xrainier.com** · Worker `skyabove-proxy-beta` |
@@ -56,7 +56,7 @@ and set preview deployments to **None**, so beta pushes don't create extra previ
 
 ### 4. Sign-in
 - Google Cloud Console → OAuth client → Authorized JavaScript origins: add `https://beta-admin.skyabove.xrainier.com` and `https://beta.skyabove.xrainier.com`.
-- Cloudflare → Turnstile → your SkyAbove widget → Hostnames: add `beta.skyabove.xrainier.com`.
+- Cloudflare → Turnstile → your SkyHere widget → Hostnames: add `beta.skyabove.xrainier.com`.
 
 ### 5. Stripe (test mode)
 Developers → Webhooks (test mode) → Add endpoint `https://api-beta.skyabove.xrainier.com/stripe/webhook` with the same events as live;

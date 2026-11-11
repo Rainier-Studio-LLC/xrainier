@@ -1,6 +1,6 @@
 // XRainier admin — shared server helpers (Cloudflare Pages Functions). No secrets here: this repo is public.
 // Settings on the Pages project (Settings → Variables and Secrets):
-//   GOOGLE_CLIENT_ID  Google sign-in client (same one as SkyAbove)      ADMIN_EMAILS  who may sign in, comma-separated
+//   GOOGLE_CLIENT_ID  Google sign-in client (same one as SkyHere)      ADMIN_EMAILS  who may sign in, comma-separated
 //   SESSION_SECRET    random text (secret) that signs admin sessions     Binding SITE  KV namespace for site settings
 //   (Production = xrainier.com settings, Preview = beta.xrainier.com settings: give each its own KV namespace.)
 const te = new TextEncoder();
@@ -45,7 +45,7 @@ export async function readSession(env, req) {
 export const setupProblems = (env) => ["GOOGLE_CLIENT_ID", "ADMIN_EMAILS", "SESSION_SECRET"].filter((k) => !env[k]).concat(env.SITE ? [] : ["SITE (KV binding)"]);
 
 // ---- products on the home page
-export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyAbove", show: true }, { id: "tankwar", name: "TankWar", show: true }, { id: "blockrush", name: "BlockRush", show: true }];
+export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyHere", show: true }, { id: "tankwar", name: "TankWar", show: true }, { id: "blockrush", name: "BlockRush", show: true }];
 export async function readProducts(env) {
   const v = env.SITE ? await env.SITE.get("products", "json").catch(() => null) : null;
   if (v && Array.isArray(v.products)) {   // products added later (like BlockRush) appear, shown, until the owner saves the list

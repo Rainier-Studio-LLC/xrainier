@@ -1,6 +1,6 @@
 // XRainier portal: menu, scroll reveal, screenshots (with placeholders), lightbox, section highlight.
 (() => {
-  // beta.xrainier.com (or any address with "beta" in it) uses the beta SkyAbove server and shows a BETA tag
+  // beta.xrainier.com (or any address with "beta" in it) uses the beta SkyHere server and shows a BETA tag
   const BETA = /(^|[.-])beta([.-]|$)/.test(location.hostname);
   if (BETA) {
     const m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m);
@@ -39,7 +39,7 @@
     sub.forEach((a) => { const t = document.querySelector(a.getAttribute('href')); if (t) so.observe(t); });
   }
   $$('[data-year]').forEach((el) => (el.textContent = new Date().getFullYear()));
-  // featured SkyAbove promotion (set in the SkyAbove admin, Promotions tab → ★)
+  // featured SkyHere promotion (set in the SkyHere admin, Promotions tab → ★)
   const slots = $$('[data-promo]');
   if (slots.length) fetch((BETA ? 'https://api-beta.skyabove.xrainier.com' : 'https://api.skyabove.xrainier.com') + '/promo/featured').then((r) => r.json()).then((f) => {
     if (!f || !f.code) return;
