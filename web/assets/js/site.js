@@ -30,7 +30,7 @@
       icon: img ? img.getAttribute('src') : '', kind: 'APP', line: p ? p.textContent.trim().split(/(?<=[.:!])\s/)[0].replace(/[.:]$/, '') : '' });
   });
   const IDS = new Set(XR.map((p) => p.id));
-  const here = ((/^\/([a-z0-9-]+)\.html$/i.exec(location.pathname) || [])[1] || '').toLowerCase();
+  const here = ((/^\/([a-z0-9-]+)(?:\.html)?\/?$/i.exec(location.pathname) || [])[1] || '').toLowerCase();
   const mine = XR.find((p) => p.id === here);
   const nav = $('header.nav .links'), wrapEl = $('header.nav .wrap');
   let renderNav = () => {};
@@ -58,8 +58,9 @@
       if (logo) logo.insertAdjacentHTML('afterend', `<a class="xr-crumb" href="${esc(mine.href)}" aria-label="${esc(mine.name)} overview"><img src="${esc(mine.icon)}" alt="" onerror="this.remove()"><span>${esc(mine.name)}</span></a>`);
     }
     const dd = $('.xr-dd', nav), btn = $('.xr-dd-btn', nav);
-    const setOpen = (o) => { dd.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); };
-    btn.onclick = (e) => { e.stopPropagation(); setOpen(!dd.classList.contains('open')); };
+    let openedAt = 0;
+    const setOpen = (o) => { if (o && !dd.classList.contains('open')) openedAt = Date.now(); dd.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); };
+    btn.onclick = (e) => { e.stopPropagation(); const o = dd.classList.contains('open'); setOpen(!o || Date.now() - openedAt < 500); };
     document.addEventListener('click', (e) => { if (!e.target.closest('.xr-dd')) setOpen(false); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dd.classList.contains('open')) { setOpen(false); btn.focus(); } });
     const hover = matchMedia('(hover: hover) and (min-width: 821px)');
@@ -242,7 +243,7 @@ a.xr-tile:hover{background:rgba(120,170,255,.08);border-color:var(--line);color:
     $$('[data-live-words]').forEach((e) => (e.textContent = WORDS[n] || n + ' products'));
     renderNav(status, unlisted, ord);
     // this page belongs to a product that's Off: keep it out of search results
-    const me = (/^\/([a-z0-9-]+)\.html$/i.exec(location.pathname) || [])[1];
+    const me = (/^\/([a-z0-9-]+)(?:\.html)?\/?$/i.exec(location.pathname) || [])[1];
     const off = me && (status[me.toLowerCase()] || null) === 'off';
     let rob = $('meta[name="robots"][data-xr]');
     if (off && !rob) { rob = document.createElement('meta'); rob.name = 'robots'; rob.content = 'noindex'; rob.dataset.xr = '1'; document.head.appendChild(rob); }
