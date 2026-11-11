@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04060e"><link rel="icon" type="image/png" href="/assets/img/favicon.png"><link rel="apple-touch-icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="preload" as="image" href="/assets/img/memorylane/hero.jpg" fetchpriority="high">
+<title>MemoryLane · Your photos from days like today · XRainier</title>
+<meta name="description" content="MemoryLane finds the photos you took in the same place, the same season and the same kind of weather as today, and plays them back as a film, a grid or a photo book with music. Free, private, in your browser.">
+<meta property="og:title" content="MemoryLane · Your photos from days like today"><meta property="og:description" content="Same place, same season, same sky. Relive it as a film, a grid or a photo book. Free and private in your browser.">
+<meta property="og:image" content="https://xrainier.com/assets/img/memorylane/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="An old instant photo held up in front of the same lakeside boardwalk at golden hour">
+<meta property="og:url" content="https://xrainier.com/memorylane.html"><meta property="og:type" content="website"><meta property="og:site_name" content="XRainier">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="MemoryLane · Your photos from days like today"><meta name="twitter:description" content="Same place, same season, same sky. Free and private in your browser."><meta name="twitter:image" content="https://xrainier.com/assets/img/memorylane/og.jpg">
+<link rel="canonical" href="https://xrainier.com/memorylane.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"MemoryLane","url":"https://xrainier.com/memorylane.html","sameAs":"https://memorylane.xrainier.com/","image":"https://xrainier.com/assets/img/memorylane/og.jpg","description":"A private photo-memory app that surfaces photos taken in the same place, season, weather and time of day as today, and plays them back as a film, a grid or a photo book with weather-matched music.","applicationCategory":"PhotographyApplication","operatingSystem":"Any modern browser","publisher":{"@type":"Organization","name":"Rainier Studio LLC","url":"https://xrainier.com/","email":"support@xrainier.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","url":"https://memorylane.xrainier.com/"}}</script>
+<style>
+.ml{--m1:#f6c177;--m2:#eb6f92;--m3:#c4a7e7;--ink:#f6efe6;--mut2:#b3a596;--line:rgba(246,193,119,.16);--card:rgba(28,20,22,.72);--mlg:linear-gradient(90deg,var(--m1),var(--m2) 60%,var(--m3));overflow-x:clip}
+.ml *{box-sizing:border-box}.ml img{max-width:100%;display:block}
+.ml a:focus-visible,.ml summary:focus-visible{outline:2px solid var(--m1);outline-offset:3px;border-radius:6px}
+.ml .ml-sec{padding:96px 0;position:relative}
+.ml .ml-sec h2{font-family:Fraunces,Georgia,serif;font-weight:400;letter-spacing:-.01em;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:14px 0 14px;color:var(--ink)}
+.ml .ml-sec .lead{max-width:760px}
+.ml .kick.ml-k{color:var(--m1)}.ml .kick.ml-k:before{background:var(--m1);box-shadow:0 0 8px var(--m1)}
+.ml .mlg{background:var(--mlg);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
+.ml .btn.ml-go{background:linear-gradient(135deg,#f7d9a8,var(--m1) 55%,#e9a07f);color:#2a1a12;border-color:transparent;box-shadow:0 10px 30px rgba(246,193,119,.28)}
+.ml .btn.ml-go:hover{filter:brightness(1.06);color:#2a1a12}
+.ml svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ml-hero{position:relative;min-height:min(92vh,880px);display:grid;align-items:center;isolation:isolate;overflow:hidden;padding:130px 0 80px}
+.ml-hero .bg{position:absolute;inset:0 0 0 30%;z-index:-2}
+.ml-hero .bg img{width:100%;height:100%;object-fit:cover;object-position:70% 50%;animation:mldrift 24s ease-in-out infinite alternate}
+.ml-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#04060e 0%,#04060e 30%,rgba(4,6,14,.6) 42%,rgba(4,6,14,0) 62%),linear-gradient(0deg,#04060e 0%,rgba(4,6,14,0) 28%),linear-gradient(180deg,rgba(4,6,14,.8) 0%,rgba(4,6,14,0) 20%)}
+.ml-hero h1{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(56px,8.4vw,116px);line-height:.95;letter-spacing:-.02em;margin:18px 0 14px;color:var(--ink);text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.ml-hero h1 em{font-style:italic;background:var(--mlg);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+.ml-hero .sub{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:clamp(20px,2.4vw,28px);color:var(--ink);margin:0 0 14px;max-width:600px;line-height:1.3}
+.ml-hero .lead{max-width:540px;color:#e2d8cc}
+.ml-hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.ml-hero .tags{margin-top:22px}
+.ml-today{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 14px;border-radius:999px;background:rgba(246,193,119,.1);border:1px solid rgba(246,193,119,.4);color:#f3e2c8;font:600 13px/1.2 "JetBrains Mono",monospace;letter-spacing:.02em}
+.ml-today b{color:#fff}.ml-today i{width:8px;height:8px;border-radius:50%;background:var(--m1);box-shadow:0 0 10px var(--m1);animation:mlpulse 1.8s ease-in-out infinite}
+.ml-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(246,193,119,.06),rgba(235,111,146,.06),rgba(196,167,231,.05))}
+.ml-strip ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.ml-strip li{padding:22px 18px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px}.ml-strip li:first-child{border-left:0}
+.ml-strip b{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(28px,3.4vw,40px);color:var(--ink)}.ml-strip b i{font-style:normal;color:var(--m1)}
+.ml-strip span{font:600 11px/1.4 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+.ml-steps{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ml-steps li{display:flex;flex-direction:column;gap:14px;padding:24px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.ml-steps .n{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:400 22px Fraunces,Georgia,serif;color:#2a1a12;background:linear-gradient(135deg,#f7d9a8,var(--m1) 55%,#e9a07f)}
+.ml-steps h3{font-size:18px;margin:0 0 6px;color:var(--ink)}.ml-steps p{margin:0;color:#cdc1b4;line-height:1.55;font-size:15px}.ml-steps em{color:#f3e2c8}
+.ml-views{margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ml-view{position:relative;padding:28px 24px;border-radius:18px;background:var(--card);border:1px solid var(--line);overflow:hidden;transition:transform .25s ease,border-color .25s ease}
+.ml-view:hover{transform:translateY(-3px);border-color:rgba(246,193,119,.5)}
+.ml-view::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--c)}
+.ml-view svg{width:44px;height:44px;padding:10px;border-radius:14px;color:var(--c);background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.ml-view h3{font-family:Fraunces,Georgia,serif;font-weight:500;font-size:24px;margin:16px 0 6px;color:var(--ink)}.ml-view p{margin:0;color:#cdc1b4;line-height:1.55}
+.ml-music{margin-top:20px;display:flex;gap:18px;align-items:center;padding:22px 24px;border-radius:18px;border:1px dashed rgba(246,193,119,.4);background:rgba(246,193,119,.05)}
+.ml-music>svg{flex:none;width:46px;height:46px;padding:11px;border-radius:50%;color:#2a1a12;background:linear-gradient(135deg,#f7d9a8,var(--m1) 55%,#e9a07f)}
+.ml-music h3{margin:0 0 4px;color:var(--ink);font-size:18px}.ml-music p{margin:0;color:#cdc1b4;line-height:1.55}.ml-music b{color:#f3e2c8;font-weight:600}
+.ml-chips{list-style:none;padding:0;margin:30px 0 0;display:flex;flex-wrap:wrap;gap:10px}
+.ml-chips li{padding:10px 16px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:#e6dccf;font-size:15px}
+.ml-chips li.pub{border-style:dashed;color:var(--m1)}
+.ml-priv{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;align-items:center}
+.ml-checks{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:14px}
+.ml-checks li{display:grid;grid-template-columns:30px 1fr;gap:12px;color:#d8cdc0;line-height:1.5}
+.ml-checks li::before{content:"✓";width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;color:#2a1a12;background:var(--m1)}
+.ml-checks b{color:var(--ink)}
+.ml-polar{margin:0 auto;width:min(300px,80%);padding:18px 18px 22px;background:#fbf7f0;border-radius:6px;transform:rotate(3deg);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.ml-polar img{width:100%;border-radius:22%}
+.ml-polar figcaption{margin-top:14px;text-align:center;font:400 26px Fraunces,Georgia,serif;color:#2b2420}
+.ml-polar figcaption em{font-style:italic;color:#c0577a}.ml-polar small{display:block;font:600 10px "JetBrains Mono",monospace;letter-spacing:.24em;text-transform:uppercase;color:#9a8b7d;margin-top:4px}
+.ml-faq{margin-top:34px;display:grid;gap:12px;max-width:880px}
+.ml-faq details{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 22px}
+.ml-faq summary{cursor:pointer;list-style:none;padding:20px 30px 20px 0;font-weight:700;color:var(--ink);position:relative;font-size:17px}
+.ml-faq summary::-webkit-details-marker{display:none}
+.ml-faq summary::after{content:"+";position:absolute;right:0;top:50%;transform:translateY(-50%);font:600 22px "JetBrains Mono",monospace;color:var(--m1)}
+.ml-faq details[open] summary::after{content:"−"}.ml-faq details p{margin:0 0 20px;color:#d0c5b8;line-height:1.6}
+.ml-final{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(246,193,119,.35);padding:clamp(40px,7vw,90px) clamp(24px,5vw,70px);isolation:isolate;text-align:center}
+.ml-final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;object-position:70% 50%}
+.ml-final::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 55%,rgba(4,6,14,.55),rgba(4,6,14,.93) 75%)}
+.ml-final h2{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:clamp(30px,4.4vw,50px);margin:14px 0;color:var(--ink)}
+.ml-final p{max-width:560px;margin:0 auto;color:#e2d8cc}.ml-final .cta{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}
+@keyframes mldrift{from{transform:scale(1.02) translateX(0)}to{transform:scale(1.08) translateX(-1.5%)}}
+@keyframes mlpulse{50%{opacity:.35}}
+@media (max-width:1000px){.ml-steps,.ml-views{grid-template-columns:1fr 1fr}.ml-priv{grid-template-columns:1fr;gap:40px}}
+@media (max-width:700px){
+ .ml .ml-sec{padding:70px 0}
+ .ml-hero{min-height:auto;padding:min(70vw,300px) 0 44px;align-items:end}
+ .ml-hero .bg{left:0;bottom:auto;height:min(110vw,480px)}
+ .ml-hero::before{background:linear-gradient(0deg,#04060e 0%,#04060e calc(100% - min(110vw,480px)),rgba(4,6,14,.55) calc(100% - min(70vw,300px)),rgba(4,6,14,.1) 100%)}
+ .ml-strip ul{grid-template-columns:repeat(2,1fr)}.ml-strip li:nth-child(3){border-left:0}.ml-strip li:nth-child(n+3){border-top:1px solid var(--line)}
+ .ml-steps,.ml-views{grid-template-columns:1fr}.ml-music{flex-direction:column;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){.ml *,.ml *::before,.ml *::after{animation:none!important;transition:none!important}.ml-view:hover{transform:none}}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ml-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="ml-film" viewBox="0 0 24 24"><path d="M4 5h16v14H4Z M8 5v14 M16 5v14 M4 9h4 M4 15h4 M16 9h4 M16 15h4"/></symbol>
+<symbol id="ml-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4Z M13 4h7v4h-7Z M13 10h7v10h-7Z M4 13h7v7H4Z"/></symbol>
+<symbol id="ml-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2Z M12 6.5v13"/></symbol>
+<symbol id="ml-note" viewBox="0 0 24 24"><path d="M9 18.5V6l10-2v12.5 M9 18.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z M19 16.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/></symbol>
+<symbol id="ml-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></symbol></svg>
+<header class="nav"><div class="wrap">
+ <a class="logo" href="/" aria-label="XRainier home"><img src="/assets/img/xr-emblem.png" alt=""><span>XRAINIER</span></a>
+ <nav class="links" id="links" aria-label="Main">
+  <a href="/#products" data-k="products">Products</a><a href="/skyabove.html" data-k="skyabove">SkyHere</a><a href="/tankwar.html" data-k="tankwar">TankWar</a><a href="/blockrush.html" data-k="blockrush">BlockRush</a><a href="/memorylane.html" data-k="memorylane" aria-current="page">MemoryLane</a><a href="/#lab" data-k="lab">Lab</a><a href="/#about" data-k="about">About</a><a href="/#contact" data-k="contact">Contact</a>
+ </nav>
+ <a class="btn pri" href="https://memorylane.xrainier.com/" style="padding:8px 14px"><svg><use href="#ml-photo"/></svg>Open MemoryLane</a>
+ <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="links">☰</button>
+</div></header>
+
+<main class="ml">
+<section class="ml-hero" aria-labelledby="ml-title">
+ <div class="bg"><img src="/assets/img/memorylane/hero.jpg" width="1600" height="899" alt="An old instant photo of a parent and child on a lakeside boardwalk, held up in front of the same boardwalk today at golden hour" fetchpriority="high"></div>
+ <div class="wrap">
+  <div class="kick ml-k">XRainier · Apps</div>
+  <h1 id="ml-title">Memory<em>Lane</em></h1>
+  <p class="sub">Your photos from this place, this season, this kind of day.</p>
+  <p class="lead">Open MemoryLane and it looks at where you are, today's date, the time and the sky outside, then finds the photos you took in the same spot on days just like this one, and plays them back as a film, a grid or a photo book, with music that matches the weather.</p>
+  <div class="cta"><a class="btn pri ml-go" href="https://memorylane.xrainier.com/">Open MemoryLane <svg><use href="#ml-arrow"/></svg></a><a class="btn ghost" href="#how">See how it works</a></div>
+  <div class="tags"><span class="tag live">WEB</span><span class="tag">FREE</span><span class="tag">PRIVATE</span><span class="tag">NO ACCOUNT</span></div>
+  <div class="ml-today"><i aria-hidden="true"></i><span>Photos stay <b>on your device</b>. Nothing is uploaded.</span></div>
+ </div>
+</section>
+
+<div class="ml-strip"><div class="wrap"><ul>
+ <li><b>40<i>%</i></b><span>Same place</span></li><li><b>35<i>%</i></b><span>Same time of year</span></li><li><b>15<i>%</i></b><span>Same kind of sky</span></li><li><b>10<i>%</i></b><span>Same time of day</span></li>
+</ul></div></div>
+
+<section class="ml-sec" id="how" aria-labelledby="h-how"><div class="wrap">
+ <div class="kick ml-k">How it works</div>
+ <h2 id="h-how">It remembers the <span class="mlg">days like today</span>.</h2>
+ <p class="lead">Not just "on this day". MemoryLane weighs place, season, weather and time of day, so a rainy November evening by the lake brings back the rainy evenings you spent there before.</p>
+ <ol class="ml-steps">
+  <li class="reveal"><span class="n" aria-hidden="true">1</span><div><h3>It reads right now</h3><p>Your location (with your permission), the date, the time and today's weather from Open-Meteo. You can also time-travel to any other day.</p></div></li>
+  <li class="reveal"><span class="n" aria-hidden="true">2</span><div><h3>It finds your days like today</h3><p>Every photo gets a score: how close it was taken, how near the same week of the year, whether the sky was the same and whether it was the same hour. Photos from one outing become one memory.</p></div></li>
+  <li class="reveal"><span class="n" aria-hidden="true">3</span><div><h3>It plays them back</h3><p>Each memory says why it surfaced: <em>"3 years ago today · 250 m from here · also a rainy day"</em>. Then sit back and watch.</p></div></li>
+ </ol>
+</div></section>
+
+<section class="ml-sec" id="views" aria-labelledby="h-views" style="padding-top:30px"><div class="wrap">
+ <div class="kick ml-k">Three ways to relive it</div>
+ <h2 id="h-views">A film, a wall of photos, a book you can hold.</h2>
+ <div class="ml-views">
+  <article class="ml-view reveal" style="--c:var(--m1)"><svg aria-hidden="true"><use href="#ml-film"/></svg><h3>Film</h3><p>A cinematic slideshow with slow pan-and-zoom, soft cross-fades and a title card for every year. Plays by itself, full screen.</p></article>
+  <article class="ml-view reveal" style="--c:var(--m2)"><svg aria-hidden="true"><use href="#ml-grid"/></svg><h3>Grid</h3><p>Every match at a glance, grouped by year, with the reason each photo came back. Tap Play for a full-screen show.</p></article>
+  <article class="ml-view reveal" style="--c:var(--m3)"><svg aria-hidden="true"><use href="#ml-book"/></svg><h3>Photo book</h3><p>Magazine-style spreads with a cover, a chapter per year and real page turns. Turns its own pages, or print it to PDF.</p></article>
+ </div>
+ <div class="ml-music reveal">
+  <svg aria-hidden="true"><use href="#ml-note"/></svg>
+  <div><h3>Music that matches the sky</h3><p>A soundtrack composed live in your browser follows today's weather: <b>Golden hour</b>, <b>Soft overcast</b>, <b>Rain on glass</b>, <b>First snow</b> or <b>Night drive</b>. Or play your own song.</p></div>
+ </div>
+</div></section>
+
+<section class="ml-sec" id="sources" aria-labelledby="h-src" style="padding-top:30px"><div class="wrap">
+ <div class="kick ml-k">Bring your photos</div>
+ <h2 id="h-src">From wherever your memories live</h2>
+ <p class="lead">Pick a folder, choose from Google's picker, or drop in the data download your social networks give you. MemoryLane reads dates and places on your device.</p>
+ <ul class="ml-chips">
+  <li>Apple Photos &amp; iCloud</li><li>Camera roll</li><li>Google Photos</li><li>Google Takeout</li><li>Instagram</li><li>Facebook</li><li>X (Twitter)</li><li>LinkedIn</li><li>NAS &amp; network drives</li><li class="pub">Public photos near you · Wikimedia Commons</li>
+ </ul>
+</div></section>
+
+<section class="ml-sec" id="private" aria-labelledby="h-priv" style="padding-top:30px"><div class="wrap ml-priv">
+ <div>
+  <div class="kick ml-k">Private by design</div>
+  <h2 id="h-priv">Your photos never <span class="mlg">leave your device</span>.</h2>
+  <ul class="ml-checks">
+   <li><span><b>Read on-device.</b> Dates, places and thumbnails are worked out in your browser and kept in its private storage.</span></li>
+   <li><span><b>No account, no upload.</b> There is no MemoryLane server holding your pictures.</span></li>
+   <li><span><b>Only what you choose.</b> You pick the folder, the photos or the archive. Location is used only with your permission.</span></li>
+   <li><span><b>Gone when you say so.</b> Clear the library with one tap.</span></li>
+  </ul>
+ </div>
+ <figure class="ml-polar reveal"><img src="/assets/img/memorylane/icon.png" width="256" height="256" loading="lazy" alt="The MemoryLane app icon: two instant photos of a lane winding toward a golden sun"><figcaption>Memory<em>Lane</em><small>by XRainier</small></figcaption></figure>
+</div></section>
+
+<section class="ml-sec" id="faq" aria-labelledby="h-faq" style="padding-top:30px"><div class="wrap">
+ <div class="kick ml-k">FAQ</div>
+ <h2 id="h-faq">Questions</h2>
+ <div class="ml-faq">
+  <details open><summary>Is MemoryLane free?</summary><p>Yes. It runs in any modern browser on your phone, tablet or computer, and you can add it to your home screen like an app.</p></details>
+  <details><summary>Do you see my photos?</summary><p>No. Photos are read and stored in your own browser. Nothing is sent to us. Only public photos from Wikimedia Commons are loaded from the internet, and only if you ask for them.</p></details>
+  <details><summary>Why don't Instagram or Facebook connect directly?</summary><p>Those networks no longer let apps read your personal photos. Request the copy of your data they offer ("Download your information"), then drop the ZIP into MemoryLane. It keeps each photo's date and, where the export has it, the place.</p></details>
+  <details><summary>My Google Photos have no location. Why?</summary><p>Google removes location from photos shared through its picker, so those match on date, time and weather. For places, import a Google Takeout download instead, which keeps them.</p></details>
+  <details><summary>What if I'm somewhere new?</summary><p>MemoryLane still surfaces photos from the same week in past years, and you can time-travel to any date. Or try "Around here, years ago" for public photos taken near you.</p></details>
+ </div>
+ <p class="lead" style="font-size:16px;margin-top:22px">Something else? <a class="mail" href="mailto:support@xrainier.com?subject=MemoryLane">support@xrainier.com</a></p>
+</div></section>
+
+<section class="ml-sec" style="padding-top:20px" aria-labelledby="h-final"><div class="wrap">
+ <div class="ml-final reveal">
+  <img src="/assets/img/memorylane/hero.jpg" width="1600" height="899" loading="lazy" alt="">
+  <div class="kick ml-k" style="justify-content:center">Today is a day like another</div>
+  <h2 id="h-final">Which one will it bring back?</h2>
+  <p>Free in your browser. Your photos stay yours.</p>
+  <div class="cta"><a class="btn pri ml-go" href="https://memorylane.xrainier.com/">Open MemoryLane <svg><use href="#ml-arrow"/></svg></a></div>
+ </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+ <a class="logo" href="/"><img src="/assets/img/xr-emblem.png" alt="" style="width:26px"><span style="font-size:15px">XRAINIER</span></a>
+ <span>© <span data-year>2026</span> Rainier Studio LLC<br><small style="color:#6f7a99">XRainier is a trademark of Rainier Studio LLC.</small></span><span class="sp"></span>
+ <a href="/skyabove.html">SkyHere</a><a href="/tankwar.html">TankWar</a><a href="/blockrush.html">BlockRush</a><a href="/memorylane.html">MemoryLane</a><a href="https://memorylane.xrainier.com/">Open the app</a><a href="mailto:support@xrainier.com">Support</a>
+</div></footer>
+<script src="/assets/js/site.js" defer></script>
+</body></html>
