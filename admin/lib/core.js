@@ -45,10 +45,14 @@ export async function readSession(env, req) {
 export const setupProblems = (env) => ["GOOGLE_CLIENT_ID", "ADMIN_EMAILS", "SESSION_SECRET"].filter((k) => !env[k]).concat(env.SITE ? [] : ["SITE (KV binding)"]);
 
 // ---- products on the home page
-export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyAbove", show: true }, { id: "tankwar", name: "TankWar", show: true }];
+export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyAbove", show: true }, { id: "tankwar", name: "TankWar", show: true }, { id: "blockrush", name: "BlockRush", show: true }];
 export async function readProducts(env) {
   const v = env.SITE ? await env.SITE.get("products", "json").catch(() => null) : null;
-  return v && Array.isArray(v.products) ? v : { products: PRODUCTS_DEFAULT, at: null, by: null };
+  if (v && Array.isArray(v.products)) {   // products added later (like BlockRush) appear, shown, until the owner saves the list
+    const have = new Set(v.products.map((p) => p.id));
+    return { ...v, products: [...v.products, ...PRODUCTS_DEFAULT.filter((p) => !have.has(p.id))] };
+  }
+  return { products: PRODUCTS_DEFAULT, at: null, by: null };
 }
 // Every id that has ever been in the list. A product the owner removes stays here, so it isn't added back automatically.
 export const knownIds = (v) => [...new Set([...(Array.isArray(v.known) ? v.known : []), ...v.products.map((p) => p.id), ...PRODUCTS_DEFAULT.map((p) => p.id)])];
