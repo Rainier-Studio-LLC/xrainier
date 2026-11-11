@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04060e"><link rel="icon" type="image/png" href="/assets/img/favicon.png"><link rel="apple-touch-icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="preload" as="image" href="/assets/img/blockrush/hero.jpg" fetchpriority="high">
+<title>BlockRush · The daily block puzzle · XRainier</title>
+<meta name="description" content="BlockRush is a free daily block puzzle in your browser. Drop pieces on an 8×8 board, clear rows and columns and chain combos. Everyone gets the same pieces in the Daily, Endless ranks your best run of the week and Duels send a friend your exact pieces.">
+<meta property="og:title" content="BlockRush · The daily block puzzle"><meta property="og:description" content="One puzzle, same pieces for everyone. Clear rows and columns, chain combos and share your score. Every score verified. Play free in your browser.">
+<meta property="og:image" content="https://xrainier.com/assets/img/blockrush/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="The BlockRush logo next to an 8×8 puzzle board with coloured blocks and a combo in progress">
+<meta property="og:url" content="https://xrainier.com/blockrush.html"><meta property="og:type" content="website"><meta property="og:site_name" content="XRainier">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="BlockRush · The daily block puzzle"><meta name="twitter:description" content="Same pieces for everyone, one run counts. Clear lines, chain combos, duel a friend. Play free in your browser."><meta name="twitter:image" content="https://xrainier.com/assets/img/blockrush/og.jpg">
+<link rel="canonical" href="https://xrainier.com/blockrush.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BlockRush","url":"https://xrainier.com/blockrush.html","sameAs":"https://blockrush.xrainier.com/","image":"https://xrainier.com/assets/img/blockrush/og.jpg","description":"The daily block puzzle in your browser. Place pieces on an 8×8 board, clear rows and columns and chain combos. Daily puzzle with the same pieces for everyone, Endless with a weekly leaderboard and Duels with identical pieces. Every score is verified on the server.","genre":["Puzzle","Casual"],"gamePlatform":"Web Browser","applicationCategory":"Game","operatingSystem":"Any modern browser","playMode":"SinglePlayer","publisher":{"@type":"Organization","name":"Rainier Studio LLC","url":"https://xrainier.com/","email":"support@xrainier.com"},"offers":{"@type":"Offer","name":"BlockRush","price":"0","priceCurrency":"USD","url":"https://blockrush.xrainier.com/play.html"}}</script>
+<style>
+.br{--cy:#38bdf8;--vi:#a78bfa;--pk:#f472b6;--lm:#a3e635;--yl:#facc15;--ink:#eef2ff;--mut2:#9aa6c4;--line:rgba(160,190,255,.14);--card:rgba(12,17,34,.74);--grad:linear-gradient(100deg,#38bdf8,#a78bfa 50%,#f472b6);overflow-x:clip}
+.br *{box-sizing:border-box}
+.br img{max-width:100%;display:block}
+.br a:focus-visible,.br summary:focus-visible{outline:2px solid var(--yl);outline-offset:3px;border-radius:6px}
+.br .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.br .br-sec{padding:96px 0;position:relative}
+.br .br-sec h2{font-family:Orbitron,Inter,sans-serif;font-weight:800;letter-spacing:.02em;font-size:clamp(28px,4.2vw,46px);line-height:1.08;margin:14px 0 14px;color:var(--ink)}
+.br .br-sec .lead{max-width:760px}
+.br .br-gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.br .kick.br-k{color:var(--cy)}
+.br .br-k::before{content:"";display:inline-block;width:22px;height:2px;background:linear-gradient(90deg,var(--cy),var(--pk));vertical-align:middle;margin-right:10px;opacity:.9}
+
+/* hero */
+.br-hero{position:relative;min-height:min(92vh,900px);display:grid;align-items:end;isolation:isolate;overflow:hidden;padding:140px 0 70px}
+.br-hero .bg{position:absolute;inset:0;z-index:-2;background:#060a18}
+.br-hero .bg img{width:100%;height:100%;object-fit:cover;object-position:100% 50%;transform-origin:85% 50%;animation:brzoom 30s ease-in-out infinite alternate}
+.br-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(4,6,14,.94) 0%,rgba(4,6,14,.8) 36%,rgba(4,6,14,.35) 58%,rgba(4,6,14,0) 74%),linear-gradient(0deg,#04060e 0%,rgba(4,6,14,0) 34%),linear-gradient(180deg,rgba(4,6,14,.85) 0%,rgba(4,6,14,0) 22%)}
+.br-fall{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.br-fall i{position:absolute;top:-60px;width:22px;height:22px;border-radius:5px;opacity:0;animation:brdrop 9s linear infinite;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.35)}
+.br-fall i:nth-child(1){left:8%;background:var(--cy)}
+.br-fall i:nth-child(2){left:22%;background:var(--pk);animation-delay:2.5s;animation-duration:11s}
+.br-fall i:nth-child(3){left:38%;background:var(--yl);animation-delay:5s;width:16px;height:16px}
+.br-fall i:nth-child(4){left:46%;background:var(--vi);animation-delay:1.2s;animation-duration:12s}
+.br-fall i:nth-child(5){left:30%;background:var(--lm);animation-delay:7s;width:14px;height:14px}
+.br-hero>.wrap{min-width:0;width:100%}
+.br-hero h1{font-family:Fredoka,Inter,sans-serif;font-weight:700;font-size:clamp(46px,7.4vw,108px);overflow-wrap:anywhere;line-height:.9;letter-spacing:.01em;margin:18px 0 14px;color:var(--ink);text-shadow:0 5px 0 rgba(70,40,150,.85),0 10px 44px rgba(0,0,0,.55)}
+.br-hero h1 b{font-weight:700;background:linear-gradient(180deg,#7dd3fc 0%,#a78bfa 50%,#f472b6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.br-hero .sub{font-size:clamp(20px,2.4vw,28px);font-weight:700;color:var(--ink);margin:0 0 14px;max-width:640px;line-height:1.25}
+.br-hero .lead{max-width:560px;color:#d3daec}
+.br-hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.br-hero .tags{margin-top:22px}
+.br-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(56,189,248,.08),rgba(167,139,250,.07),rgba(244,114,182,.08))}
+.br-strip ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.br-strip li{padding:22px 18px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.br-strip li:first-child{border-left:0}
+.br-strip b{font-family:Orbitron,Inter,sans-serif;font-size:clamp(24px,3vw,34px);color:var(--ink)}
+.br-strip span{font:600 11px/1.4 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+
+/* how it plays */
+.br-how{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.br-feat{padding:22px;border-radius:16px;background:var(--card);border:1px solid var(--line);transition:transform .25s ease,border-color .25s ease}
+.br-feat:hover{transform:translateY(-3px);border-color:rgba(167,139,250,.5)}
+.br-feat svg{width:26px;height:26px;stroke:var(--cy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.br-feat h3{font-size:17px;margin:12px 0 6px;color:var(--ink)}
+.br-feat p{margin:0;font-size:14px;color:#b4bed6;line-height:1.55}
+.br-mini{display:grid;grid-template-columns:repeat(4,12px);gap:3px;margin-top:14px}
+.br-mini i{width:12px;height:12px;border-radius:3px;background:rgba(160,190,255,.1)}
+.br-mini i.f{background:var(--cy)}.br-mini i.p{background:var(--pk)}.br-mini i.v{background:var(--vi)}.br-mini i.y{background:var(--yl)}
+.br-score{margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:18px 22px;border-radius:14px;border:1px dashed rgba(167,139,250,.4);background:rgba(167,139,250,.06);font:600 15px/1.5 "JetBrains Mono",monospace;color:#d6dcf0}
+.br-score .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);margin-right:6px}
+.br-score b{color:var(--yl);font-weight:600}.br-score em{font-style:normal;color:var(--pk)}
+
+/* modes */
+.br-modes{margin-top:44px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.br-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;transition:transform .25s ease,border-color .25s ease}
+.br-card:hover{transform:translateY(-3px);border-color:rgba(56,189,248,.5)}
+.br-card figure{margin:0}
+.br-card .ph{aspect-ratio:16/10;overflow:hidden;background:#0a1226}
+.br-card .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.4);transform-origin:50% 44%;transition:transform .6s ease}
+.br-card:hover .ph img{transform:scale(1.46)}
+.br-card .bd{padding:18px 20px 22px;display:flex;flex-direction:column;flex:1}
+.br-card h3{font-size:20px;margin:0 0 6px;color:var(--ink)}
+.br-card p{margin:0;color:#b9c3da;font-size:15px;line-height:1.55}
+.br-card .go{margin-top:auto;padding-top:16px;font-weight:700;color:var(--cy)}
+.br-card .go:hover{text-decoration:underline}
+.br-lbl{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2)}
+.br-badge{position:absolute;top:12px;left:12px;padding:7px 10px;border-radius:9px;font:700 12px/1 "JetBrains Mono",monospace;letter-spacing:.08em;background:rgba(4,6,14,.8);border:1px solid var(--c);color:var(--c)}
+
+/* share */
+.br-share{margin-top:44px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.br-msg{position:relative;max-width:460px;padding:22px 24px;border-radius:20px 20px 20px 6px;background:linear-gradient(160deg,rgba(56,189,248,.16),rgba(167,139,250,.12) 55%,rgba(244,114,182,.14));border:1px solid rgba(167,139,250,.4);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.br-msg .who{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:var(--mut2)}
+.br-msg .who img{width:28px;height:28px;border-radius:7px}
+.br-msg pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:600 clamp(15px,1.8vw,19px)/1.6 "JetBrains Mono",monospace;color:var(--ink)}
+.br-msg pre b{color:var(--yl);font-weight:600}
+.br-msg .ln{display:block;margin-top:8px;font-size:14px;color:var(--cy)}
+.br-share ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:14px}
+.br-share li{display:flex;gap:12px;align-items:flex-start;color:#d0d8ea;line-height:1.5}
+.br-share li svg{flex:none;width:22px;height:22px;stroke:var(--pk);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+
+/* fair play */
+.br-fair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:center}
+.br-feats{margin-top:26px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.br-flow{margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 12px/1 "JetBrains Mono",monospace;letter-spacing:.06em;color:#d6dcf0}
+.br-flow span{padding:9px 11px;border-radius:9px;background:var(--card);border:1px solid var(--line)}
+.br-flow span.ok{border-color:rgba(163,230,53,.55);color:var(--lm)}
+.br-flow i{font-style:normal;color:var(--mut2)}
+.br-shot{position:relative;margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.4);background:#0a1226}
+.br-shot img{width:100%;height:auto}
+.br-fair .br-shot img{aspect-ratio:16/10;object-fit:cover;transform:scale(1.18);transform-origin:50% 20%}
+
+/* gallery */
+.br-gal{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:210px;gap:14px}
+.br-gal figure{margin:0;position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0a1226}
+.br-gal img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;transition:transform .6s ease}
+.br-gal figure:hover img{transform:scale(1.04)}
+.br-gal .w2{grid-column:span 2}.br-gal .h2{grid-row:span 2}
+.br-gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(0deg,rgba(4,6,14,.92),rgba(4,6,14,0));font-size:13px;color:#e6ebf7;line-height:1.35}
+.br-gal figcaption b{display:block;font:600 10px/1.4 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+
+/* faq */
+.br-faq{margin-top:34px;display:grid;gap:12px;max-width:880px}
+.br-faq details{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 22px}
+.br-faq summary{cursor:pointer;list-style:none;padding:20px 30px 20px 0;font-weight:700;color:var(--ink);position:relative;font-size:17px}
+.br-faq summary::-webkit-details-marker{display:none}
+.br-faq summary::after{content:"+";position:absolute;right:0;top:50%;transform:translateY(-50%);font:600 22px "JetBrains Mono",monospace;color:var(--cy)}
+.br-faq details[open] summary::after{content:"−"}
+.br-faq details p{margin:0 0 20px;color:#c0c9de;line-height:1.6}
+
+/* final */
+.br-final{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(167,139,250,.4);padding:clamp(40px,7vw,90px) clamp(24px,5vw,70px);isolation:isolate;text-align:center}
+.br-final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;object-position:50% 50%}
+.br-final::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 60%,rgba(4,6,14,.55),rgba(4,6,14,.93) 75%)}
+.br-final h2{margin-top:6px}
+.br-final p{max-width:560px;margin:0 auto;color:#d0d8ea}
+.br-final .cta{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}
+
+.br .btn.br-go{background:linear-gradient(100deg,#38bdf8,#a78bfa 55%,#f472b6);color:#06101f;border-color:transparent;box-shadow:0 10px 30px rgba(167,139,250,.35)}
+.br .btn.br-go:hover{filter:brightness(1.08)}
+
+@keyframes brzoom{from{transform:scale(1)}to{transform:scale(1.06)}}
+@keyframes brdrop{0%{top:-60px;opacity:0;transform:rotate(0)}10%{opacity:.7}80%{opacity:.4}100%{top:105%;opacity:0;transform:rotate(90deg)}}
+
+@media (max-width:1000px){
+ .br-share,.br-fair{grid-template-columns:1fr}
+ .br-how{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .br-modes{grid-template-columns:1fr 1fr}
+ .br-modes .br-card:last-child{grid-column:span 2}
+ .br-modes .br-card:last-child .ph{aspect-ratio:21/9}
+ .br-gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:190px}
+}
+@media (max-width:700px){
+ .br .br-sec{padding:70px 0}
+ .br-hero{min-height:auto;padding:min(70vw,300px) 0 44px}
+ .br-hero .bg{bottom:auto;height:min(110vw,480px)}
+ .br-hero .bg img{object-position:78% 50%}
+ .br-hero::before{background:linear-gradient(0deg,#04060e 0%,#04060e calc(100% - min(110vw,480px)),rgba(4,6,14,.55) calc(100% - min(70vw,300px)),rgba(4,6,14,.1) 100%)}
+ .br-fall{display:none}
+ .br-strip ul{grid-template-columns:repeat(2,1fr)}
+ .br-strip li:nth-child(3){border-left:0}
+ .br-strip li:nth-child(n+3){border-top:1px solid var(--line)}
+ .br-how,.br-feats,.br-modes{grid-template-columns:1fr}
+ .br-modes .br-card:last-child{grid-column:auto}
+ .br-modes .br-card:last-child .ph{aspect-ratio:16/10}
+ .br-gal{grid-template-columns:1fr 1fr;grid-auto-rows:150px}
+ .br-gal .w2{grid-column:span 2}
+ .br-score{font-size:13px;padding:14px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+ .br *,.br *::before,.br *::after{animation:none!important;transition:none!important}
+ .br-fall{display:none}
+ .br-card:hover,.br-feat:hover{transform:none}
+ .br-card:hover .ph img{transform:scale(1.4)}
+ .br-gal figure:hover img{transform:none}
+}
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+<symbol id="i-blocks" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></symbol>
+<symbol id="i-drag" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V12m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-.5a6 6 0 0 1-4.6-2.2L4 15.5a1.6 1.6 0 0 1 2.4-2L9 15"/></symbol>
+<symbol id="i-lines" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 12h18M12 3v18"/></symbol>
+<symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.7 7-6.8 0-3.6-2.4-5.8-4-7.7-.4 2-1.4 3.2-2.6 3.8C12.7 8 11.6 4.6 8.5 2c0 4-4 6.5-4 11.4C4.5 18.7 8 22 12 22z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></symbol>
+<symbol id="i-device" viewBox="0 0 24 24"><rect x="2" y="5" width="14" height="10" rx="2"/><rect x="17" y="8" width="5" height="11" rx="1.5"/><path d="M6 19h6"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-calm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1.8 2 5.2 2 7 0M9 9.5h.01M15 9.5h.01"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8M9 18h6"/></symbol>
+<symbol id="i-swords" viewBox="0 0 24 24"><path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 6.5L13 3h3v3l-3.5 3.5M5 14l4 4M7 17l-3 3M3 19l2 2"/></symbol></svg>
+<header class="nav"><div class="wrap">
+ <a class="logo" href="/" aria-label="XRainier home"><img src="/assets/img/xr-emblem.png" alt=""><span>XRAINIER</span></a>
+ <nav class="links" id="links" aria-label="Main">
+  <a href="/#products" data-k="products">Products</a><a href="/skyabove.html" data-k="skyabove" data-product="skyabove">SkyAbove</a><a href="/tankwar.html" data-k="tankwar" data-product="tankwar">TankWar</a><a href="/turbotoons.html" data-k="turbotoons" data-product="turbotoons">TurboToons</a><a href="/blockrush.html" data-k="blockrush" data-product="blockrush" aria-current="page">BlockRush</a><a href="/#lab" data-k="lab">Lab</a><a href="/#about" data-k="about">About</a><a href="/#contact" data-k="contact">Contact</a>
+ </nav>
+ <a class="btn pri" href="https://blockrush.xrainier.com/play.html" style="padding:8px 14px"><svg><use href="#i-blocks"/></svg>Play BlockRush</a>
+ <button class="menu" aria-label="Menu" aria-expanded="false" aria-controls="links">☰</button>
+</div></header>
+
+<main class="br">
+<section class="br-hero" aria-labelledby="br-title">
+ <div class="bg"><img src="/assets/img/blockrush/hero.jpg" width="1920" height="1080" alt="The BlockRush 8×8 board with coloured blocks, a hand of three pieces and a combo streak in progress" fetchpriority="high"></div>
+ <div class="br-fall" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+ <div class="wrap">
+  <div class="kick br-k">XRainier · Games</div>
+  <h1 id="br-title">BLOCK<b>RUSH</b></h1>
+  <p class="sub">One puzzle a day. Same pieces for everyone. Your best moves win.</p>
+  <p class="lead">Drop pieces on an 8×8 board, clear rows and columns and chain combos for big points. Play today's Daily, chase your best run of the week in Endless, or send a friend a Duel with exactly your pieces. No install, no account.</p>
+  <div class="cta"><a class="btn pri br-go" href="https://blockrush.xrainier.com/play.html">Play now, free <svg><use href="#i-arrow"/></svg></a><a class="btn ghost" href="https://blockrush.xrainier.com/leaderboard.html">Leaderboards</a></div>
+  <div class="tags"><span class="tag live">WEB</span><span class="tag">PHONE · TABLET · PC</span><span class="tag">DAILY PUZZLE</span><span class="tag">NEW</span></div>
+ </div>
+</section>
+
+<div class="br-strip"><div class="wrap"><ul>
+ <li><b>8×8</b><span>Board</span></li><li><b>3</b><span>Pieces per hand</span></li><li><b>32</b><span>Shapes</span></li><li><b>+300</b><span>Board clear</span></li>
+</ul></div></div>
+
+<section class="br-sec" id="play" aria-labelledby="h-play"><div class="wrap">
+ <div class="kick br-k">How it plays</div>
+ <h2 id="h-play">Easy to learn, <span class="br-gt">hard to put down</span></h2>
+ <p class="lead">You get a hand of three pieces from 32 shapes. Place all three to get a new hand. The run ends when nothing in your hand fits, so every drop counts.</p>
+ <div class="br-how">
+  <article class="br-feat reveal"><svg aria-hidden="true"><use href="#i-drag"/></svg><h3>Drag &amp; drop</h3><p>Drag a piece onto the board with your finger or mouse. A ghost preview shows exactly where it lands.</p><div class="br-mini" aria-hidden="true"><i class="f"></i><i class="f"></i><i></i><i></i><i class="f"></i><i></i><i></i><i class="p"></i><i></i><i></i><i class="p"></i><i class="p"></i><i></i><i></i><i></i><i></i></div></article>
+  <article class="br-feat reveal"><svg aria-hidden="true"><use href="#i-lines"/></svg><h3>Clear lines</h3><p>Fill a whole row or column and it clears. Lines light up before you drop, so you can see what's about to go.</p><div class="br-mini" aria-hidden="true"><i></i><i></i><i class="v"></i><i></i><i class="y"></i><i class="y"></i><i class="y"></i><i class="y"></i><i></i><i></i><i class="v"></i><i></i><i></i><i class="f"></i><i class="v"></i><i></i></div></article>
+  <article class="br-feat reveal"><svg aria-hidden="true"><use href="#i-fire"/></svg><h3>Combo streaks</h3><p>Clear on move after move and your streak multiplies every clear. It survives up to two quiet placements, so plan ahead.</p></article>
+  <article class="br-feat reveal"><svg aria-hidden="true"><use href="#i-star"/></svg><h3>Clean sweep</h3><p>Empty the whole board for a +300 bonus. Rare, loud and very satisfying.</p></article>
+ </div>
+ <div class="br-score reveal" role="note"><span class="lbl">Scoring</span><span>cells placed</span><span>+</span><span><b>10</b> × lines² × <em>streak</em></span><span>+</span><span><b>300</b> for a clear board</span></div>
+</div></section>
+
+<section class="br-sec" id="modes" aria-labelledby="h-modes" style="padding-top:30px"><div class="wrap">
+ <div class="kick br-k">Three ways to play</div>
+ <h2 id="h-modes">Daily, Endless, Duel</h2>
+ <p class="lead">A quick puzzle with your morning coffee, a long run on the bus, or a head-to-head with a friend.</p>
+ <div class="br-modes">
+  <article class="br-card reveal"><figure><div class="ph"><img src="/assets/img/blockrush/daily.jpg" width="1440" height="900" loading="lazy" alt="BlockRush Daily mode in progress, with the daily puzzle number, the score and a hand of three pieces below the board"></div></figure><span class="br-badge" style="--c:#38bdf8">DAILY #N</span><div class="bd"><div class="br-lbl">Same pieces for everyone</div><h3>Daily</h3><p>A new puzzle every day from the UTC date. Everyone gets the same pieces, and your first finished run is the one that counts. Then share your result.</p><a class="go" href="https://blockrush.xrainier.com/play.html">Play today's Daily →</a></div></article>
+  <article class="br-card reveal"><figure><div class="ph"><img src="/assets/img/blockrush/play.jpg" width="1440" height="900" loading="lazy" alt="A BlockRush Endless run with several coloured blocks on the board"></div></figure><span class="br-badge" style="--c:#a78bfa">ENDLESS</span><div class="bd"><div class="br-lbl">Weekly leaderboard</div><h3>Endless</h3><p>Fresh pieces every run. Play as long as you can last; your best run of the week is ranked on the weekly board.</p><a class="go" href="https://blockrush.xrainier.com/play.html?mode=endless">Start an Endless run →</a></div></article>
+  <article class="br-card reveal"><figure><div class="ph"><img src="/assets/img/blockrush/duel.jpg" width="1440" height="900" loading="lazy" alt="A BlockRush Duel in progress against a friend's score, with the same pieces they had"></div></figure><span class="br-badge" style="--c:#f472b6">DUEL</span><div class="bd"><div class="br-lbl">Identical pieces</div><h3>Duel</h3><p>Finish an Endless run and tap Challenge a friend. They get a link, see your score and play the exact same piece order. No excuses.</p><a class="go" href="https://blockrush.xrainier.com/play.html?mode=endless">Make a challenge →</a></div></article>
+ </div>
+</div></section>
+
+<section class="br-sec" id="share" aria-labelledby="h-share" style="padding-top:30px"><div class="wrap">
+ <div class="kick br-k">Daily share</div>
+ <h2 id="h-share">Post your score. Start the argument.</h2>
+ <p class="lead">When your Daily is done, BlockRush gives you a short result to paste into any chat. Everyone had the same pieces, so the numbers say it all.</p>
+ <div class="br-share">
+  <div class="br-msg reveal" role="img" aria-label="Example share message: BlockRush Daily #N, 4,820 points, 37 lines, combo times 5">
+   <div class="who" aria-hidden="true"><img src="/assets/img/blockrush/icon.png" alt="" width="28" height="28">You · just now</div>
+   <pre aria-hidden="true">BlockRush Daily #N · <b>4,820 pts</b> · 37 lines · combo ×5</pre>
+   <span class="ln mono" aria-hidden="true">blockrush.xrainier.com</span>
+  </div>
+  <div class="reveal">
+   <div class="br-lbl">Built for friends</div>
+   <ul>
+    <li><svg aria-hidden="true"><use href="#i-cal"/></svg><span><b>One puzzle a day</b>: the pieces come from the date, so the Daily is the same for everyone, wherever you play.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-trophy"/></svg><span><b>First run counts</b>: no retries on the Daily leaderboard. Make it a good one.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-share"/></svg><span><b>Share text</b>: score, lines cleared and your best combo in one line, ready for any chat.</span></li>
+    <li><svg aria-hidden="true"><use href="#i-swords"/></svg><span><b>Duel links</b>: after an Endless run, challenge a friend to beat your score with the identical pieces.</span></li>
+   </ul>
+  </div>
+ </div>
+</div></section>
+
+<section class="br-sec" id="fair" aria-labelledby="h-fair" style="padding-top:30px"><div class="wrap br-fair">
+ <div>
+  <div class="kick br-k">Fair play</div>
+  <h2 id="h-fair">Every score is replayed. <span class="br-gt">Every one.</span></h2>
+  <p class="lead">Your browser never sends a score. It sends your moves, and the BlockRush server replays them from the same pieces with the same game engine. Only the score it computes goes on the board.</p>
+  <div class="br-flow" aria-label="Your moves, replayed on the server, verified score on the leaderboard"><span>Your moves</span><i aria-hidden="true">→</i><span>Server replay</span><i aria-hidden="true">→</i><span class="ok">✓ Verified score</span></div>
+  <div class="br-feats">
+   <div class="br-feat"><svg aria-hidden="true"><use href="#i-shield"/></svg><h3>Verified scores</h3><p>Illegal moves and unfinished runs are rejected before they reach a leaderboard.</p></div>
+   <div class="br-feat"><svg aria-hidden="true"><use href="#i-save"/></svg><h3>Saved every move</h3><p>Refresh, close the tab or lose signal: your run picks up where you left it.</p></div>
+   <div class="br-feat"><svg aria-hidden="true"><use href="#i-calm"/></svg><h3>Ad-light</h3><p>No wall of ads after every game. Just the next puzzle.</p></div>
+   <div class="br-feat"><svg aria-hidden="true"><use href="#i-device"/></svg><h3>Phone &amp; desktop</h3><p>Touch or mouse, in any modern browser. Nothing to install.</p></div>
+  </div>
+ </div>
+ <figure class="br-shot reveal"><img src="/assets/img/blockrush/leaderboard.jpg" width="1440" height="900" loading="lazy" alt="The BlockRush leaderboard with verified Daily and Endless scores"></figure>
+</div></section>
+
+<section class="br-sec" id="gallery" aria-labelledby="h-gal" style="padding-top:30px"><div class="wrap">
+ <div class="kick br-k">Gallery</div>
+ <h2 id="h-gal">Straight from the game</h2>
+ <p class="lead">Real screenshots from BlockRush on desktop and phone.</p>
+ <div class="br-gal">
+  <figure class="w2 h2 reveal"><img src="/assets/img/blockrush/play.jpg" width="1440" height="900" loading="lazy" alt="A BlockRush run in progress on desktop"><figcaption><b>Desktop</b>Mid-run, three pieces in hand</figcaption></figure>
+  <figure class="h2 reveal"><img src="/assets/img/blockrush/phone.jpg" width="780" height="1688" loading="lazy" alt="BlockRush on a phone, with the board above a hand of three pieces"><figcaption><b>Phone</b>One-thumb play</figcaption></figure>
+  <figure class="reveal"><img src="/assets/img/blockrush/daily.jpg" width="1440" height="900" loading="lazy" alt="The BlockRush Daily puzzle"><figcaption><b>Daily</b>Same pieces for everyone</figcaption></figure>
+  <figure class="reveal"><img src="/assets/img/blockrush/leaderboard.jpg" width="1440" height="900" loading="lazy" alt="BlockRush leaderboards"><figcaption><b>Leaderboards</b>Daily and weekly</figcaption></figure>
+ </div>
+</div></section>
+
+<section class="br-sec" id="faq" aria-labelledby="h-faq" style="padding-top:30px"><div class="wrap">
+ <div class="kick br-k">FAQ</div>
+ <h2 id="h-faq">Questions</h2>
+ <div class="br-faq">
+  <details open><summary>What do I need to play?</summary><p>Any modern browser on a phone, tablet or computer. Nothing to download or install. Open <a href="https://blockrush.xrainier.com/play.html">blockrush.xrainier.com</a> and play.</p></details>
+  <details><summary>Is BlockRush free?</summary><p>Yes. BlockRush is free to play: the Daily, Endless, Duels and the leaderboards are all included, with no subscription.</p></details>
+  <details><summary>Do I need an account?</summary><p>No. You play as a guest and only pick a name to show up on the leaderboards. No email needed.</p></details>
+  <details><summary>When does a new Daily start?</summary><p>The Daily puzzle changes with the date at midnight UTC. Everyone gets the same pieces, and only your first finished run counts on the Daily board.</p></details>
+  <details><summary>How do you stop cheating?</summary><p>The game sends your moves, never a score. The server replays every run with the same engine and only the score it computes is ranked. Illegal moves and unfinished runs are rejected.</p></details>
+  <details><summary>What if I close the tab mid-game?</summary><p>Your run is saved on your device after every move, so you can come back and carry on.</p></details>
+ </div>
+ <p class="lead" style="font-size:16px;margin-top:22px">Something else? <a class="mail" href="mailto:support@xrainier.com?subject=BlockRush">support@xrainier.com</a> · <a href="https://blockrush.xrainier.com/privacy.html">BlockRush privacy policy</a></p>
+</div></section>
+
+<section class="br-sec" style="padding-top:20px" aria-labelledby="h-final"><div class="wrap">
+ <div class="br-final reveal">
+  <img src="/assets/img/blockrush/hero.jpg" width="1920" height="1080" loading="lazy" alt="">
+  <div class="kick br-k" style="justify-content:center">Today's puzzle</div>
+  <h2 id="h-final">Your pieces are waiting.</h2>
+  <p>Free in your browser, right now. No install, no account.</p>
+  <div class="cta"><a class="btn pri br-go" href="https://blockrush.xrainier.com/play.html">Play now, free <svg><use href="#i-arrow"/></svg></a><a class="btn ghost" href="https://blockrush.xrainier.com/play.html?mode=endless">Endless mode</a></div>
+ </div>
+</div></section>
+</main>
+<footer><div class="wrap">
+ <a class="logo" href="/"><img src="/assets/img/xr-emblem.png" alt="" style="width:26px"><span style="font-size:15px">XRAINIER</span></a>
+ <span>© <span data-year>2026</span> Rainier Studio LLC<br><small style="color:#6f7a99">XRainier is a trademark of Rainier Studio LLC.</small></span><span class="sp"></span>
+ <a href="/skyabove.html">SkyAbove</a><a href="/tankwar.html">TankWar</a><a href="/turbotoons.html">TurboToons</a><a href="/blockrush.html">BlockRush</a><a href="https://blockrush.xrainier.com/">Play</a><a href="mailto:support@xrainier.com">Support</a>
+</div></footer>
+<script src="/assets/js/blockrush-links.js" defer></script>
+<script src="/assets/js/site.js" defer></script>
+
+</body></html>
