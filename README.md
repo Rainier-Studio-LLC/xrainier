@@ -16,15 +16,32 @@ XRainier is the trade name of Rainier Studio LLC. No build step: plain HTML, CSS
 - `404.html`: not found
 - `assets/`: styles, `js/site.js` (menu, screenshots, lightbox, promotions, product list), images, `shots/` (SkyHere screenshots)
 
-### Products shown on the site
-The admin decides which products appear and in what order. `web/assets/js/site.js` reads the list from
-`admin.xrainier.com/api/products` (beta pages read `admin-beta`) and hides the cards, menu and footer links of hidden products.
-If the list can't be loaded, everything shows. Mark new product links with `data-product="<id>"` where needed.
+### Products on the site: Live, Coming soon, Off
+Every product has a status, set in the admin (Website tab), separately for each site:
+admin.xrainier.com controls xrainier.com, admin-beta.xrainier.com controls beta.xrainier.com.
+
+| Status | Home-page card | Top menu, header and footer links | Its own page |
+|---|---|---|---|
+| **Live** | shows | show | opens |
+| **Coming soon** | shows with a COMING SOON tag, no link | hidden | opens |
+| **Off** | hidden | hidden | opens, marked noindex |
+
+A status change saves at once; the site follows within about a minute. `web/assets/js/site.js` reads the list from
+`admin.xrainier.com/api/products` (beta pages read `admin-beta`), applies the last known list at once (no flicker) and then
+the latest one. If the list can't be loaded at all, everything shows.
+
+**Incoming products.** A product needs no code change in the admin. When a card with `data-product="<id>"` lands on the
+home page and that id has never been in the list, the admin adds it by itself with the *New products start as* status and
+shows it under **Incoming** until you pick Go live, Coming soon or Keep off. Defaults: **Off** on xrainier.com (nothing new
+goes public until you click Go live) and **Live** on beta.xrainier.com (so you can check it there). The site applies the same
+status to a card whose id the admin hasn't picked up yet, so a new card never flashes on the live site.
+A product you remove is never added back by itself; use Off to just hide it.
 
 ### Add a product
 1. Copy `web/skyabove.html` to `web/<product>.html` and change the text, icon and screenshots.
-2. On `web/index.html`, add a card for it (`data-product="<id>"`) in the products grid.
-3. Add the page to `web/sitemap.xml`, then add the product in the admin.
+2. On `web/index.html`, add a card for it in the products grid and its menu and footer links, all with `data-product="<id>"`.
+3. Add the page to `web/sitemap.xml`. Push to beta: it shows on beta.xrainier.com and waits in Incoming on the live admin.
+4. After the release to main, open admin.xrainier.com → Incoming → **Go live** (or **Coming soon** to tease it first).
 
 ### Screenshots
 `web/assets/shots/` holds the SkyHere screenshots; missing ones show a placeholder.

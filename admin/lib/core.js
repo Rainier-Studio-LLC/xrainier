@@ -44,22 +44,45 @@ export async function readSession(env, req) {
 }
 export const setupProblems = (env) => ["GOOGLE_CLIENT_ID", "ADMIN_EMAILS", "SESSION_SECRET"].filter((k) => !env[k]).concat(env.SITE ? [] : ["SITE (KV binding)"]);
 
-// ---- products on the home page
-export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyHere", show: true }, { id: "tankwar", name: "TankWar", show: true }, { id: "blockrush", name: "BlockRush", show: true }];
-export async function readProducts(env) {
+// ---- products on the XRainier site
+// Each product has a status, set in the admin (Website tab):
+//   "live"  card, top menu and footer links show            "soon"  card shows with a COMING SOON tag, no links
+//   "off"   hidden everywhere (its own page still opens for anyone with the link, marked noindex)
+// Products are found automatically: any element on the home page with data-product="id" whose id has never been in the
+// list is added with the "new products start as" status (default: Off on xrainier.com, Live on beta.xrainier.com) and
+// flagged "incoming" until the owner decides. A product the owner removes is remembered and never added back by itself.
+export const STATUSES = ["live", "soon", "off"];
+export const PRODUCTS_DEFAULT = [{ id: "skyabove", name: "SkyHere", status: "live" }, { id: "tankwar", name: "TankWar", status: "live" }, { id: "blockrush", name: "BlockRush", status: "live" }];
+export const statusOf = (p) => (p && STATUSES.includes(p.status) ? p.status : p && (p.show === false || p.show === "false") ? "off" : "live");   // older lists saved {show}
+// The site this admin controls: admin-beta → beta.xrainier.com, admin → xrainier.com (SITE_URL overrides).
+export const siteUrl = (env, req) => env.SITE_URL || (req && /(^|[.-])beta([.-]|$)/.test(new URL(req.url).hostname) ? "https://beta.xrainier.com/" : "https://xrainier.com/");
+export const isBetaSite = (env, req) => /(^|[.-])beta([.-]|$)/.test(new URL(siteUrl(env, req)).hostname);
+// Status a newly found product starts with: the owner's choice, else Off on the live site and Live on beta.
+export const newStatusOf = (v, env, req) => (STATUSES.includes(v && v.newStatus) ? v.newStatus : isBetaSite(env, req) ? "live" : "off");
+export async function readProducts(env, req) {
   const v = env.SITE ? await env.SITE.get("products", "json").catch(() => null) : null;
-  if (v && Array.isArray(v.products)) {   // products added later (like BlockRush) appear, shown, until the owner saves the list
-    const have = new Set(v.products.map((p) => p.id));
-    return { ...v, products: [...v.products, ...PRODUCTS_DEFAULT.filter((p) => !have.has(p.id))] };
+  if (!v || !Array.isArray(v.products)) return { products: PRODUCTS_DEFAULT.map((p) => ({ ...p })), at: null, by: null, v2: false };
+  let products = v.products.map((p) => ({ ...p, status: statusOf(p) }));
+  products.forEach((p) => delete p.show);
+  if (!v.v2) {   // a list saved before statuses: products added to the code since then show until the list is upgraded
+    const have = new Set(products.map((p) => p.id));
+    products = [...products, ...PRODUCTS_DEFAULT.filter((p) => !have.has(p.id)).map((p) => ({ ...p }))];
   }
-  return { products: PRODUCTS_DEFAULT, at: null, by: null };
+  return { ...v, products };
 }
 // Every id that has ever been in the list. A product the owner removes stays here, so it isn't added back automatically.
 export const knownIds = (v) => [...new Set([...(Array.isArray(v.known) ? v.known : []), ...v.products.map((p) => p.id), ...PRODUCTS_DEFAULT.map((p) => p.id)])];
+// What the public site needs: status per product, and what to do with a data-product id that isn't in the list yet.
+export const publicView = (v, env, req) => ({
+  products: v.products.map((p) => ({ id: p.id, name: p.name, status: p.status, show: p.status === "live" })),
+  unlisted: v.v2 ? newStatusOf(v, env, req) : "live", at: v.at || null,
+});
+export async function addLog(env, by, what) {
+  const log = (await env.SITE.get("log", "json").catch(() => null)) || [];
+  log.unshift({ t: Date.now(), by, what }); await env.SITE.put("log", JSON.stringify(log.slice(0, 50)));
+}
 
 // ---- new products are picked up from the home page automatically
-// The site this admin controls: admin-beta → beta.xrainier.com, admin → xrainier.com (SITE_URL overrides).
-export const siteUrl = (env, req) => env.SITE_URL || (/(^|[.-])beta([.-]|$)/.test(new URL(req.url).hostname) ? "https://beta.xrainier.com/" : "https://xrainier.com/");
 // Products on the home page: every element with data-product="id"; the name is the text of its menu link.
 export function productsInPage(html) {
   const found = new Map(), tag = /<[a-z][^>]*\sdata-product="([a-z0-9][a-z0-9-]{0,29})"[^>]*>([^<]*)/gi;
@@ -74,17 +97,21 @@ export async function readSiteProducts(env, req) {
   if (!r.ok) throw Error("home page " + r.status);
   return productsInPage(await r.text());
 }
-// Adds products that are on the home page but have never been in the list (shown, at the end) and saves them.
+// Adds products that are on the home page but have never been in the list and saves them. They start with the
+// "new products start as" status and are flagged incoming. The first run after the upgrade to statuses adds what's
+// already on the home page as Live (nothing that shows today disappears) and marks the list upgraded (v2).
 // Returns {v, found, added}. Never throws: if the home page can't be read, nothing changes.
 export async function syncProducts(env, req) {
-  const v = await readProducts(env); let found = null;
+  const v = await readProducts(env, req); let found = null;
   try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [] }; }
   const known = new Set(knownIds(v)), added = found.filter((p) => !known.has(p.id)).slice(0, Math.max(0, 30 - v.products.length));
-  if (!added.length || !env.SITE) return { v, found, added: [] };
-  const t = Date.now(), nv = { ...v, products: [...v.products, ...added.map((p) => ({ id: p.id, name: p.name, show: true, auto: t }))], known: [...known, ...added.map((p) => p.id)], at: t, by: "automatic (new on the home page)" };
+  if ((!added.length && v.v2) || !env.SITE) return { v, found, added: [] };
+  const t = Date.now(), upgrade = !v.v2, st = upgrade ? "live" : newStatusOf(v, env, req);
+  const nv = { ...v, v2: true, products: [...v.products, ...added.map((p) => ({ id: p.id, name: p.name, status: st, auto: t, ...(upgrade ? {} : { incoming: t }) }))],
+    known: [...known, ...added.map((p) => p.id)] };
+  if (added.length) { nv.at = t; nv.by = "automatic (new on the home page)"; }
   await env.SITE.put("products", JSON.stringify(nv));
-  const log = (await env.SITE.get("log", "json").catch(() => null)) || [];
-  log.unshift({ t, by: "automatic", what: "Added from the home page: " + added.map((p) => p.name).join(", ") });
-  await env.SITE.put("log", JSON.stringify(log.slice(0, 50)));
+  if (added.length) await addLog(env, "automatic", (upgrade ? "Added from the home page: " : "Incoming from the home page (" + LABEL[st] + "): ") + added.map((p) => p.name).join(", "));
   return { v: nv, found, added };
 }
+export const LABEL = { live: "Live", soon: "Coming soon", off: "Off" };

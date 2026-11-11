@@ -1,10 +1,11 @@
-// Products shown on the XRainier home page.
-//   GET /api/products   public (the home page reads it; cached 60 s)   → {products:[{id, name, show}], at}
-//   PUT /api/products   owner only, {products:[{id, name, show}]} in display order
-// New products are added automatically: a product card on the home page (data-product="id") whose id has never been in
-// the list is appended (shown) and saved. The admin view checks the home page every time; public reads check it in the
-// background at most every 10 minutes. A product the owner removed is never added back by itself.
-import { json, readSession, readProducts, syncProducts, knownIds, PRODUCTS_DEFAULT } from "../../lib/core.js";
+// Products on the XRainier site and their status (Live / Coming soon / Off).
+//   GET /api/products   public (site.js reads it; cached 60 s) → {products:[{id, name, status, show}], unlisted, at}
+//                       signed in: the full list plus what the home page has, incoming products and the "new products start as" setting
+//   PUT /api/products   owner only, {products:[{id, name, status, incoming?}], newStatus?} in display order
+// New products are found automatically: a product on the home page (data-product="id") whose id has never been in the list
+// is added with the "new products start as" status (default Off on xrainier.com, Live on beta) and flagged incoming.
+// The admin view checks the home page every time; public reads check it in the background at most every 10 minutes.
+import { json, readSession, readProducts, syncProducts, knownIds, publicView, newStatusOf, isBetaSite, siteUrl, addLog, STATUSES, LABEL, PRODUCTS_DEFAULT } from "../../lib/core.js";
 const CORS = { "Access-Control-Allow-Origin": "*" }, EVERY = 600000;
 let lastSync = 0;   // per isolate; the Cache API marker below covers the rest of the edge
 async function due(request) {
@@ -20,11 +21,12 @@ export async function onRequestGet({ request, env, waitUntil }) {
   const me = await readSession(env, request);
   if (me) {   // admin view: who saved it and when, what the home page has, which ids were removed on purpose
     const { v, found, added } = await syncProducts(env, request), ids = new Set(v.products.map((p) => p.id));
-    return json({ ...v, defaults: PRODUCTS_DEFAULT, found, added: added.map((p) => p.id), removed: knownIds(v).filter((id) => !ids.has(id)) });
+    return json({ ...v, defaults: PRODUCTS_DEFAULT, found, added: added.map((p) => p.id), removed: knownIds(v).filter((id) => !ids.has(id)),
+      newStatus: newStatusOf(v, env, request), newStatusSet: STATUSES.includes(v.newStatus), beta: isBetaSite(env, request), site: siteUrl(env, request) });
   }
-  const v = await readProducts(env);
+  const v = await readProducts(env, request);
   if (env.SITE && (await due(request))) { const s = syncProducts(env, request).catch(() => {}); if (waitUntil) waitUntil(s); else await s; }
-  return json({ products: v.products.map(({ id, name, show }) => ({ id, name, show: !!show })), at: v.at || null }, 200, { ...CORS, "Cache-Control": "public, max-age=60" });
+  return json(publicView(v, env, request), 200, { ...CORS, "Cache-Control": "public, max-age=60" });
 }
 export const onRequestOptions = () => new Response(null, { status: 204, headers: { ...CORS, "Access-Control-Allow-Methods": "GET", "Access-Control-Max-Age": "86400" } });
 export async function onRequestPut({ request, env }) {
@@ -34,13 +36,21 @@ export async function onRequestPut({ request, env }) {
   for (const p of Array.isArray(b.products) ? b.products.slice(0, 30) : []) {
     const id = String((p && p.id) || "").toLowerCase().trim(), name = String((p && p.name) || "").trim().slice(0, 40);
     if (!/^[a-z0-9][a-z0-9-]{0,29}$/.test(id) || seen.has(id)) return json({ error: "id", message: `"${id || "(empty)"}" isn't a valid product id: use a-z, 0-9 and -, each once.` }, 400);
-    seen.add(id); list.push({ id, name: name || id, show: !!p.show });
+    const status = STATUSES.includes(p.status) ? p.status : p.show === false ? "off" : p.show === true ? "live" : null;
+    if (!status) return json({ error: "status", message: `Pick Live, Coming soon or Off for "${name || id}".` }, 400);
+    seen.add(id); list.push({ id, name: name || id, status, ...(p.auto ? { auto: +p.auto || Date.now() } : {}), ...(p.incoming ? { incoming: +p.incoming || Date.now() } : {}) });
   }
   if (!list.length) return json({ error: "empty", message: "Keep at least one product in the list." }, 400);
-  const prev = await readProducts(env), v = { products: list, known: [...new Set([...knownIds(prev), ...list.map((p) => p.id)])], at: Date.now(), by: me.email };
+  if (b.newStatus != null && !STATUSES.includes(b.newStatus)) return json({ error: "newStatus", message: "New products start as Live, Coming soon or Off." }, 400);
+  const prev = await readProducts(env, request), newStatus = b.newStatus != null ? b.newStatus : prev.newStatus;
+  const v = { v2: true, products: list, known: [...new Set([...knownIds(prev), ...list.map((p) => p.id)])], ...(STATUSES.includes(newStatus) ? { newStatus } : {}), at: Date.now(), by: me.email };
   await env.SITE.put("products", JSON.stringify(v));
-  const log = (await env.SITE.get("log", "json").catch(() => null)) || [];
-  log.unshift({ t: v.at, by: me.email, what: list.map((p) => p.name + (p.show ? "" : " (hidden)")).join(", ") });
-  await env.SITE.put("log", JSON.stringify(log.slice(0, 50)));
+  // Activity: say what changed, not the whole list
+  const before = new Map(prev.products.map((p) => [p.id, p])), what = [];
+  for (const p of list) { const o = before.get(p.id); if (!o) what.push(`${p.name} added (${LABEL[p.status]})`); else if (o.status !== p.status) what.push(`${p.name}: ${LABEL[o.status]} → ${LABEL[p.status]}`); }
+  for (const o of prev.products) if (!seen.has(o.id)) what.push(`${o.name} removed`);
+  if (prev.products.filter((p) => seen.has(p.id)).map((p) => p.id).join() !== list.filter((p) => before.has(p.id)).map((p) => p.id).join()) what.push("order: " + list.map((p) => p.name).join(", "));
+  if (newStatus !== prev.newStatus && STATUSES.includes(newStatus)) what.push(`new products start as ${LABEL[newStatus]}`);
+  await addLog(env, me.email, what.join(" · ") || "saved, no changes");
   return json({ ok: true, ...v });
 }

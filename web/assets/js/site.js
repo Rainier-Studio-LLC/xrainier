@@ -47,30 +47,63 @@
     const until = f.ends ? new Date(f.ends).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
     slots.forEach((el) => { el.innerHTML = `<span class="pz">🎁</span><span><b>${esc(f.banner || f.label)}</b><small>Use code <code>${esc(f.code)}</code>${until ? ' · until ' + until : ''}</small></span><a class="btn pri" href="https://${BETA ? 'beta.' : ''}skyabove.xrainier.com/?promo=${encodeURIComponent(f.code)}">Get the offer</a>`; el.hidden = false; });
   }).catch(() => {});
-  // products on the site: chosen in the XRainier admin (admin.xrainier.com → Website; beta.xrainier.com uses admin-beta).
-  // A hidden product leaves the top menu, header buttons, footer and home-page cards on every page; its own page still works.
-  // The last known setting is applied at once (no flicker), then the latest one. If it can't be loaded, everything shows.
+  // products on the site: each one is Live, Coming soon or Off, set in the XRainier admin (admin.xrainier.com → Website;
+  // beta.xrainier.com uses admin-beta).
+  //   Live: card, top menu, header buttons and footer links show.  Coming soon: the card shows with a COMING SOON tag and
+  //   no link; menu and footer links hide.  Off: everything hides; the product's own page still opens but isn't indexed.
+  // A card or link marked data-product="id" whose id isn't in the admin's list yet is a new (incoming) product: it gets
+  // the admin's "new products start as" status (list.unlisted), so a new product can't go public before it's turned on.
+  // The last known list is applied at once (no flicker), then the latest one. If it can't be loaded, everything shows.
   const PKEY = 'xr.products' + (BETA ? '.beta' : ''), PAPI = (BETA ? 'https://admin-beta.xrainier.com' : 'https://admin.xrainier.com') + '/api/products';
   const WORDS = ['No products', 'One product', 'Two products', 'Three products', 'Four products', 'Five products', 'Six products', 'Seven products', 'Eight products', 'Nine products'];
+  const ST = ['live', 'soon', 'off'];
   const prodOf = (el) => {
     if (el.dataset.product) return el.dataset.product;
-    const h = el.getAttribute('href') || '', m = /^\/([a-z0-9-]+)\.html(?:[?#].*)?$/i.exec(h) || /^https?:\/\/(?:beta\.)?([a-z0-9-]+)\.xrainier\.com\/?(?:[?#].*)?$/i.exec(h);
+    const h = el.getAttribute('href') || el.dataset.xrHref || '', m = /^\/([a-z0-9-]+)\.html(?:[?#].*)?$/i.exec(h) || /^https?:\/\/(?:beta\.)?([a-z0-9-]+)\.xrainier\.com\/?(?:[?#].*)?$/i.exec(h);
     return m ? m[1].toLowerCase() : null;
+  };
+  if (!$('#xr-soon-css')) document.head.insertAdjacentHTML('beforeend', '<style id="xr-soon-css">.xr-soon{cursor:default}.xr-soon:hover{transform:none}.xr-soon .more{opacity:.7}</style>');
+  // a product card in the grid: Coming soon keeps it visible but without its link; Live puts the link back
+  const cardMode = (el, soon) => {
+    const tag = $('.tag.live', el), more = $('.more', el);
+    if (soon && !el.classList.contains('xr-soon')) {
+      el.classList.add('soon', 'xr-soon');
+      if (el.hasAttribute('href')) { el.dataset.xrHref = el.getAttribute('href'); el.removeAttribute('href'); el.setAttribute('aria-disabled', 'true'); }
+      if (tag) { tag.dataset.xrText = tag.textContent; tag.textContent = 'COMING SOON'; tag.classList.replace('live', 'xr-was-live'); }
+      if (more) { more.dataset.xrText = more.textContent; more.textContent = 'Coming soon'; }
+    } else if (!soon && el.classList.contains('xr-soon')) {
+      el.classList.remove('soon', 'xr-soon');
+      if (el.dataset.xrHref) { el.setAttribute('href', el.dataset.xrHref); delete el.dataset.xrHref; el.removeAttribute('aria-disabled'); }
+      const t = $('.tag.xr-was-live', el); if (t) { t.textContent = t.dataset.xrText || 'LIVE'; t.classList.replace('xr-was-live', 'live'); }
+      if (more && more.dataset.xrText) more.textContent = more.dataset.xrText;
+    }
   };
   const applyProducts = (c) => {
     if (!c || !Array.isArray(c.products) || !c.products.length) return;
-    const show = {}, ord = {}; c.products.forEach((p, i) => { show[p.id] = !!p.show; ord[p.id] = i; });
-    const shown = new Set();
-    $$('[data-product], header a[href], nav a[href], footer a[href]').forEach((el) => {
-      const id = prodOf(el); if (!id || !(id in show)) return;
-      el.style.display = show[id] ? '' : 'none'; if (show[id] && el.matches('[data-product]')) shown.add(id);
+    const status = {}, ord = {}; c.products.forEach((p, i) => { status[p.id] = ST.includes(p.status) ? p.status : p.show === false ? 'off' : 'live'; ord[p.id] = i; });
+    const unlisted = ST.includes(c.unlisted) ? c.unlisted : 'live';
+    const live = new Set();
+    $$('[data-product], header a[href], nav a[href], footer a[href], a[data-xr-href]').forEach((el) => {
+      const id = prodOf(el); if (!id) return;
+      if (!(id in status) && !el.dataset.product) return;   // a plain link to a page that isn't a product: leave it alone
+      const s = id in status ? status[id] : unlisted, card = !!el.closest('#products .grid');
+      el.style.display = s === 'live' || (s === 'soon' && card) ? '' : 'none';
+      if (card) cardMode(el, s === 'soon');
+      if (s === 'live' && card) live.add(id);
     });
     const g = $('#products .grid');
     if (g) { const cards = [...g.children].filter((e) => e.dataset.product), rest = [...g.children].filter((e) => !e.dataset.product);
-      cards.sort((a, b) => (ord[a.dataset.product] ?? 99) - (ord[b.dataset.product] ?? 99)); [...cards, ...rest].forEach((e) => g.appendChild(e)); }
-    const n = [...shown].length;
+      const rank = (e) => { const s = status[e.dataset.product] || unlisted; return (s === 'soon' ? 1000 : 0) + (ord[e.dataset.product] ?? 99); };   // coming soon after live
+      cards.sort((a, b) => rank(a) - rank(b)); [...cards, ...rest].forEach((e) => g.appendChild(e)); }
+    const n = live.size;
     $$('[data-live-count]').forEach((e) => (e.textContent = n));
     $$('[data-live-words]').forEach((e) => (e.textContent = WORDS[n] || n + ' products'));
+    // this page belongs to a product that's Off: keep it out of search results
+    const me = (/^\/([a-z0-9-]+)\.html$/i.exec(location.pathname) || [])[1];
+    const off = me && (status[me.toLowerCase()] || null) === 'off';
+    let rob = $('meta[name="robots"][data-xr]');
+    if (off && !rob) { rob = document.createElement('meta'); rob.name = 'robots'; rob.content = 'noindex'; rob.dataset.xr = '1'; document.head.appendChild(rob); }
+    else if (!off && rob) rob.remove();
   };
   try { applyProducts(JSON.parse(localStorage.getItem(PKEY))); } catch (e) {}
   fetch(PAPI).then((r) => (r.ok ? r.json() : null)).then((c) => { if (c && c.products) { try { localStorage.setItem(PKEY, JSON.stringify(c)); } catch (e) {} applyProducts(c); } }).catch(() => {});

@@ -28,22 +28,41 @@ code{background:#0b1222;border:1px solid var(--line);border-radius:5px;padding:1
 @media(max-width:640px){header{padding:12px 14px;gap:8px}.brand{letter-spacing:.08em;font-size:14px}.who{display:none}main{padding:18px 12px 50px}.card{padding:14px 12px}
  h3{flex-wrap:wrap}th,td{padding:8px 4px}th:nth-child(3),td:nth-child(3){display:none}td:first-child{white-space:nowrap}td:first-child .btn{padding:5px 8px}th:first-child{width:auto!important}
  td:last-child .btn{padding:5px 8px;font-size:12px}.tag{display:table;margin:4px 0 0}.sw{gap:5px}#found .btn{font-size:12px}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}.seg button{background:none;border:0;border-left:1px solid var(--line);color:var(--mut);padding:6px 11px;cursor:pointer;font:inherit;font-size:13px;white-space:nowrap}.seg button:first-child{border-left:0}
+.seg button:hover{color:var(--txt)}.seg button.on.live{background:rgba(74,222,128,.16);color:var(--ok);font-weight:600}.seg button.on.soon{background:rgba(56,189,248,.16);color:var(--acc);font-weight:600}.seg button.on.off{background:rgba(248,113,113,.14);color:var(--bad);font-weight:600}
+.seg button:disabled{cursor:default}.tag.incT{background:rgba(56,189,248,.14);color:var(--acc)}.tag.soonT{background:rgba(56,189,248,.14);color:var(--acc)}
+#incoming{display:none;border-color:rgba(56,189,248,.45);background:linear-gradient(180deg,rgba(56,189,248,.07),transparent 70%),var(--card)}
+.inc{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}.inc:first-of-type{border-top:0}.inc .nm{flex:1;min-width:180px}.inc .btn{font-size:13px;padding:6px 11px}
+.btn.go{background:rgba(74,222,128,.16);border-color:rgba(74,222,128,.4);color:var(--ok);font-weight:600}
+select{background:#0b1222;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 8px;font:inherit;font-size:14px}
+td:first-child{white-space:nowrap}.rmX{display:none}
+.saving{font-size:12px;color:var(--mut);min-width:70px;text-align:right}
+@media(max-width:640px){.seg button{padding:6px 7px;font-size:12px}.inc .nm{min-width:100%}.rmT{display:none}.rmX{display:inline}td:last-child .btn{padding:5px 7px}#rows td:first-child .btn{padding:5px 6px}table{table-layout:auto}}
 </style></head><body>
 <header><div class="brand">X<b>RAINIER</b> ADMIN</div><span class="env" id="env">LIVE</span><span class="sp"></span><span class="who" id="who"></span><button class="btn" id="out" hidden>Sign out</button></header>
 <div id="login"><div class="lbox"><h2>XRainier admin</h2><p class="muted" style="margin:6px 0 0">Owner sign-in only.</p><div id="gbtn"></div><div id="lmsg"></div></div></div>
 <main id="app" hidden>
  <div class="tabs"><button class="tab on" data-p="site">Website</button><button class="tab" data-p="log">Activity</button></div>
  <section class="pane on" id="p-site">
-  <div class="card"><h3>Products on the home page<span class="sp"></span><a class="btn" id="open" target="_blank" rel="noopener">Open the site ↗</a><button class="btn pri" id="save" disabled>Save</button></h3>
-   <p class="muted" style="font-size:13px;margin:0 0 10px">Choose which products the home page shows and their order (top = first). Hidden products disappear from the product cards, the menu and the footer, and the "products live" count updates; their own pages still work for anyone with the link. The site picks up a change within about a minute.<br><b style="color:var(--txt)">New products add themselves:</b> when a product card appears on the home page (data-product="id"), it's added here automatically, shown, at the end of the list. A product you remove isn't added back unless you add it.</p>
-   <table><thead><tr><th style="width:90px">Order</th><th>Product</th><th>ID on the page</th><th>Home page</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+  <div class="card" id="incoming"><h3>✨ Incoming products<span class="sp"></span></h3>
+   <p class="muted" style="font-size:13px;margin:0 0 6px" id="incHelp"></p><div id="incRows"></div></div>
+  <div class="card"><h3>Products on the site<span class="sp"></span><span class="saving" id="saving"></span><a class="btn" id="open" target="_blank" rel="noopener">Open the site ↗</a></h3>
+   <p class="muted" style="font-size:13px;margin:0 0 10px">Click a status to change it; it saves at once and the site follows within about a minute.
+    <b style="color:var(--ok)">Live</b>: card, menu and footer links. <b style="color:var(--acc)">Coming soon</b>: the card shows with a COMING SOON tag and no links.
+    <b style="color:var(--bad)">Off</b>: hidden everywhere (its own page still opens with the link, and isn't indexed). Arrows set the order on the home page.</p>
+   <table><thead><tr><th style="width:100px">Order</th><th>Product</th><th>ID on the page</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table>
    <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><input type="text" id="nid" placeholder="id, e.g. newapp" style="width:150px" aria-label="New product id"><input type="text" id="nname" placeholder="Name" style="width:160px" aria-label="New product name"><button class="btn" id="add">+ Add product</button>
-    <span class="muted" style="font-size:12px">Added by hand, a product appears once the home page has a card for it (data-product="id").</span></div>
+    <span class="muted" style="font-size:12px">Added by hand, a product starts as Off and appears once the home page has a card for it (data-product="id").</span></div>
    <div id="found"></div>
    <p class="muted" id="at" style="font-size:12px;margin:12px 0 0"></p>
   </div>
+  <div class="card"><h3>New products</h3>
+   <p class="muted" style="font-size:13px;margin:0 0 10px">When a new product card lands on the home page (data-product="id"), it's added to the list by itself and waits in Incoming. Choose how it starts:</p>
+   <label class="sw" style="cursor:default">Start new products as <span class="seg" id="newSeg"></span></label>
+   <p class="muted" id="newHelp" style="font-size:12px;margin:10px 0 0"></p>
+  </div>
  </section>
- <section class="pane" id="p-log"><div class="card"><h3>Recent changes</h3><table><thead><tr><th>When</th><th>Who</th><th>Products</th></tr></thead><tbody id="logRows"></tbody></table></div></section>
+ <section class="pane" id="p-log"><div class="card"><h3>Recent changes</h3><table><thead><tr><th>When</th><th>Who</th><th>What changed</th></tr></thead><tbody id="logRows"></tbody></table></div></section>
 </main>
 <div id="toast" role="status"></div>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -63,22 +82,47 @@ async function login(){$('login').style.display='flex';let cfg=null;try{cfg=awai
   google.accounts.id.renderButton($('gbtn'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with'})};go()}
 function start(){$('login').style.display='none';$('app').hidden=false;$('out').hidden=false;$('who').textContent=sessionStorage.getItem('xa.email')||'';load().catch((e)=>toast(e.message,1))}
 document.querySelectorAll('.tab').forEach((b)=>b.onclick=()=>{document.querySelectorAll('.tab').forEach((x)=>x.classList.toggle('on',x===b));document.querySelectorAll('.pane').forEach((p)=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));if(b.dataset.p==='log')loadLog().catch((e)=>toast(e.message,1))});
-const dirty=(on)=>{$('save').disabled=!on};
-function draw(){const P=data.products;$('rows').innerHTML=P.map((p,i)=>`<tr><td><button class="btn" data-up="${i}" ${i?'':'disabled'} aria-label="Move ${esc(p.name)} up">↑</button> <button class="btn" data-dn="${i}" ${i<P.length-1?'':'disabled'} aria-label="Move ${esc(p.name)} down">↓</button></td><td><b>${esc(p.name)}</b>${p.auto?'<span class="tag new" title="Added automatically from the home page">new</span>':''}${data.found&&!data.found.some((f)=>f.id===p.id)?'<span class="tag nocard" title="The home page has no card with this id yet, so nothing shows for it">no card yet</span>':''}</td><td><code>${esc(p.id)}</code></td>`
-  +`<td><label class="sw"><input type="checkbox" data-show="${i}" ${p.show?'checked':''}>${p.show?'Shown':'<span class="hid">Hidden</span>'}</label></td><td>${data.defaults.some((d)=>d.id===p.id)?'':`<button class="btn" data-rm="${i}">Remove</button>`}</td></tr>`).join('');
- const T=$('rows'),sw=(i,j)=>{[P[i],P[j]]=[P[j],P[i]];draw();dirty(true)};
+const ST=['live','soon','off'],LBL={live:'Live',soon:'Coming soon',off:'Off'},SH={live:'Live',soon:'Soon',off:'Off'};
+const seg=(cur,attr,i)=>`<span class="seg" role="group">${ST.map((s)=>`<button type="button" class="${s}${s===cur?' on':''}" ${attr}="${i}" data-s="${s}" aria-pressed="${s===cur}">${SH[s]}</button>`).join('')}</span>`;
+const ago=(t)=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':new Date(t).toLocaleDateString()};
+let busy=Promise.resolve();
+// Every change saves at once (one at a time); on an error the list is reloaded from the server.
+function save(msg){$('saving').textContent='Saving…';const body=JSON.stringify({products:data.products.map(({id,name,status,auto,incoming})=>({id,name,status,auto,incoming})),newStatus:data.newStatus});
+ busy=busy.then(()=>api('/api/products',{method:'PUT',body})).then(()=>{$('saving').textContent='Saved ✓';if(msg)toast(msg);setTimeout(()=>{if($('saving').textContent==='Saved ✓')$('saving').textContent=''},2500)})
+  .catch((e)=>{$('saving').textContent='';toast(e.message,1);return load().catch(()=>{})});return busy}
+function setStatus(p,s,why){if(p.status===s&&!p.incoming)return;p.status=s;delete p.incoming;draw();
+ save(why||`${s==='live'?'🟢':s==='soon'?'🔵':'⚪'} ${p.name} is now ${LBL[s]} on ${BETA?'beta.xrainier.com':'xrainier.com'}. The site updates within about a minute.`)}
+function draw(){const P=data.products,site=BETA?'beta.xrainier.com':'xrainier.com';
+ $('rows').innerHTML=P.map((p,i)=>`<tr><td><button class="btn" data-up="${i}" ${i?'':'disabled'} aria-label="Move ${esc(p.name)} up">↑</button> <button class="btn" data-dn="${i}" ${i<P.length-1?'':'disabled'} aria-label="Move ${esc(p.name)} down">↓</button></td><td><b>${esc(p.name)}</b>${p.incoming?'<span class="tag incT" title="Found on the home page, waiting for your decision">incoming</span>':''}${data.found&&!data.found.some((f)=>f.id===p.id)?'<span class="tag nocard" title="The home page has no card with this id yet, so nothing shows for it">no card yet</span>':''}</td><td><code>${esc(p.id)}</code></td>`
+  +`<td>${seg(p.status,'data-st',i)}</td><td>${data.defaults.some((d)=>d.id===p.id)?'':`<button class="btn" data-rm="${i}" title="Remove from the list" aria-label="Remove ${esc(p.name)}"><span class="rmT">Remove</span><span class="rmX">✕</span></button>`}</td></tr>`).join('');
+ const T=$('rows'),sw=(i,j)=>{[P[i],P[j]]=[P[j],P[i]];draw();save()};
  T.querySelectorAll('[data-up]').forEach((b)=>b.onclick=()=>sw(+b.dataset.up,+b.dataset.up-1));T.querySelectorAll('[data-dn]').forEach((b)=>b.onclick=()=>sw(+b.dataset.dn,+b.dataset.dn+1));
- T.querySelectorAll('[data-show]').forEach((c)=>c.onchange=()=>{P[+c.dataset.show].show=c.checked;draw();dirty(true)});T.querySelectorAll('[data-rm]').forEach((b)=>b.onclick=()=>{P.splice(+b.dataset.rm,1);draw();dirty(true)});
+ T.querySelectorAll('[data-st]').forEach((b)=>b.onclick=()=>setStatus(P[+b.dataset.st],b.dataset.s));
+ T.querySelectorAll('[data-rm]').forEach((b)=>b.onclick=()=>{const p=P[+b.dataset.rm];if(!confirm(`Remove ${p.name} from the list? It won't be added back by itself (use Off to just hide it).`))return;P.splice(+b.dataset.rm,1);draw();save(`${p.name} removed.`)});
+ // incoming inbox
+ const inc=P.filter((p)=>p.incoming);$('incoming').style.display=inc.length?'block':'none';
+ $('incHelp').textContent=`Found on the ${site} home page by themselves. Each one already has the status shown; pick one to confirm it and clear it from this list.`;
+ $('incRows').innerHTML=inc.map((p)=>`<div class="inc"><div class="nm"><b>${esc(p.name)}</b> <code>${esc(p.id)}</code><div class="muted" style="font-size:12px">Found ${ago(p.incoming)} · now <b>${LBL[p.status]}</b> on ${site}</div></div>`
+  +`<button class="btn go" data-go="${esc(p.id)}">Go live</button><button class="btn" data-so="${esc(p.id)}">Coming soon</button><button class="btn" data-of="${esc(p.id)}">Keep off</button></div>`).join('');
+ const by=(id)=>P.find((p)=>p.id===id);
+ $('incRows').querySelectorAll('[data-go]').forEach((b)=>b.onclick=()=>setStatus(by(b.dataset.go),'live'));
+ $('incRows').querySelectorAll('[data-so]').forEach((b)=>b.onclick=()=>setStatus(by(b.dataset.so),'soon'));
+ $('incRows').querySelectorAll('[data-of]').forEach((b)=>b.onclick=()=>setStatus(by(b.dataset.of),'off',`${by(b.dataset.of).name} stays Off. Turn it on here any time.`));
+ // removed products that still have a card
  const back=(data.found||[]).filter((f)=>!P.some((p)=>p.id===f.id)),F=$('found');F.style.display=back.length?'block':'none';
  F.innerHTML=back.length?'<span class="muted">On the home page but not in this list (removed): </span>'+back.map((f,i)=>`<button class="btn" data-back="${i}">+ ${esc(f.name)}</button>`).join(''):'';
- F.querySelectorAll('[data-back]').forEach((b)=>b.onclick=()=>{const f=back[+b.dataset.back];P.push({id:f.id,name:f.name,show:true});draw();dirty(true)})}
-async function load(){const j=await api('/api/products');data={products:j.products.map((p)=>({id:p.id,name:p.name,show:!!p.show,auto:p.auto||0})),defaults:j.defaults||[],found:j.found||null};
- if(j.added&&j.added.length)toast('✨ New on the home page, added automatically: '+j.products.filter((p)=>j.added.includes(p.id)).map((p)=>p.name).join(', '));
- $('at').textContent=j.at?'Last saved '+new Date(j.at).toLocaleString()+(j.by?' by '+j.by:''):'Not saved yet: the home page shows every product.';draw();dirty(false)}
-$('save').onclick=async()=>{if(!data.products.some((p)=>p.show)&&!confirm('Hide every product from the home page?'))return;$('save').disabled=true;
- try{await api('/api/products',{method:'PUT',body:JSON.stringify({products:data.products})});toast('✅ Saved. The home page updates within about a minute.');await load()}catch(e){toast(e.message,1);dirty(true)}};
+ F.querySelectorAll('[data-back]').forEach((b)=>b.onclick=()=>{const f=back[+b.dataset.back];P.push({id:f.id,name:f.name,status:'off'});draw();save(`${f.name} added back as Off.`)});
+ // new products start as
+ $('newSeg').innerHTML=ST.map((s)=>`<button type="button" class="${s}${s===data.newStatus?' on':''}" data-ns="${s}" aria-pressed="${s===data.newStatus}">${LBL[s]}</button>`).join('');
+ $('newSeg').querySelectorAll('[data-ns]').forEach((b)=>b.onclick=()=>{if(data.newStatus===b.dataset.ns)return;data.newStatus=b.dataset.ns;draw();save(`New products will start as ${LBL[data.newStatus]} on ${site}.`)});
+ $('newHelp').textContent={off:`Recommended for ${site}: nothing new goes public until you click Go live.`,soon:'New products show a COMING SOON card (no links) until you click Go live.',live:'New products show on the site as soon as their card is published.'}[data.newStatus]
+  +(BETA?' The live site has its own setting in admin.xrainier.com.':' beta.xrainier.com has its own setting in admin-beta.xrainier.com.')}
+async function load(){const j=await api('/api/products');data={products:j.products.map((p)=>({id:p.id,name:p.name,status:ST.includes(p.status)?p.status:(p.show===false?'off':'live'),auto:p.auto||0,incoming:p.incoming||0})),defaults:j.defaults||[],found:j.found||null,newStatus:ST.includes(j.newStatus)?j.newStatus:(BETA?'live':'off')};
+ data.products.forEach((p)=>{if(!p.incoming)delete p.incoming;if(!p.auto)delete p.auto});
+ if(j.added&&j.added.length)toast('✨ New on the home page: '+j.products.filter((p)=>j.added.includes(p.id)).map((p)=>p.name+' ('+LBL[p.status]+')').join(', '));
+ $('at').textContent=j.at?'Last change '+new Date(j.at).toLocaleString()+(j.by?' by '+j.by:''):'Not saved yet: the site shows every product.';draw()}
 $('add').onclick=()=>{const id=$('nid').value.trim().toLowerCase(),name=$('nname').value.trim();if(!/^[a-z0-9][a-z0-9-]{0,29}$/.test(id))return toast('Product id: lowercase letters, numbers and -, e.g. newapp.',1);
- if(data.products.some((p)=>p.id===id))return toast('That product is already in the list.',1);data.products.push({id,name:name||id,show:true});$('nid').value=$('nname').value='';draw();dirty(true)};
+ if(data.products.some((p)=>p.id===id))return toast('That product is already in the list.',1);data.products.push({id,name:name||id,status:'off'});$('nid').value=$('nname').value='';draw();save(`${name||id} added as Off.`)};
 async function loadLog(){const j=await api('/api/log');$('logRows').innerHTML=j.log.map((l)=>`<tr><td>${esc(new Date(l.t).toLocaleString())}</td><td>${esc(l.by)}</td><td>${esc(l.what)}</td></tr>`).join('')||'<tr><td colspan="3" class="muted">No changes yet.</td></tr>'}
 if(token)start();else login();
 </script>
