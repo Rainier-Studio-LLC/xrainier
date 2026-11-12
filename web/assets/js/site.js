@@ -4,6 +4,8 @@
   // beta.xrainier.com (or any address with "beta" in it) uses the beta SkyHere server and shows a BETA tag
   const BETA = /(^|[.-])beta([.-]|$)/.test(location.hostname);
   if (BETA) {
+    // every product link opens its beta site (game.xrainier.com → beta.game.xrainier.com); www, admin and api hosts stay
+    document.querySelectorAll('a[href^="https://"]').forEach((a) => { const re = /^https:\/\/(?!beta\.|www\.|admin|api)([a-z0-9-]+)\.xrainier\.com(?=[\/?#]|$)/i, h = a.getAttribute('href'); if (re.test(h)) a.setAttribute('href', h.replace(re, 'https://beta.$1.xrainier.com')); });
     const m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m);
     document.querySelectorAll('a[href^="https://skyabove.xrainier.com"]').forEach((a) => (a.href = a.href.replace('://skyabove.', '://beta.skyabove.')));
     const b = document.createElement('div'); b.className = 'betatag'; b.textContent = 'BETA'; document.body.appendChild(b); document.title = '[BETA] ' + document.title;
