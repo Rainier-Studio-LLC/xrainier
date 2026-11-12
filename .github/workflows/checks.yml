@@ -1,0 +1,23 @@
+name: Checks
+
+on:
+  push:
+    branches: [beta, main, master]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'beta' || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Site script compiles
+        run: node --check web/assets/js/site.js
+      - name: Pages load without errors
+        run: node tools/check-pages.mjs web

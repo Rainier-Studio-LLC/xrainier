@@ -1,0 +1,6 @@
+// Beta site: beta.xrainier.com (Worker "xrainier-beta", builds from beta with: npx wrangler deploy -c wrangler.beta.jsonc).
+{
+  "name": "xrainier-beta",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./web", "not_found_handling": "404-page" }
+}

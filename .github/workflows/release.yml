@@ -1,0 +1,60 @@
+name: Release (beta → live)
+
+# Press "Run workflow" on the Actions tab to release. It runs the checks on beta, then moves the live branch
+# (the repo's default branch: main, or master in older repos) forward to exactly the tested beta commit
+# (fast-forward only, nothing new is added) and tags the release. Cloudflare then deploys the live branch as usual.
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type RELEASE to go live'
+        required: true
+      note:
+        description: 'What is in this release (optional)'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    if: ${{ inputs.confirm == 'RELEASE' }}
+    uses: ./.github/workflows/checks.yml
+
+  release:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: beta
+          fetch-depth: 0
+      - name: Move the live branch to beta
+        env:
+          NOTE: ${{ inputs.note }}
+          LIVE: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$LIVE" beta --tags
+          if ! git merge-base --is-ancestor "origin/$LIVE" origin/beta; then
+            echo "::error::$LIVE has changes that beta doesn't (a fix made straight on $LIVE?). Merge $LIVE into beta, test, then release again."
+            exit 1
+          fi
+          COUNT=$(git rev-list --count "origin/$LIVE"..origin/beta)
+          if [ "$COUNT" = "0" ]; then echo "Nothing to release: $LIVE already matches beta." >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          {
+            echo "## Released $COUNT change(s) to $LIVE"
+            [ -n "$NOTE" ] && echo "$NOTE" && echo
+            git log --pretty='- %s (%h)' "origin/$LIVE"..origin/beta
+          } >> "$GITHUB_STEP_SUMMARY"
+          git push origin "origin/beta:refs/heads/$LIVE"
+          TAG="v$(date -u +%Y.%m.%d)"; N=1
+          while git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; do N=$((N+1)); TAG="v$(date -u +%Y.%m.%d)-$N"; done
+          git tag -a "$TAG" origin/beta -m "${NOTE:-Release $TAG}"
+          git push origin "$TAG"
+          echo "Tagged **$TAG**" >> "$GITHUB_STEP_SUMMARY"
