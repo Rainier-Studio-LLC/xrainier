@@ -53,7 +53,7 @@ td:first-child{white-space:nowrap}.rmX{display:none}
    <table><thead><tr><th style="width:100px">Order</th><th>Product</th><th>ID on the page</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table>
    <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap"><input type="text" id="nid" placeholder="id, e.g. newapp" style="width:150px" aria-label="New product id"><input type="text" id="nname" placeholder="Name" style="width:160px" aria-label="New product name"><button class="btn" id="add">+ Add product</button>
     <span class="muted" style="font-size:12px">Added by hand, a product starts as Off and appears once the home page has a card for it (data-product="id").</span></div>
-   <div id="found"></div>
+   <div id="siteerr" style="display:none;margin-top:12px;padding:10px 12px;border:1px solid var(--warn);border-radius:10px;font-size:13px;color:var(--warn)"></div><div id="found"></div>
    <p class="muted" id="at" style="font-size:12px;margin:12px 0 0"></p>
   </div>
   <div class="card"><h3>New products</h3>
@@ -117,7 +117,7 @@ function draw(){const P=data.products,site=BETA?'beta.xrainier.com':'xrainier.co
  $('newSeg').querySelectorAll('[data-ns]').forEach((b)=>b.onclick=()=>{if(data.newStatus===b.dataset.ns)return;data.newStatus=b.dataset.ns;draw();save(`New products will start as ${LBL[data.newStatus]} on ${site}.`)});
  $('newHelp').textContent={off:`Recommended for ${site}: nothing new goes public until you click Go live.`,soon:'New products show a COMING SOON card (no links) until you click Go live.',live:'New products show on the site as soon as their card is published.'}[data.newStatus]
   +(BETA?' The live site has its own setting in admin.xrainier.com.':' beta.xrainier.com has its own setting in admin-beta.xrainier.com.')}
-async function load(){const j=await api('/api/products');data={products:j.products.map((p)=>({id:p.id,name:p.name,status:ST.includes(p.status)?p.status:(p.show===false?'off':'live'),auto:p.auto||0,incoming:p.incoming||0})),defaults:j.defaults||[],found:j.found||null,newStatus:ST.includes(j.newStatus)?j.newStatus:(BETA?'live':'off')};
+async function load(){const j=await api('/api/products');{const w=$('siteerr');if(w){w.style.display=j.siteError?'block':'none';w.textContent=j.siteError?'New products can\'t be picked up right now: the admin couldn\'t read the home page ('+j.siteError+'). Add them by hand below, or check the site, then reload this page.':''}}data={products:j.products.map((p)=>({id:p.id,name:p.name,status:ST.includes(p.status)?p.status:(p.show===false?'off':'live'),auto:p.auto||0,incoming:p.incoming||0})),defaults:j.defaults||[],found:j.found||null,newStatus:ST.includes(j.newStatus)?j.newStatus:(BETA?'live':'off')};
  data.products.forEach((p)=>{if(!p.incoming)delete p.incoming;if(!p.auto)delete p.auto});
  if(j.added&&j.added.length)toast('✨ New on the home page: '+j.products.filter((p)=>j.added.includes(p.id)).map((p)=>p.name+' ('+LBL[p.status]+')').join(', '));
  $('at').textContent=j.at?'Last change '+new Date(j.at).toLocaleString()+(j.by?' by '+j.by:''):'Not saved yet: the site shows every product.';draw()}

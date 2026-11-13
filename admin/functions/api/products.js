@@ -20,8 +20,8 @@ async function due(request) {
 export async function onRequestGet({ request, env, waitUntil }) {
   const me = await readSession(env, request);
   if (me) {   // admin view: who saved it and when, what the home page has, which ids were removed on purpose
-    const { v, found, added } = await syncProducts(env, request), ids = new Set(v.products.map((p) => p.id));
-    return json({ ...v, defaults: PRODUCTS_DEFAULT, found, added: added.map((p) => p.id), removed: knownIds(v).filter((id) => !ids.has(id)),
+    const { v, found, added, error } = await syncProducts(env, request), ids = new Set(v.products.map((p) => p.id));
+    return json({ ...v, defaults: PRODUCTS_DEFAULT, found, siteError: error || null, added: added.map((p) => p.id), removed: knownIds(v).filter((id) => !ids.has(id)),
       newStatus: newStatusOf(v, env, request), newStatusSet: STATUSES.includes(v.newStatus), beta: isBetaSite(env, request), site: siteUrl(env, request) });
   }
   const v = await readProducts(env, request);

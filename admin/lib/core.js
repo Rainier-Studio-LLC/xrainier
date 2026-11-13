@@ -93,9 +93,22 @@ export function productsInPage(html) {
   return [...found].map(([id, name]) => ({ id, name: name || id }));
 }
 export async function readSiteProducts(env, req) {
-  const r = await fetch(siteUrl(env, req) + "?products-check=" + Math.floor(Date.now() / 60000), { headers: { "User-Agent": "xrainier-admin" }, cf: { cacheTtl: 0 } });
-  if (!r.ok) throw Error("home page " + r.status);
-  return productsInPage(await r.text());
+  // Read the home page this admin controls. xrainier.com redirects to www, so try both; a page with no product cards
+  // (e.g. a Cloudflare challenge page) counts as unreadable. The reason is shown in the admin instead of failing silently.
+  const base = siteUrl(env, req), tries = [base];
+  try { const u = new URL(base); if (!u.hostname.startsWith("www.") && u.hostname.split(".").length === 2) { u.hostname = "www." + u.hostname; tries.push(u.href); } } catch (e) {}
+  let why = "";
+  for (const url of tries) {
+    try {
+      const r = await fetch(url + (url.includes("?") ? "&" : "?") + "products-check=" + Math.floor(Date.now() / 60000),
+        { redirect: "follow", headers: { "User-Agent": "Mozilla/5.0 (compatible; xrainier-admin)", accept: "text/html" }, cf: { cacheTtl: 0 } });
+      if (!r.ok) { why = `${url} answered HTTP ${r.status}`; continue; }
+      const found = productsInPage(await r.text());
+      if (found.length) return found;
+      why = `${url} has no product cards (data-product) on it`;
+    } catch (e) { why = `${url}: ${e.message}`; }
+  }
+  throw Error(why || "the home page couldn't be read");
 }
 // Adds products that are on the home page but have never been in the list and saves them. They start with the
 // "new products start as" status and are flagged incoming. The first run after the upgrade to statuses adds what's
@@ -103,7 +116,7 @@ export async function readSiteProducts(env, req) {
 // Returns {v, found, added}. Never throws: if the home page can't be read, nothing changes.
 export async function syncProducts(env, req) {
   const v = await readProducts(env, req); let found = null;
-  try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [] }; }
+  try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [], error: String(e.message || e) }; }
   const known = new Set(knownIds(v)), added = found.filter((p) => !known.has(p.id)).slice(0, Math.max(0, 30 - v.products.length));
   if ((!added.length && v.v2) || !env.SITE) return { v, found, added: [] };
   const t = Date.now(), upgrade = !v.v2, st = upgrade ? "live" : newStatusOf(v, env, req);
