@@ -68,7 +68,7 @@ td:first-child{white-space:nowrap}.rmX{display:none}
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 const $=(id)=>document.getElementById(id),esc=(s)=>String(s??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const BETA=/(^|[.-])beta([.-]|$)/.test(location.hostname)||/^beta\./.test(location.hostname),SITE=BETA?'https://beta.xrainier.com/':'https://xrainier.com/';
+const BETA=/(^|[.-])beta([.-]|$)/.test(location.hostname)||/^beta\./.test(location.hostname),SITE=BETA?'https://beta.xrainier.com/':'https://www.xrainier.com/';
 let token=sessionStorage.getItem('xa.token')||'',data=null;
 $('env').textContent=BETA?'BETA · beta.xrainier.com':'LIVE · xrainier.com';$('env').classList.toggle('beta',BETA);$('open').href=SITE+'#products';
 function toast(m,bad){const t=$('toast');t.textContent=m;t.className=bad?'bad':'';t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',bad?7000:3500)}
@@ -120,6 +120,7 @@ function draw(){const P=data.products,site=BETA?'beta.xrainier.com':'xrainier.co
 async function load(){const j=await api('/api/products');{const w=$('siteerr');if(w){w.style.display=j.siteError?'block':'none';w.textContent=j.siteError?'New products can\'t be picked up right now: the admin couldn\'t read the home page ('+j.siteError+'). Add them by hand below, or check the site, then reload this page.':''}}data={products:j.products.map((p)=>({id:p.id,name:p.name,status:ST.includes(p.status)?p.status:(p.show===false?'off':'live'),auto:p.auto||0,incoming:p.incoming||0})),defaults:j.defaults||[],found:j.found||null,newStatus:ST.includes(j.newStatus)?j.newStatus:(BETA?'live':'off')};
  data.products.forEach((p)=>{if(!p.incoming)delete p.incoming;if(!p.auto)delete p.auto});
  if(j.added&&j.added.length)toast('✨ New on the home page: '+j.products.filter((p)=>j.added.includes(p.id)).map((p)=>p.name+' ('+LBL[p.status]+')').join(', '));
+ /*openFromApi*/if(j.site)$('open').href=String(j.site).replace(/\/?$/,'/')+'#products';
  $('at').textContent=j.at?'Last change '+new Date(j.at).toLocaleString()+(j.by?' by '+j.by:''):'Not saved yet: the site shows every product.';draw()}
 $('add').onclick=()=>{const id=$('nid').value.trim().toLowerCase(),name=$('nname').value.trim();if(!/^[a-z0-9][a-z0-9-]{0,29}$/.test(id))return toast('Product id: lowercase letters, numbers and -, e.g. newapp.',1);
  if(data.products.some((p)=>p.id===id))return toast('That product is already in the list.',1);data.products.push({id,name:name||id,status:'off'});$('nid').value=$('nname').value='';draw();save(`${name||id} added as Off.`)};
