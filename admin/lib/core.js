@@ -110,7 +110,8 @@ export async function readSiteProducts(env, req) {
   }
   throw Error(why || "the home page couldn't be read");
 }
-// Adds products that are on the home page but have never been in the list and saves them. They start with the
+// Adds products that are on the home page but have never been in the list, renames listed ones whose card name
+// changed on the home page, and saves them. They start with the
 // "new products start as" status and are flagged incoming. The first run after the upgrade to statuses adds what's
 // already on the home page as Live (nothing that shows today disappears) and marks the list upgraded (v2).
 // Returns {v, found, added}. Never throws: if the home page can't be read, nothing changes.
@@ -118,13 +119,19 @@ export async function syncProducts(env, req) {
   const v = await readProducts(env, req); let found = null;
   try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [], error: String(e.message || e) }; }
   const known = new Set(knownIds(v)), added = found.filter((p) => !known.has(p.id)).slice(0, Math.max(0, 30 - v.products.length));
-  if ((!added.length && v.v2) || !env.SITE) return { v, found, added: [] };
+  const renamed = [], products = v.products.map((o) => {
+    const p = found.find((x) => x.id === o.id);
+    if (p && p.name && p.name !== o.name) { renamed.push(o.name + " → " + p.name); return { ...o, name: p.name }; }
+    return o;
+  });
+  if ((!added.length && !renamed.length && v.v2) || !env.SITE) return { v, found, added: [] };
   const t = Date.now(), upgrade = !v.v2, st = upgrade ? "live" : newStatusOf(v, env, req);
-  const nv = { ...v, v2: true, products: [...v.products, ...added.map((p) => ({ id: p.id, name: p.name, status: st, auto: t, ...(upgrade ? {} : { incoming: t }) }))],
+  const nv = { ...v, v2: true, products: [...products, ...added.map((p) => ({ id: p.id, name: p.name, status: st, auto: t, ...(upgrade ? {} : { incoming: t }) }))],
     known: [...known, ...added.map((p) => p.id)] };
-  if (added.length) { nv.at = t; nv.by = "automatic (new on the home page)"; }
+  if (added.length || renamed.length) { nv.at = t; nv.by = added.length ? "automatic (new on the home page)" : "automatic (renamed on the home page)"; }
   await env.SITE.put("products", JSON.stringify(nv));
   if (added.length) await addLog(env, "automatic", (upgrade ? "Added from the home page: " : "Incoming from the home page (" + LABEL[st] + "): ") + added.map((p) => p.name).join(", "));
-  return { v: nv, found, added };
+  if (renamed.length) await addLog(env, "automatic", "Renamed from the home page: " + renamed.join(", "));
+  return { v: nv, found, added, renamed };
 }
 export const LABEL = { live: "Live", soon: "Coming soon", off: "Off" };
