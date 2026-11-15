@@ -1,4 +1,4 @@
-// LandLord introduction page: on beta.xrainier.com, links to the game open the beta game.
+// DrizzleTown introduction page: on beta.xrainier.com, links to the game open the beta game.
 (() => {
   'use strict';
   if (/(^|[.-])beta([.-]|$)/.test(location.hostname)) {
