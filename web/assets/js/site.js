@@ -108,7 +108,7 @@
 .xr-dd-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
 .xr-dd.open .xr-dd-btn svg{transform:rotate(180deg)}
 .xr-mega{position:fixed;top:72px;left:50%;width:min(820px,calc(100vw - 32px));transform:translate(-50%,-8px);opacity:0;visibility:hidden;transition:opacity .18s,transform .18s,visibility .18s;
- background:linear-gradient(180deg,rgba(14,20,44,.86),rgba(7,11,26,.82));border:1px solid var(--line2);border-radius:16px;box-shadow: 0 30px 80px rgba(0,0,0,.45),0 0 0 1px rgba(34,225,255,.06),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);overflow:hidden;z-index:60}
+ background:linear-gradient(180deg,rgba(14,20,44,.95),rgba(7,11,26,.93));border:1px solid var(--line2);border-radius:16px;box-shadow: 0 30px 80px rgba(0,0,0,.45),0 0 0 1px rgba(34,225,255,.06),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);overflow:hidden;z-index:60}
 .xr-dd.open .xr-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .xr-mega:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--grad)}
 .xr-mega-in{display:grid;grid-template-columns:1.55fr 1fr}
@@ -131,7 +131,7 @@ a.xr-tile:hover{background:rgba(120,170,255,.08);border-color:var(--line);color:
 .xr-tile.soon .xr-ic{filter:grayscale(.6) brightness(.8)}.xr-tile.soon .xr-k{border-color:rgba(251,191,36,.45);color:var(--am)}
 .xr-empty{color:var(--mut);font-size:13px;margin:6px}
 .xr-note{margin:12px 4px 0;font-size:12.5px;color:var(--mut)}.xr-note a{color:#d8b4fe}
-.xr-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);background:rgba(4,6,14,.45)}
+.xr-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);background:rgba(4,6,14,.6)}
 .xr-foot a{font-weight:700}
 .xr-crumb{display:inline-flex;align-items:center;gap:8px;margin-left:-6px;padding:4px 12px 4px 4px;border-radius:999px;color:var(--txt);font-weight:600;font-size:14px;border:1px solid var(--line);background:rgba(120,170,255,.05);white-space:nowrap;transition:border-color .15s,background .15s}
 .xr-crumb:hover{color:#fff;border-color:var(--line2);background:rgba(120,170,255,.1)}
