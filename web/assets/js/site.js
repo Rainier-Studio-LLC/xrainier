@@ -111,6 +111,13 @@
     box.addEventListener('mouseenter', () => hold(true)); box.addEventListener('mouseleave', () => hold(false));
     box.addEventListener('focusin', () => hold(true)); box.addEventListener('focusout', () => hold(false));
     document.addEventListener('visibilitychange', () => hold(document.hidden));
+    // home showcase v3.3: match the width of the page sections below (their .wrap content width)
+    const fit = () => {
+      const ref = $('#products .wrap') || $('#lab .wrap') || $('main .wrap:not(.hero .wrap)');
+      if (ref) { const cs = getComputedStyle(ref); box.style.setProperty('--xr-w', Math.round(ref.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)) + 'px'); }
+      box.style.setProperty('--xr-mid', Math.round(stage.offsetHeight / 2) + 'px');
+    };
+    fit(); addEventListener('resize', fit, { passive: true }); addEventListener('load', fit);
     // home showcase v3.1: a plain block (not a <section>, so page section styles don't squeeze it); measure the scrollbar for the edge-to-edge width
     const sbw = () => document.documentElement.style.setProperty('--xr-sbw', Math.max(0, innerWidth - document.documentElement.clientWidth) + 'px');
     sbw(); addEventListener('resize', sbw, { passive: true });
@@ -179,6 +186,14 @@
 .xr-sc .radar{position:absolute;inset:auto;left:64%;top:50%;height:90%;width:auto;max-width:none;aspect-ratio:1;transform:translate(-50%,-50%);margin:0}
 .sc-pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.07);transition:transform 7s ease-out}
 .xr-sl.on .sc-pic img{transform:scale(1)}
+/* home showcase v3.3: same width as the sections below, 16:9 so the pictures show whole (no stretching or heavy cropping) */
+@media(min-width:821px){
+.xr-show.xr-show{box-sizing:border-box!important;width:auto!important;max-width:var(--xr-w,1180px)!important;margin:12px auto 0!important;padding:0!important}
+.xr-show.xr-show .xr-stage{width:100%!important;height:auto!important;aspect-ratio:16/9!important;max-height:calc(100vh - 140px)!important}
+.xr-show.xr-show .xr-nav-b{top:var(--xr-mid,50%)!important}
+.xr-show.xr-show .xr-nav-b.prev{left:16px!important}.xr-show.xr-show .xr-nav-b.next{right:16px!important}
+.xr-show .sc-pic img{transform:none!important}
+}
 /* home showcase v3.2: BlockRush 3D glass picture effects */
 .sc-b3x img{object-position:70% 50%}
 .sc-b3x .gl{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.0) 44%,rgba(190,240,255,.28) 49%,rgba(255,255,255,.08) 52%,transparent 58%);background-size:250% 100%;background-repeat:no-repeat;mix-blend-mode:screen;animation:xrb3gl 4.5s ease-in-out infinite 0.6s}
