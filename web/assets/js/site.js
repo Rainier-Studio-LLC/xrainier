@@ -102,6 +102,8 @@
     renderNav();
     // menu glass v1: the hover light follows the pointer
   document.addEventListener('pointermove', (e) => { const t = e.target && e.target.closest && e.target.closest('.xr-tile,.xr-dd-btn,.xr-crumb,header.nav .links>a:not(.btn)'); if (!t) return; const r = t.getBoundingClientRect(); t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px'); }, { passive: true });
+  // top menu glass v1: the hover light follows the pointer on the top menu pills
+  document.addEventListener('pointermove', (e) => { const t = e.target && e.target.closest && e.target.closest('header.nav .links>a, header.nav .links .xr-dd-btn'); if (!t) return; const r = t.getBoundingClientRect(); t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px'); }, { passive: true });
   if (!$('#xr-nav-css')) document.head.insertAdjacentHTML('beforeend', `<style id="xr-nav-css">
 .nav .wrap{gap:16px}
 .xr-dd{position:relative;display:flex}
@@ -124,6 +126,11 @@
 .xr-tile{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;color:var(--txt);border:1px solid transparent;transition:background .15s,border-color .15s,transform .15s}
 a.xr-tile:hover{background:rgba(120,170,255,.08);border-color:var(--line);color:#fff;transform:translateX(2px)}
 .xr-tile[aria-current]{background:rgba(34,225,255,.07);border-color:rgba(34,225,255,.35)}
+/* top menu glass v1: glass sheen + cursor light on the top menu pills */
+header.nav .links>a:not(.btn):not(.xr-mcta),header.nav .links .xr-dd-btn{isolation:isolate;transition:color .2s,box-shadow .25s,transform .2s,background-color .2s}
+header.nav .links>a:not(.btn):not(.xr-mcta):hover,header.nav .links .xr-dd-btn:hover,header.nav .links .xr-dd.open .xr-dd-btn{background-color:rgba(120,170,255,.06);background-image:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.30) 47%,rgba(255,255,255,.08) 53%,transparent 62%),radial-gradient(90px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.20),transparent 65%),linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 50%,rgba(255,255,255,0) 51%),linear-gradient(135deg,rgba(34,225,255,.16),rgba(168,85,247,.18));background-size:260% 100%,100% 100%,100% 100%,100% 100%;background-repeat:no-repeat;background-position:-20% 0,0 0,0 0,0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.25),inset 0 0 0 1px rgba(120,170,255,.25),0 4px 16px rgba(34,225,255,.14);transform:translateY(-1px);animation:xrglasstop .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes xrglasstop{from{background-position:120% 0,0 0,0 0,0 0}to{background-position:-20% 0,0 0,0 0,0 0}}
+@media (prefers-reduced-motion:reduce){header.nav .links>a:not(.btn):not(.xr-mcta):hover,header.nav .links .xr-dd-btn:hover,header.nav .links .xr-dd.open .xr-dd-btn{animation:none;transform:none}}
 /* menu glass v1: glass sheen + cursor light on hover */
 .xr-tile,.xr-dd-btn,.xr-crumb,header.nav .links>a:not(.btn){position:relative;isolation:isolate}
 .xr-tile.xr-tile:hover,.xr-dd-btn.xr-dd-btn:hover,.xr-dd.open .xr-dd-btn.xr-dd-btn,.xr-crumb.xr-crumb:hover,header.nav .links>a:not(.btn):hover{background-image:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.28) 47%,rgba(255,255,255,.08) 53%,transparent 62%),radial-gradient(140px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 55%);background-size:260% 100%,100% 100%,100% 100%;background-repeat:no-repeat;background-position:-20% 0,0 0,0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(0,0,0,.25),0 6px 18px rgba(0,0,0,.22);animation:xrglass .9s cubic-bezier(.2,.7,.2,1) both}
