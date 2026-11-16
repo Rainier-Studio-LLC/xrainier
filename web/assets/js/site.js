@@ -169,7 +169,8 @@
           '<div class="xr-sl-txt"><span class="xr-sl-k"><img src="' + esc(p.icon) + '" alt="" onerror="this.remove()">' + esc(p.kind || 'APP') + (soon ? ' · COMING SOON' : '') + '</span>' +
           '<h2>' + esc(p.name) + '</h2><p class="xr-sl-line">' + esc(hl[0] || p.line) + '</p>' +
           (hl[1].length ? '<ul class="xr-hl">' + hl[1].map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') +
-          '<div class="xr-sl-cta"><a class="btn pri" href="' + esc(p.href) + '">' + (soon ? 'See what’s coming' : 'Explore ' + esc(p.name)) + ' →</a></div></div></article>';
+          // showcase soon v1: a product that isn't live has no link to its page, only a Coming soon badge
+          '<div class="xr-sl-cta">' + (soon ? '<span class="xr-sl-soon">Coming soon</span>' : '<a class="btn pri" href="' + esc(p.href) + '">Explore ' + esc(p.name) + ' →</a>') + '</div></div></article>';
       }).join('');
       dots.innerHTML = list.map((p, i) => '<button class="xr-dot" type="button" role="tab" data-i="' + i + '" aria-label="' + esc(p.name) + '" style="--t:' + (TINT[p.id] || '120,170,255') + '"><img src="' + esc(p.icon) + '" alt="" onerror="this.remove()"><span>' + esc(p.name) + '</span><i></i></button>').join('');
       const k = list.findIndex((p) => p.id === curId);
@@ -198,6 +199,8 @@
 .xr-hl li{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:13.5px;color:#dfe6ff;background:rgba(6,10,22,.5);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .xr-hl li:before{content:"";width:7px;height:7px;border-radius:50%;flex:none;background:rgb(var(--t));box-shadow:0 0 10px rgb(var(--t))}
 .xr-sl-cta{display:flex;gap:10px;flex-wrap:wrap}
+.xr-sl-soon{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:700;color:#fbbf24;border:1px solid rgba(251,191,36,.45);background:rgba(251,191,36,.08)}
+.xr-sl-soon:before{content:"";width:8px;height:8px;border-radius:50%;background:#fbbf24;box-shadow:0 0 10px #fbbf24}
 .xr-nav-b{position:absolute;top:calc(clamp(560px,82vh,860px)/2);transform:translateY(-50%);z-index:3;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(10,16,34,.55);color:#fff;font-size:26px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s,background .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .xr-nav-b.prev{left:34px}.xr-nav-b.next{right:34px}
 .xr-show:hover .xr-nav-b,.xr-nav-b:focus-visible{opacity:1}.xr-nav-b:hover{background:rgba(34,225,255,.18)}
