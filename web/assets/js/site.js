@@ -49,6 +49,29 @@
   const here = ((/^\/([a-z0-9-]+)(?:\.html)?\/?$/i.exec(location.pathname) || [])[1] || '').toLowerCase();
   const mine = XR.find((p) => p.id === here);
   const nav = $('header.nav .links'), wrapEl = $('header.nav .wrap');
+  // ---------- product footer v1: every product page gets the same footer as the home page,
+  // and its Privacy link goes to that product's own privacy page (not SkyHere's) ----------
+  (() => {
+    if (!here || here === 'index' || here === '404') return;
+    const SKIP = /^(www|admin|admin-beta|beta|api|api-beta)$/;
+    const count = {};
+    $$('a[href]').forEach((a) => {
+      if (a.closest('header.nav')) return;
+      const m = /^https?:\/\/(?:beta\.)?([a-z0-9-]+)\.xrainier\.com(?:\/|$)/i.exec(a.getAttribute('href') || '');
+      if (m && !SKIP.test(m[1].toLowerCase())) { const h = m[1].toLowerCase(); count[h] = (count[h] || 0) + 1 + (h === here || (mine && h === mine.id) ? 100 : 0); }
+    });
+    const host = Object.keys(count).sort((a, b) => count[b] - count[a])[0];
+    if (!host) return;   // not a product page
+    const old = $('footer');
+    const keep = old ? $$('a[href]', old).filter((a) => /terms|credits|licen|legal|imprint/i.test(a.textContent)) : [];
+    const mail = old && $('a[href^="mailto:"]', old);
+    const f = document.createElement('footer');
+    f.innerHTML = '<div class="wrap"><a class="logo" href="/"><img src="/assets/img/xr-emblem.png" alt="" style="width:26px"><span style="font-size:15px">XRAINIER</span></a>' +
+      '<span>© <span data-year>' + new Date().getFullYear() + '</span> Rainier Studio LLC<br><small style="color:#6f7a99">XRainier is a trademark of Rainier Studio LLC.</small></span><span class="sp"></span>' +
+      keep.map((a) => '<a href="' + esc(a.getAttribute('href')) + '">' + esc(a.textContent.trim()) + '</a>').join('') +
+      '<a href="https://' + host + '.xrainier.com/privacy" data-xr-privacy>Privacy</a><a href="' + esc(mail ? mail.getAttribute('href') : 'mailto:support@xrainier.com') + '">Support</a></div>';
+    if (old) old.replaceWith(f); else (document.querySelector('script[src*="site.js"]') || document.body.lastChild).before(f);
+  })();
   // ---------- home showcase v3: replaces the home hero and the product cards; SkyHere keeps its live radar,
   // every other product shows its postcard picture (the hero picture from its own page), 6 s each ----------
   let renderShow = () => {};
