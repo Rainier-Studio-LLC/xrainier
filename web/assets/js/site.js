@@ -81,15 +81,17 @@
       starviewer: '/assets/img/starviewer-hero.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg',
     };
     const pic = (p, first) => '<div class="sc-pic"><img src="' + esc(PIC[p.id]) + '" alt="' + esc(p.name) + '" decoding="async"' + (first ? ' fetchpriority="high"' : ' fetchpriority="low"') + ' onerror="this.remove()"></div>';
+    // home showcase v3.2: BlockRush 3D gets a shiny glass picture with light effects on top (glint sweep, glowing clear, rising sparkles)
+    SCENE.blockrush3d = () => { let s = ''; for (let i = 0; i < 14; i++) s += '<b style="left:' + (52 + Math.random() * 30).toFixed(1) + '%;animation-delay:' + (Math.random() * 4).toFixed(2) + 's;--d:' + (3 + Math.random() * 2.5).toFixed(2) + 's"></b>';
+      return '<div class="sc-pic sc-b3x"><img src="/assets/img/blockrush3d-showcase.jpg" alt="BlockRush 3D" decoding="async" onerror="this.remove()"><i class="pulse"></i><i class="gl"></i><i class="sp">' + s + '</i></div>'; };
     const scene = (p, first) => (SCENE[p.id] ? SCENE[p.id]() : PIC[p.id] ? pic(p, first) : gen(p));
     const box = document.createElement('div');
     box.className = 'xr-show'; box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'XRainier products');
     const h1 = $('h1', hero0);
     box.innerHTML = '<h1 class="xr-sr">' + esc(h1 ? h1.textContent.replace(/ +/g, ' ').trim() : 'XRainier') + '</h1><div class="xr-stage"></div><button class="xr-nav-b prev" type="button" aria-label="Previous product">&#8249;</button><button class="xr-nav-b next" type="button" aria-label="Next product">&#8250;</button><div class="xr-dots" role="tablist"></div>';
     // showcase v3: the showcase is the Products section now; the cards stay in the page (hidden) for the admin statuses
-    const prods = $('#products');
-    if (prods) { [...prods.children].forEach((c) => (c.hidden = true)); prods.classList.add('xr-prods'); prods.prepend(box); }
-    else hero0.insertAdjacentElement('beforebegin', box);
+    // home showcase v3.2: the showcase takes the old top section's place; the What we make cards stay below it
+    hero0.insertAdjacentElement('beforebegin', box);
     hero0.hidden = true;
     const stage = $('.xr-stage', box), dots = $('.xr-dots', box);
     let at = 0, sig = '';
@@ -177,6 +179,16 @@
 .xr-sc .radar{position:absolute;inset:auto;left:64%;top:50%;height:90%;width:auto;max-width:none;aspect-ratio:1;transform:translate(-50%,-50%);margin:0}
 .sc-pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.07);transition:transform 7s ease-out}
 .xr-sl.on .sc-pic img{transform:scale(1)}
+/* home showcase v3.2: BlockRush 3D glass picture effects */
+.sc-b3x img{object-position:70% 50%}
+.sc-b3x .gl{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.0) 44%,rgba(190,240,255,.28) 49%,rgba(255,255,255,.08) 52%,transparent 58%);background-size:250% 100%;background-repeat:no-repeat;mix-blend-mode:screen;animation:xrb3gl 4.5s ease-in-out infinite 0.6s}
+@keyframes xrb3gl{0%{background-position:130% 0}55%,100%{background-position:-40% 0}}
+.sc-b3x .pulse{position:absolute;left:66%;top:74%;width:34%;height:30%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,236,190,.55),rgba(255,180,90,.18) 55%,transparent);mix-blend-mode:screen;animation:xrb3pulse 2.4s ease-in-out infinite}
+@keyframes xrb3pulse{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(.85)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+.sc-b3x .sp{position:absolute;inset:0;pointer-events:none}
+.sc-b3x .sp b{position:absolute;bottom:24%;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 8px 2px rgba(150,230,255,.9);opacity:0;animation:xrb3sp var(--d,4s) ease-out infinite}
+@keyframes xrb3sp{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1}100%{transform:translateY(-260px) scale(1.2);opacity:0}}
+@media(max-width:820px){.sc-b3x .pulse{display:none}.sc-b3x img{object-position:68% 50%}}
 .sc-gen{display:grid;place-items:center}.sc-gen img{width:180px;height:180px;border-radius:40px;box-shadow:0 20px 60px rgba(var(--t),.5)}
 .sc-gen .o{position:absolute;left:50%;top:50%;border-radius:50%;border:1px dashed rgba(var(--t),.5);animation:xrrot 20s linear infinite}.sc-gen .o1{width:320px;height:320px;margin:-160px}.sc-gen .o2{width:480px;height:480px;margin:-240px;animation-direction:reverse}
 @keyframes xrrot{to{transform:rotate(360deg)}}
