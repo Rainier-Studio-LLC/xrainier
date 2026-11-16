@@ -25,11 +25,25 @@
     { id: 'blockrush', name: 'BlockRush', href: '/blockrush.html', icon: '/assets/img/blockrush/icon.png', kind: 'GAME', line: 'The daily block puzzle' },
     { id: 'blockrush3d', name: 'BlockRush 3D', href: 'https://blockrush3d.xrainier.com/', icon: '/assets/img/blockrush/blockrush3d-icon.png', kind: 'GAME', line: 'The block puzzle in a 5×5×5 well' },
   ];
+  // menu icons v1: products added after the list above, with their own icon, line and kind
+  [
+    { id: 'landlord', name: 'DrizzleTown', href: '/drizzletown.html', icon: '/assets/img/drizzletown-icon.png', kind: 'GAME', line: 'The family board game in 3D' },
+    { id: 'starviewer', name: 'Star Viewer', href: '/starviewer.html', icon: '/assets/img/starviewer-icon.png', kind: 'APP', line: 'The night sky, live, wherever you are' },
+  ].forEach((q) => { if (!XR.some((p) => p.id === q.id)) XR.push(q); });
   $$('[data-product]').forEach((el) => {
-    const id = el.dataset.product; if (!id || XR.some((p) => p.id === id)) return;
+    const id = el.dataset.product; if (!id) return;
     const img = $('img', el), h = $('h3', el), p = $('p', el);
-    XR.push({ id, name: (h || el).textContent.trim(), href: el.getAttribute('href') || el.dataset.xrHref || '/#products',
-      icon: img ? img.getAttribute('src') : '', kind: 'APP', line: p ? p.textContent.trim().split(/(?<=[.:!])\s/)[0].replace(/[.:]$/, '') : '' });
+    const game = $$('.tag', el).some((t) => /^\s*game\s*$/i.test(t.textContent));
+    const line = p ? p.textContent.trim().split(/(?<=[.:!])\s/)[0].replace(/[.:]$/, '') : '';
+    const known = XR.find((q) => q.id === id);
+    if (known) {   // a menu link seen first: let the home card fill in its icon, line and kind
+      if (!known.icon && img) known.icon = img.getAttribute('src');
+      if (!known.line && line) known.line = line;
+      if (game && known.auto) known.kind = 'GAME';
+      return;
+    }
+    XR.push({ id, auto: true, name: (h || el).textContent.trim(), href: el.getAttribute('href') || el.dataset.xrHref || '/#products',
+      icon: img ? img.getAttribute('src') : '', kind: game ? 'GAME' : 'APP', line });
   });
   const IDS = new Set(XR.map((p) => p.id));
   const here = ((/^\/([a-z0-9-]+)(?:\.html)?\/?$/i.exec(location.pathname) || [])[1] || '').toLowerCase();
@@ -94,13 +108,13 @@
 .xr-dd-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
 .xr-dd.open .xr-dd-btn svg{transform:rotate(180deg)}
 .xr-mega{position:fixed;top:72px;left:50%;width:min(820px,calc(100vw - 32px));transform:translate(-50%,-8px);opacity:0;visibility:hidden;transition:opacity .18s,transform .18s,visibility .18s;
- background:rgba(7,11,26,.97);border:1px solid var(--line2);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(34,225,255,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;z-index:60}
+ background:linear-gradient(180deg,rgba(14,20,44,.52),rgba(7,11,26,.46));border:1px solid var(--line2);border-radius:16px;box-shadow: 0 30px 80px rgba(0,0,0,.45),0 0 0 1px rgba(34,225,255,.06),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);overflow:hidden;z-index:60}
 .xr-dd.open .xr-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .xr-mega:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--grad)}
 .xr-mega-in{display:grid;grid-template-columns:1.55fr 1fr}
 .xr-mega.one{width:min(620px,calc(100vw - 32px))}.xr-mega.one .xr-mega-in{grid-template-columns:1fr}
 .xr-col{padding:20px}
-.xr-soon-col{background:linear-gradient(180deg,rgba(168,85,247,.08),rgba(34,225,255,.02));border-left:1px solid var(--line)}
+.xr-soon-col{background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(34,225,255,0));border-left:1px solid var(--line)}
 .xr-h{display:flex;align-items:center;gap:8px;margin:0 0 12px 4px;font:600 11px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#86efac}
 .xr-h i{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80}
 .xr-soon-col .xr-h{color:var(--am)}.xr-soon-col .xr-h i{background:var(--am);box-shadow:0 0 8px var(--am)}
@@ -117,7 +131,7 @@ a.xr-tile:hover{background:rgba(120,170,255,.08);border-color:var(--line);color:
 .xr-tile.soon .xr-ic{filter:grayscale(.6) brightness(.8)}.xr-tile.soon .xr-k{border-color:rgba(251,191,36,.45);color:var(--am)}
 .xr-empty{color:var(--mut);font-size:13px;margin:6px}
 .xr-note{margin:12px 4px 0;font-size:12.5px;color:var(--mut)}.xr-note a{color:#d8b4fe}
-.xr-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);background:rgba(4,6,14,.55)}
+.xr-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);background:rgba(4,6,14,.22)}
 .xr-foot a{font-weight:700}
 .xr-crumb{display:inline-flex;align-items:center;gap:8px;margin-left:-6px;padding:4px 12px 4px 4px;border-radius:999px;color:var(--txt);font-weight:600;font-size:14px;border:1px solid var(--line);background:rgba(120,170,255,.05);white-space:nowrap;transition:border-color .15s,background .15s}
 .xr-crumb:hover{color:#fff;border-color:var(--line2);background:rgba(120,170,255,.1)}
