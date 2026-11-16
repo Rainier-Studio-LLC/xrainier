@@ -82,7 +82,7 @@
     };
     const pic = (p, first) => '<div class="sc-pic"><img src="' + esc(PIC[p.id]) + '" alt="' + esc(p.name) + '" decoding="async"' + (first ? ' fetchpriority="high"' : ' fetchpriority="low"') + ' onerror="this.remove()"></div>';
     const scene = (p, first) => (SCENE[p.id] ? SCENE[p.id]() : PIC[p.id] ? pic(p, first) : gen(p));
-    const box = document.createElement('section');
+    const box = document.createElement('div');
     box.className = 'xr-show'; box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'XRainier products');
     const h1 = $('h1', hero0);
     box.innerHTML = '<h1 class="xr-sr">' + esc(h1 ? h1.textContent.replace(/ +/g, ' ').trim() : 'XRainier') + '</h1><div class="xr-stage"></div><button class="xr-nav-b prev" type="button" aria-label="Previous product">&#8249;</button><button class="xr-nav-b next" type="button" aria-label="Next product">&#8250;</button><div class="xr-dots" role="tablist"></div>';
@@ -109,6 +109,9 @@
     box.addEventListener('mouseenter', () => hold(true)); box.addEventListener('mouseleave', () => hold(false));
     box.addEventListener('focusin', () => hold(true)); box.addEventListener('focusout', () => hold(false));
     document.addEventListener('visibilitychange', () => hold(document.hidden));
+    // home showcase v3.1: a plain block (not a <section>, so page section styles don't squeeze it); measure the scrollbar for the edge-to-edge width
+    const sbw = () => document.documentElement.style.setProperty('--xr-sbw', Math.max(0, innerWidth - document.documentElement.clientWidth) + 'px');
+    sbw(); addEventListener('resize', sbw, { passive: true });
     let x0 = null;
     stage.addEventListener('pointerdown', (e) => { x0 = e.clientX; });
     stage.addEventListener('pointerup', (e) => { if (x0 !== null && Math.abs(e.clientX - x0) > 45) go(at + (e.clientX < x0 ? 1 : -1)); x0 = null; });
@@ -178,6 +181,13 @@
 .sc-gen .o{position:absolute;left:50%;top:50%;border-radius:50%;border:1px dashed rgba(var(--t),.5);animation:xrrot 20s linear infinite}.sc-gen .o1{width:320px;height:320px;margin:-160px}.sc-gen .o2{width:480px;height:480px;margin:-240px;animation-direction:reverse}
 @keyframes xrrot{to{transform:rotate(360deg)}}
 @media(max-width:820px){.xr-show{padding:0 12px}.xr-stage{height:min(760px,86vh);border-radius:22px}.xr-sc:after{background:linear-gradient(0deg,rgba(4,7,16,.92) 0,rgba(4,7,16,.6) 30%,rgba(4,7,16,0) 58%)}.xr-sc .radar{left:50%;top:36%;height:auto;width:92%}.xr-sl-txt{width:100%;padding:0 20px 24px}.xr-sl h2{font-size:clamp(34px,10vw,48px)}.xr-hl{margin-bottom:14px}.xr-hl li{font-size:12.5px;padding:5px 10px}.xr-nav-b{display:none}.xr-dots{justify-content:flex-start}.xr-dot span{display:none}.xr-dot{padding:6px 6px 9px}}
+/* home showcase v3.1: edge to edge (wider than the sections below) and fills the screen height */
+@media(min-width:821px){
+.xr-show{box-sizing:border-box!important;width:calc(100vw - var(--xr-sbw,0px))!important;max-width:none!important;margin:8px 0 0 calc(50% - (100vw - var(--xr-sbw,0px))/2)!important;padding:0 clamp(12px,1.6vw,28px)!important}
+.xr-stage{height:clamp(600px,calc(100vh - 150px),1000px)!important;width:100%!important;max-width:none!important}
+.xr-nav-b{top:calc(clamp(600px,calc(100vh - 150px),1000px)/2)!important}
+.xr-nav-b.prev{left:calc(clamp(12px,1.6vw,28px) + 18px)!important}.xr-nav-b.next{right:calc(clamp(12px,1.6vw,28px) + 18px)!important}
+}
 @media(prefers-reduced-motion:reduce){.xr-sc *{animation-duration:0s!important;animation-iteration-count:1!important}.xr-sl,.xr-sl.on,.xr-sl-txt>*,.sc-pic img{transition-duration:.01s}}
 </style>`);
     renderShow();
