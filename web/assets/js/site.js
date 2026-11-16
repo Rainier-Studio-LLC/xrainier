@@ -100,7 +100,9 @@
       if (BETA) $$('a[href^="https://skyabove.xrainier.com"]', nav).forEach((a) => (a.href = a.href.replace('://skyabove.', '://beta.skyabove.')));
     };
     renderNav();
-    if (!$('#xr-nav-css')) document.head.insertAdjacentHTML('beforeend', `<style id="xr-nav-css">
+    // menu glass v1: the hover light follows the pointer
+  document.addEventListener('pointermove', (e) => { const t = e.target && e.target.closest && e.target.closest('.xr-tile,.xr-dd-btn,.xr-crumb,header.nav .links>a:not(.btn)'); if (!t) return; const r = t.getBoundingClientRect(); t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px'); }, { passive: true });
+  if (!$('#xr-nav-css')) document.head.insertAdjacentHTML('beforeend', `<style id="xr-nav-css">
 .nav .wrap{gap:16px}
 .xr-dd{position:relative;display:flex}
 .xr-dd-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#c3cce6;padding:8px 12px;border-radius:8px;font:inherit;font-size:15px;cursor:pointer}
@@ -122,6 +124,11 @@
 .xr-tile{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;color:var(--txt);border:1px solid transparent;transition:background .15s,border-color .15s,transform .15s}
 a.xr-tile:hover{background:rgba(120,170,255,.08);border-color:var(--line);color:#fff;transform:translateX(2px)}
 .xr-tile[aria-current]{background:rgba(34,225,255,.07);border-color:rgba(34,225,255,.35)}
+/* menu glass v1: glass sheen + cursor light on hover */
+.xr-tile,.xr-dd-btn,.xr-crumb,header.nav .links>a:not(.btn){position:relative;isolation:isolate}
+.xr-tile.xr-tile:hover,.xr-dd-btn.xr-dd-btn:hover,.xr-dd.open .xr-dd-btn.xr-dd-btn,.xr-crumb.xr-crumb:hover,header.nav .links>a:not(.btn):hover{background-image:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.28) 47%,rgba(255,255,255,.08) 53%,transparent 62%),radial-gradient(140px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 55%);background-size:260% 100%,100% 100%,100% 100%;background-repeat:no-repeat;background-position:-20% 0,0 0,0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(0,0,0,.25),0 6px 18px rgba(0,0,0,.22);animation:xrglass .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes xrglass{from{background-position:120% 0,0 0,0 0}to{background-position:-20% 0,0 0,0 0}}
+@media (prefers-reduced-motion:reduce){.xr-tile.xr-tile:hover,.xr-dd-btn.xr-dd-btn:hover,.xr-dd.open .xr-dd-btn.xr-dd-btn,.xr-crumb.xr-crumb:hover,header.nav .links>a:not(.btn):hover{animation:none}}
 .xr-ic{width:40px;height:40px;border-radius:11px;flex:none;object-fit:cover;box-shadow:0 6px 16px rgba(0,0,0,.45)}
 .xr-ic.letter{display:grid;place-items:center;font:800 17px "Orbitron",sans-serif;color:#05060f;background:var(--grad)}
 .xr-t{display:flex;flex-direction:column;min-width:0;line-height:1.3}
