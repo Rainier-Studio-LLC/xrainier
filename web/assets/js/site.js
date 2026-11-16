@@ -30,6 +30,11 @@
     { id: 'landlord', name: 'DrizzleTown', href: '/drizzletown.html', icon: '/assets/img/drizzletown-icon.png', kind: 'GAME', line: 'The family board game in 3D' },
     { id: 'starviewer', name: 'Star Viewer', href: '/starviewer.html', icon: '/assets/img/starviewer-icon.png', kind: 'APP', line: 'The night sky, live, wherever you are' },
   ].forEach((q) => { if (!XR.some((p) => p.id === q.id)) XR.push(q); });
+  // new products v1: DoodleHere and RidgeHere in the menu and the showcase
+  [
+    { id: 'doodlehere', name: 'DoodleHere', href: '/doodlehere.html', icon: '/assets/img/doodlehere-icon.png', kind: 'APP', line: 'Drawing that talks back, for kids' },
+    { id: 'ridgehere', name: 'RidgeHere', href: '/ridgehere.html', icon: '/assets/img/ridgehere-icon.png', kind: 'APP', line: 'Name every peak you can see' },
+  ].forEach((q) => { if (!XR.some((p) => p.id === q.id)) XR.push(q); });
   $$('[data-product]').forEach((el) => {
     const id = el.dataset.product; if (!id) return;
     const img = $('img', el), h = $('h3', el), p = $('p', el);
@@ -52,7 +57,9 @@
   // ---------- product footer v1: every product page gets the same footer as the home page,
   // and its Privacy link goes to that product's own privacy page (not SkyHere's) ----------
   (() => {
-    if (!here || here === 'index' || here === '404') return;
+    // xrainier privacy v1: pages that aren't a product (home, 404, privacy) link Privacy to XRainier's own policy
+    const genPriv = () => $$('footer a').forEach((a) => { if (/^\s*privacy\s*$/i.test(a.textContent)) a.setAttribute('href', '/privacy.html'); });
+    if (!here || here === 'index' || here === '404' || here === 'privacy' || here === 'terms') { genPriv(); return; }
     const SKIP = /^(www|admin|admin-beta|beta|api|api-beta)$/;
     const count = {};
     $$('a[href]').forEach((a) => {
@@ -61,7 +68,7 @@
       if (m && !SKIP.test(m[1].toLowerCase())) { const h = m[1].toLowerCase(); count[h] = (count[h] || 0) + 1 + (h === here || (mine && h === mine.id) ? 100 : 0); }
     });
     const host = Object.keys(count).sort((a, b) => count[b] - count[a])[0];
-    if (!host) return;   // not a product page
+    if (!host) { genPriv(); return; }   // not a product page
     const old = $('footer');
     const keep = old ? $$('a[href]', old).filter((a) => /terms|credits|licen|legal|imprint/i.test(a.textContent)) : [];
     const mail = old && $('a[href^="mailto:"]', old);
