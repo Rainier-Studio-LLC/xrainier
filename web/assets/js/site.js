@@ -134,6 +134,9 @@
       const od = dt[at]; if (od && dots.scrollWidth > dots.clientWidth + 4) dots.scrollTo({ left: od.offsetLeft - (dots.clientWidth - od.offsetWidth) / 2, behavior: 'smooth' });
     };
     dots.addEventListener('animationend', (e) => { if (e.animationName === 'xrshowfill') go(at + 1); });
+    // showcase strip v1: if the names don't fit, show icons only (the current product keeps its name)
+    const fitStrip = () => { $$('.xr-dot', dots).forEach((d) => (d.title = d.getAttribute('aria-label') || '')); dots.classList.remove('tight'); if (dots.scrollWidth > dots.clientWidth + 2) dots.classList.add('tight'); };
+    new MutationObserver(fitStrip).observe(dots, { childList: true }); addEventListener('resize', fitStrip, { passive: true }); fitStrip();
     dots.addEventListener('click', (e) => { const d = e.target.closest('.xr-dot'); if (d) go(+d.dataset.i); });
     $('.prev', box).addEventListener('click', () => go(at - 1));
     $('.next', box).addEventListener('click', () => go(at + 1));
@@ -210,6 +213,11 @@
 .xr-dot img{width:26px;height:26px;border-radius:8px}
 .xr-dot:hover{color:#fff;background:rgba(120,170,255,.08)}
 .xr-dot.on{color:#fff;border-color:rgba(var(--t),.55);background:rgba(var(--t),.12)}
+/* showcase strip v1: every product fits; centred when there is room, scrollable to both ends when there isn't */
+.xr-dots.xr-dots{justify-content:flex-start}
+.xr-dots>.xr-dot:first-child{margin-left:auto}.xr-dots>.xr-dot:last-child{margin-right:auto}
+.xr-dots.tight .xr-dot:not(.on) span{display:none}
+.xr-dots.tight .xr-dot:not(.on){padding:7px 7px 9px}
 .xr-dot i{position:absolute;left:0;bottom:0;height:3px;width:0;background:rgb(var(--t))}
 .xr-dot.on i{animation:xrshowfill ${SECS}s linear forwards}
 .xr-show.held .xr-dot.on i{animation-play-state:paused}
