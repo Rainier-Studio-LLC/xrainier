@@ -317,6 +317,14 @@
 .xr-mega:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--grad)}
 .xr-mega-in{display:grid;grid-template-columns:1.55fr 1fr}
 .xr-mega.one{width:min(620px,calc(100vw - 32px))}.xr-mega.one .xr-mega-in{grid-template-columns:1fr}
+/* menu fit v1: wider Products panel; the Coming soon column always fits inside it */
+@media(min-width:821px){
+.xr-mega:not(.one){width:min(1000px,calc(100vw - 32px))}
+.xr-mega:not(.one) .xr-mega-in{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+.xr-mega-in>.xr-col,.xr-live>*,.xr-soonl>*,.xr-tile,.xr-t{min-width:0}
+.xr-t b{flex-wrap:wrap;row-gap:3px}
+.xr-note{white-space:normal;line-height:1.5}
+}
 .xr-col{padding:20px}
 .xr-soon-col{background:linear-gradient(180deg,rgba(168,85,247,.06),rgba(34,225,255,0));border-left:1px solid var(--line)}
 .xr-h{display:flex;align-items:center;gap:8px;margin:0 0 12px 4px;font:600 11px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:#86efac}
