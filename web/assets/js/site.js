@@ -144,6 +144,13 @@
     box.addEventListener('mouseenter', () => hold(true)); box.addEventListener('mouseleave', () => hold(false));
     box.addEventListener('focusin', () => hold(true)); box.addEventListener('focusout', () => hold(false));
     document.addEventListener('visibilitychange', () => hold(document.hidden));
+    // showcase 3d v1: tilt the panel a little toward the mouse, and move the edge light with it
+    if (matchMedia('(hover:hover) and (prefers-reduced-motion:no-preference)').matches) {
+      box.addEventListener('pointermove', (e) => { const r = stage.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        stage.style.setProperty('--ry', (x * 4).toFixed(2) + 'deg'); stage.style.setProperty('--rx', (-y * 3).toFixed(2) + 'deg');
+        stage.style.setProperty('--gx', ((x + .5) * 100).toFixed(1) + '%'); stage.style.setProperty('--gy', ((y + .5) * 100).toFixed(1) + '%'); }, { passive: true });
+      box.addEventListener('pointerleave', () => { ['--rx', '--ry', '--gx', '--gy'].forEach((k) => stage.style.removeProperty(k)); });
+    }
     // home showcase v3.3: match the width of the page sections below (their .wrap content width)
     const fit = () => {
       const ref = $('#products .wrap') || $('#lab .wrap') || $('main .wrap:not(.hero .wrap)');
@@ -202,6 +209,16 @@
 .xr-hl li{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-size:13.5px;color:#dfe6ff;background:rgba(6,10,22,.5);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .xr-hl li:before{content:"";width:7px;height:7px;border-radius:50%;flex:none;background:rgb(var(--t));box-shadow:0 0 10px rgb(var(--t))}
 .xr-sl-cta{display:flex;gap:10px;flex-wrap:wrap}
+/* showcase 3d v1: the stage is a raised glass panel: layered drop shadows, bevelled lit edges, gentle tilt toward the mouse */
+.xr-show{perspective:1600px}
+.xr-show .xr-stage.xr-stage{transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s;
+ border:1px solid rgba(160,200,255,.22);
+ box-shadow:0 1px 0 rgba(255,255,255,.06),0 2px 3px rgba(0,0,0,.5),0 12px 24px -6px rgba(0,0,0,.55),0 34px 70px -18px rgba(0,0,0,.75),0 60px 120px -40px rgba(34,225,255,.22),0 0 0 1px rgba(0,0,0,.6)}
+.xr-show:hover .xr-stage.xr-stage{box-shadow:0 1px 0 rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.5),0 18px 30px -8px rgba(0,0,0,.6),0 46px 90px -20px rgba(0,0,0,.8),0 70px 140px -40px rgba(168,85,247,.28),0 0 0 1px rgba(0,0,0,.6)}
+.xr-stage:after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.6),inset 1px 0 0 rgba(255,255,255,.08),inset -1px 0 0 rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.04),inset 0 -40px 60px -30px rgba(0,0,0,.55),inset 0 30px 50px -36px rgba(255,255,255,.10);
+ background:radial-gradient(600px 300px at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.07),transparent 60%)}
+@media(prefers-reduced-motion:reduce),(hover:none){.xr-show .xr-stage.xr-stage{transform:none}}
 .xr-sl-soon{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:700;color:#fbbf24;border:1px solid rgba(251,191,36,.45);background:rgba(251,191,36,.08)}
 .xr-sl-soon:before{content:"";width:8px;height:8px;border-radius:50%;background:#fbbf24;box-shadow:0 0 10px #fbbf24}
 .xr-nav-b{position:absolute;top:calc(clamp(560px,82vh,860px)/2);transform:translateY(-50%);z-index:3;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(10,16,34,.55);color:#fff;font-size:26px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s,background .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
