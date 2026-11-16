@@ -78,7 +78,7 @@
     const PIC = {
       tankwar: '/assets/img/tankwar/hero.jpg', turbotoons: '/assets/img/turbotoons/hero.jpg', blockrush: '/assets/img/blockrush/hero.jpg',
       blockrush3d: '/assets/img/blockrush3d-hero.jpg', landlord: '/assets/img/drizzletown-hero.jpg', memorylane: '/assets/img/memorylane/hero.jpg',
-      starviewer: '/assets/img/starviewer-hero.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg',
+      starviewer: '/assets/img/starviewer-hero-v2.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg',
     };
     const pic = (p, first) => '<div class="sc-pic"><img src="' + esc(PIC[p.id]) + '" alt="' + esc(p.name) + '" decoding="async"' + (first ? ' fetchpriority="high"' : ' fetchpriority="low"') + ' onerror="this.remove()"></div>';
     // home showcase v3.2: BlockRush 3D gets a shiny glass picture with light effects on top (glint sweep, glowing clear, rising sparkles)
