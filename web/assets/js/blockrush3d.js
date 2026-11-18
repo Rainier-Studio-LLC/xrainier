@@ -7,7 +7,7 @@
 
   // on beta.xrainier.com, game links go to the beta game
   if (/(^|[.-])beta([.-]|$)/.test(location.hostname)) {
-    document.querySelectorAll('a[href^="https://blockrush3d.xrainier.com"]').forEach((a) => {
+    document.querySelectorAll('a[href^="https://prismwell3d.xrainier.com"]').forEach((a) => {
       a.href = a.getAttribute('href').replace('https://blockrush3d.', 'https://beta.blockrush3d.');
     });
   }
