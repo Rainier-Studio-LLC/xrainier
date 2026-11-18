@@ -23,7 +23,7 @@
     { id: 'tankwar', name: 'TankWar', href: '/tankwar.html', icon: '/assets/img/tankwar/icon.png', kind: 'GAME', line: 'Realistic 3D tank battles, 16 v 16' },
     { id: 'turbotoons', name: 'TurboToons', href: '/turbotoons.html', icon: '/assets/img/turbotoons/icon.png', kind: 'GAME', line: 'Cartoon racing, 8 players online' },
     { id: 'blockrush', name: 'BlockRush', href: '/blockrush.html', icon: '/assets/img/blockrush/icon.png', kind: 'GAME', line: 'The daily block puzzle' },
-    { id: 'blockrush3d', name: 'PrismWell 3D', href: '/prismwell.html', icon: '/assets/img/blockrush/blockrush3d-icon.png', kind: 'GAME', line: 'The block puzzle in a 5×5×5 well' },
+    { id: 'blockrush3d', name: 'PrismWell 3D', href: '/prismwell.html', icon: '/assets/img/prismwell3d/icon.png', kind: 'GAME', line: 'The block puzzle in a 5×5×5 well' },
   ];
   // menu icons v1: products added after the list above, with their own icon, line and kind
   [
