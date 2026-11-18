@@ -23,7 +23,7 @@
     { id: 'tankwar', name: 'TankWar', href: '/tankwar.html', icon: '/assets/img/tankwar/icon.png', kind: 'GAME', line: 'Realistic 3D tank battles, 16 v 16' },
     { id: 'turbotoons', name: 'TurboToons', href: '/turbotoons.html', icon: '/assets/img/turbotoons/icon.png', kind: 'GAME', line: 'Cartoon racing, 8 players online' },
     { id: 'blockrush', name: 'BlockRush', href: '/blockrush.html', icon: '/assets/img/blockrush/icon.png', kind: 'GAME', line: 'The daily block puzzle' },
-    { id: 'blockrush3d', name: 'BlockRush 3D', href: '/blockrush3d.html', icon: '/assets/img/blockrush/blockrush3d-icon.png', kind: 'GAME', line: 'The block puzzle in a 5×5×5 well' },
+    { id: 'blockrush3d', name: 'PrismWell 3D', href: '/prismwell.html', icon: '/assets/img/blockrush/blockrush3d-icon.png', kind: 'GAME', line: 'The block puzzle in a 5×5×5 well' },
   ];
   // menu icons v1: products added after the list above, with their own icon, line and kind
   [
@@ -111,9 +111,9 @@
       starviewer: '/assets/img/starviewer-hero-v2.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg',
     };
     const pic = (p, first) => '<div class="sc-pic"><img src="' + esc(PIC[p.id]) + '" alt="' + esc(p.name) + '" decoding="async"' + (first ? ' fetchpriority="high"' : ' fetchpriority="low"') + ' onerror="this.remove()"></div>';
-    // home showcase v3.2: BlockRush 3D gets a shiny glass picture with light effects on top (glint sweep, glowing clear, rising sparkles)
+    // home showcase v3.2: PrismWell 3D gets a shiny glass picture with light effects on top (glint sweep, glowing clear, rising sparkles)
     SCENE.blockrush3d = () => { let s = ''; for (let i = 0; i < 14; i++) s += '<b style="left:' + (52 + Math.random() * 30).toFixed(1) + '%;animation-delay:' + (Math.random() * 4).toFixed(2) + 's;--d:' + (3 + Math.random() * 2.5).toFixed(2) + 's"></b>';
-      return '<div class="sc-pic sc-b3x"><img src="/assets/img/blockrush3d-showcase.jpg" alt="BlockRush 3D" decoding="async" onerror="this.remove()"><i class="pulse"></i><i class="gl"></i><i class="sp">' + s + '</i></div>'; };
+      return '<div class="sc-pic sc-b3x"><img src="/assets/img/blockrush3d-showcase.jpg" alt="PrismWell 3D" decoding="async" onerror="this.remove()"><i class="pulse"></i><i class="gl"></i><i class="sp">' + s + '</i></div>'; };
     const scene = (p, first) => (SCENE[p.id] ? SCENE[p.id]() : PIC[p.id] ? pic(p, first) : gen(p));
     const box = document.createElement('div');
     box.className = 'xr-show'; box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'XRainier products');
@@ -252,7 +252,7 @@
 .xr-show.xr-show .xr-nav-b.prev{left:16px!important}.xr-show.xr-show .xr-nav-b.next{right:16px!important}
 .xr-show .sc-pic img{transform:none!important}
 }
-/* home showcase v3.2: BlockRush 3D glass picture effects */
+/* home showcase v3.2: PrismWell 3D glass picture effects */
 .sc-b3x img{object-position:70% 50%}
 .sc-b3x .gl{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.0) 44%,rgba(190,240,255,.28) 49%,rgba(255,255,255,.08) 52%,transparent 58%);background-size:250% 100%;background-repeat:no-repeat;mix-blend-mode:screen;animation:xrb3gl 4.5s ease-in-out infinite 0.6s}
 @keyframes xrb3gl{0%{background-position:130% 0}55%,100%{background-position:-40% 0}}

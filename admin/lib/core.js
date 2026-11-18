@@ -118,6 +118,10 @@ export async function readSiteProducts(env, req) {
 export async function syncProducts(env, req) {
   const v = await readProducts(env, req); let found = null;
   try { found = await readSiteProducts(env, req); } catch (e) { return { v, found: null, added: [], error: String(e.message || e) }; }
+  // names follow the home page: a renamed product (its menu-link text changed) is renamed in the list too
+  { const nameOf = new Map(found.map((p) => [p.id, p.name])), renamed = [];
+    for (const p of v.products) { const n = nameOf.get(p.id); if (n && n !== p.name) { renamed.push(p.name + " → " + n); p.name = n; } }
+    if (renamed.length && env.SITE && v.v2) { await env.SITE.put("products", JSON.stringify(v)); await addLog(env, "automatic", "Renamed from the home page: " + renamed.join(", ")); } }
   const known = new Set(knownIds(v)), added = found.filter((p) => !known.has(p.id)).slice(0, Math.max(0, 30 - v.products.length));
   const renamed = [], products = v.products.map((o) => {
     const p = found.find((x) => x.id === o.id);

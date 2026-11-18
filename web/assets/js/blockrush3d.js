@@ -1,4 +1,4 @@
-// BlockRush 3D introduction page: today's Daily number, beta links, and the hero well you can spin with a finger or mouse.
+// PrismWell 3D introduction page: today's Daily number, beta links, and the hero well you can spin with a finger or mouse.
 (() => {
   'use strict';
   // Daily #1 was 2026-11-11 (UTC); a new puzzle starts every day at 00:00 UTC
