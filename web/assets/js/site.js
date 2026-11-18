@@ -277,94 +277,6 @@
 </style>`);
     renderShow();
   }
-  // ---------- home showcase v1: under the top menu, every product in turn, 5 seconds each, smooth cross-fade ----------
-  let renderShow = () => {};
-  if (here === '' || here === 'index') {
-    const hdr = $('header.nav');
-    const TINT = { skyabove: '56,189,248', memorylane: '251,191,36', tankwar: '163,230,53', turbotoons: '251,113,133', blockrush: '168,85,247', blockrush3d: '34,225,255', landlord: '52,211,153', starviewer: '129,140,248', doodlehere: '244,114,182', ridgehere: '45,212,191' };
-    const SECS = 5;
-    const box = document.createElement('section');
-    box.className = 'xr-show'; box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'XRainier products');
-    box.innerHTML = '<div class="xr-stage" aria-live="off"></div><button class="xr-nav-b prev" type="button" aria-label="Previous product">&#8249;</button><button class="xr-nav-b next" type="button" aria-label="Next product">&#8250;</button><div class="xr-dots" role="tablist"></div>';
-    if (hdr) hdr.insertAdjacentElement('afterend', box);
-    const stage = $('.xr-stage', box), dots = $('.xr-dots', box);
-    let at = 0, sig = '';
-    const go = (i) => {
-      const sl = $$('.xr-sl', stage), dt = $$('.xr-dot', dots); if (!sl.length) return;
-      at = (i + sl.length) % sl.length;
-      sl.forEach((s, k) => { s.classList.toggle('on', k === at); s.setAttribute('aria-hidden', k === at ? 'false' : 'true'); s.inert = k !== at; });
-      dt.forEach((d) => d.classList.remove('on')); void dots.offsetWidth;     // restart the 5-second bar
-      dt.forEach((d, k) => { d.classList.toggle('on', k === at); d.setAttribute('aria-selected', k === at ? 'true' : 'false'); });
-    };
-    dots.addEventListener('animationend', (e) => { if (e.animationName === 'xrshowfill') go(at + 1); });
-    dots.addEventListener('click', (e) => { const d = e.target.closest('.xr-dot'); if (d) go(+d.dataset.i); });
-    $('.prev', box).addEventListener('click', () => go(at - 1));
-    $('.next', box).addEventListener('click', () => go(at + 1));
-    const hold = (on) => box.classList.toggle('held', on);
-    box.addEventListener('mouseenter', () => hold(true)); box.addEventListener('mouseleave', () => hold(false));
-    box.addEventListener('focusin', () => hold(true)); box.addEventListener('focusout', () => hold(false));
-    let x0 = null;
-    stage.addEventListener('pointerdown', (e) => { x0 = e.clientX; });
-    stage.addEventListener('pointerup', (e) => { if (x0 !== null && Math.abs(e.clientX - x0) > 45) go(at + (e.clientX < x0 ? 1 : -1)); x0 = null; });
-    renderShow = (status, unlisted, ord) => {
-      const st = (id) => (status ? (id in status ? status[id] : unlisted) : 'live');
-      const rank = (p) => (st(p.id) === 'soon' ? 1000 : 0) + (ord && p.id in ord ? ord[p.id] : 99);
-      const list = XR.filter((p) => st(p.id) === 'live' || st(p.id) === 'soon').sort((a, b) => rank(a) - rank(b));
-      const s = list.map((p) => p.id + ':' + st(p.id)).join(',');
-      if (s === sig) return; sig = s;
-      const cur = ($$('.xr-sl', stage)[at] || {}).dataset; const curId = cur && cur.id;
-      box.hidden = !list.length;
-      stage.innerHTML = list.map((p, i) => {
-        const card = $('.prod[data-product="' + p.id + '"], [data-product="' + p.id + '"]:not(a)');
-        const pics = card ? $$('img', card).map((im) => im.getAttribute('src')).filter((u) => u && u !== p.icon) : [];
-        const desc = card && $('p', card) ? $('p', card).textContent.trim().replace(/ +/g, ' ') : '';
-        const soon = st(p.id) === 'soon', t = TINT[p.id] || '120,170,255';
-        return '<article class="xr-sl" data-id="' + esc(p.id) + '" style="--t:' + t + '" aria-roledescription="slide" aria-label="' + (i + 1) + ' of ' + list.length + ': ' + esc(p.name) + '">' +
-          '<div class="xr-sl-txt"><span class="xr-sl-k">' + esc(p.kind || 'APP') + (soon ? ' · Coming soon' : '') + '</span>' +
-          '<h2>' + esc(p.name) + '</h2><p class="xr-sl-line">' + esc(p.line) + '</p>' + (desc && desc !== p.line ? '<p class="xr-sl-desc">' + esc(desc.length > 170 ? desc.slice(0, 167) + '…' : desc) + '</p>' : '') +
-          '<a class="btn pri xr-sl-go" href="' + esc(p.href) + '">' + (soon ? 'See what’s coming' : 'Explore ' + esc(p.name)) + ' →</a></div>' +
-          '<div class="xr-sl-art">' + (pics[0] ? '<img class="xr-sl-pic" src="' + esc(pics[0]) + '" alt="" loading="lazy">' : '') +
-          '<img class="xr-sl-ic" src="' + esc(p.icon) + '" alt="" onerror="this.remove()"></div></article>';
-      }).join('');
-      dots.innerHTML = list.map((p, i) => '<button class="xr-dot" type="button" role="tab" data-i="' + i + '" aria-label="' + esc(p.name) + '"><i></i></button>').join('');
-      const k = list.findIndex((p) => p.id === curId);
-      go(k < 0 ? 0 : k);
-    };
-    if (!$('#xr-show-css')) document.head.insertAdjacentHTML('beforeend', `<style id="xr-show-css">
-.xr-show{position:relative;max-width:1180px;margin:18px auto 8px;padding:0 20px}
-.xr-stage{position:relative;height:320px;border-radius:24px;overflow:hidden;border:1px solid var(--line,rgba(120,170,255,.18));background:#060a18;box-shadow:0 24px 60px rgba(0,0,0,.35);touch-action:pan-y}
-.xr-sl{position:absolute;inset:0;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:34px 64px;opacity:0;visibility:hidden;
- background:radial-gradient(520px 320px at 78% 50%,rgba(var(--t),.30),transparent 70%),radial-gradient(420px 260px at 10% 110%,rgba(var(--t),.14),transparent 70%),linear-gradient(135deg,#0a1022,#060914);
- transition:opacity 1s ease,visibility 0s linear 1s}
-.xr-sl.on{opacity:1;visibility:visible;transition:opacity 1s ease,visibility 0s}
-.xr-sl-txt>*{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
-.xr-sl.on .xr-sl-txt>*{opacity:1;transform:none}
-.xr-sl.on .xr-sl-txt>*:nth-child(2){transition-delay:.08s}.xr-sl.on .xr-sl-txt>*:nth-child(3){transition-delay:.16s}.xr-sl.on .xr-sl-txt>*:nth-child(4){transition-delay:.24s}.xr-sl.on .xr-sl-txt>*:nth-child(5){transition-delay:.32s}
-.xr-sl-k{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;padding:4px 10px;border-radius:999px;color:rgb(var(--t));border:1px solid rgba(var(--t),.45);background:rgba(var(--t),.08)}
-.xr-sl h2{margin:12px 0 6px;font-size:clamp(28px,4vw,44px);line-height:1.05;color:#fff}
-.xr-sl-line{margin:0 0 8px;font-size:18px;color:#dfe6ff}
-.xr-sl-desc{margin:0 0 16px;color:var(--mut,#9aa6c8);font-size:15px;max-width:52ch}
-.xr-sl-go{display:inline-flex;margin-top:4px}
-.xr-sl-art{position:relative;height:100%;display:grid;place-items:center}
-.xr-sl-ic{width:150px;height:150px;border-radius:34px;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 20px 60px rgba(var(--t),.45);transform:scale(.86) rotate(-4deg);opacity:0;transition:transform 1.2s cubic-bezier(.2,.7,.2,1),opacity .9s}
-.xr-sl.on .xr-sl-ic{transform:none;opacity:1;animation:xrshowfloat 5s ease-in-out infinite alternate}
-.xr-sl-pic{position:absolute;inset:8% 0;width:100%;height:84%;object-fit:cover;border-radius:18px;opacity:.28;filter:blur(1px) saturate(1.2);-webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent)}
-@keyframes xrshowfloat{to{transform:translateY(-8px)}}
-.xr-nav-b{position:absolute;top:160px;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(10,16,34,.55);color:#fff;font-size:24px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s,background .2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.xr-nav-b.prev{left:32px}.xr-nav-b.next{right:32px}
-.xr-show:hover .xr-nav-b,.xr-nav-b:focus-visible{opacity:1}.xr-nav-b:hover{background:rgba(34,225,255,.18)}
-.xr-dots{display:flex;justify-content:center;gap:8px;margin-top:12px}
-.xr-dot{position:relative;width:28px;height:6px;padding:0;border:0;border-radius:6px;background:rgba(255,255,255,.16);cursor:pointer;overflow:hidden}
-.xr-dot i{position:absolute;inset:0;width:0;background:var(--grad,linear-gradient(90deg,#22e1ff,#a855f7))}
-.xr-dot.on{width:44px}.xr-dot.on i{animation:xrshowfill ${SECS}s linear forwards}
-.xr-show.held .xr-dot.on i{animation-play-state:paused}
-@keyframes xrshowfill{to{width:100%}}
-@media(max-width:760px){.xr-stage{height:400px}.xr-sl{grid-template-columns:1fr;grid-template-rows:150px auto;padding:22px 22px 26px;gap:8px;text-align:center}.xr-sl-art{order:-1}.xr-sl-ic{width:110px;height:110px;border-radius:26px}.xr-sl-desc{margin-left:auto;margin-right:auto}.xr-nav-b{display:none}}
-@media(prefers-reduced-motion:reduce){.xr-sl,.xr-sl.on,.xr-sl-txt>*,.xr-sl-ic{transition-duration:.01s}.xr-sl.on .xr-sl-ic{animation:none}}
-</style>`);
-    document.addEventListener('visibilitychange', () => box.classList.toggle('held', document.hidden));
-    renderShow();
-  }
   let renderNav = () => {};
   if (nav && wrapEl) {
     const idOfLink = (a) => {
@@ -596,7 +508,6 @@ header.nav .links>a:not(.btn):not(.xr-mcta):hover,header.nav .links .xr-dd-btn:h
     $$('[data-live-count]').forEach((e) => (e.textContent = n));
     $$('[data-live-words]').forEach((e) => (e.textContent = WORDS[n] || n + ' products'));
     renderNav(status, unlisted, ord);
-    renderShow(status, unlisted, ord);
     renderShow(status, unlisted, ord);
     // this page belongs to a product that's Off: keep it out of search results
     const me = (/^\/([a-z0-9-]+)(?:\.html)?\/?$/i.exec(location.pathname) || [])[1];
