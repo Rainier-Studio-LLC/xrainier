@@ -34,8 +34,8 @@
   [
     { id: 'doodlehere', name: 'DoodleHere', href: '/doodlehere.html', icon: '/assets/img/doodlehere-icon.png', kind: 'APP', line: 'Drawing that talks back, for kids' },
     { id: 'ridgehere', name: 'RidgeHere', href: '/ridgehere.html', icon: '/assets/img/ridgehere-icon.png', kind: 'APP', line: 'Name every peak you can see' },
-    // partypost v1: PartyPost in the menu and the showcase
-    { id: 'partypost', name: 'PartyPost', href: 'https://partypost.xrainier.com/', icon: '/assets/img/partypost-icon.png', kind: 'APP', line: 'Animated postcard invitations with RSVPs' },
+    // partypost v1: Glowvite in the menu and the showcase (glowvite v1)
+    { id: 'partypost', name: 'Glowvite', href: 'https://glowvite.xrainier.com/', icon: '/assets/img/glowvite-icon.png', kind: 'APP', line: 'Animated postcard invitations with RSVPs' },
   ].forEach((q) => { if (!XR.some((p) => p.id === q.id)) XR.push(q); });
   // partypost v1: a PartyPost card in What we make, made from the RidgeHere card (or the last card) so it matches the others
   (() => {
@@ -44,10 +44,10 @@
     const ref = $('[data-product="ridgehere"]:not(header [data-product])') || all[all.length - 1];
     if (!ref) return;
     const c = ref.cloneNode(true); c.dataset.product = 'partypost';
-    const swap = (s) => s.replace(/RidgeHere|ridgehere\.html|ridgehere/g, (m) => (m === 'RidgeHere' ? 'PartyPost' : m === 'ridgehere.html' ? 'partypost' : 'partypost'));
-    [c, ...$$('a[href]', c)].forEach((a) => { if (a.getAttribute && a.getAttribute('href')) a.setAttribute('href', 'https://partypost.xrainier.com/'); });
-    $$('img', c).forEach((im) => { im.setAttribute('src', '/assets/img/partypost-icon.png'); im.setAttribute('alt', 'PartyPost'); });
-    const h = $('h3', c); if (h) h.textContent = 'PartyPost';
+    const swap = (s) => s.replace(/RidgeHere|ridgehere\.html|ridgehere/g, (m) => (m === 'RidgeHere' ? 'Glowvite' : m === 'ridgehere.html' ? 'partypost' : 'partypost'));
+    [c, ...$$('a[href]', c)].forEach((a) => { if (a.getAttribute && a.getAttribute('href')) a.setAttribute('href', 'https://glowvite.xrainier.com/'); });
+    $$('img', c).forEach((im) => { im.setAttribute('src', '/assets/img/glowvite-icon.png'); im.setAttribute('alt', 'Glowvite'); });
+    const h = $('h3', c); if (h) h.textContent = 'Glowvite';
     const p = $('p', c); if (p) p.textContent = 'Animated postcard invitations for birthdays and parties. Guests open a sealed envelope, see your postcard and answer yes or no with adults and kids; you see who opened it and who is coming.';
     const tags = $$('.tag', c); ['WEB', 'INVITATIONS', 'NEW'].forEach((t, i) => { if (tags[i + 1]) tags[i + 1].textContent = t; });
     const walker = document.createTreeWalker(c, NodeFilter.SHOW_TEXT); let n; while ((n = walker.nextNode())) n.nodeValue = swap(n.nodeValue);
