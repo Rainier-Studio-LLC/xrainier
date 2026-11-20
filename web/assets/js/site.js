@@ -35,7 +35,7 @@
     { id: 'doodlehere', name: 'DoodleHere', href: '/doodlehere.html', icon: '/assets/img/doodlehere-icon.png', kind: 'APP', line: 'Drawing that talks back, for kids' },
     { id: 'ridgehere', name: 'RidgeHere', href: '/ridgehere.html', icon: '/assets/img/ridgehere-icon.png', kind: 'APP', line: 'Name every peak you can see' },
     // partypost v1: Glowvite in the menu and the showcase (glowvite v1)
-    { id: 'partypost', name: 'Glowvite', href: 'https://glowvite.xrainier.com/', icon: '/assets/img/glowvite-icon.png', kind: 'APP', line: 'Animated postcard invitations with RSVPs' },
+    { id: 'partypost', name: 'Glowvite', href: 'https://glowvite.xrainier.com/', icon: '/assets/img/glowvite-icon.png', kind: 'APP', line: 'Animated invitations and cards with RSVPs' },
   ].forEach((q) => { if (!XR.some((p) => p.id === q.id)) XR.push(q); });
   // partypost v1: a PartyPost card in What we make, made from the RidgeHere card (or the last card) so it matches the others
   (() => {
@@ -103,7 +103,7 @@
   const hero0 = (here === '' || here === 'index') && $('section.hero');
   if (hero0) {
     const SECS = 6;
-    const TINT = { skyabove: '56,189,248', memorylane: '251,191,36', tankwar: '163,230,53', turbotoons: '251,113,133', blockrush: '168,85,247', blockrush3d: '34,225,255', landlord: '52,211,153', starviewer: '129,140,248', doodlehere: '244,114,182', ridgehere: '45,212,191', partypost: '255,143,171' };
+    const TINT = { skyabove: '56,189,248', memorylane: '251,191,36', tankwar: '163,230,53', turbotoons: '251,113,133', blockrush: '168,85,247', blockrush3d: '34,225,255', landlord: '52,211,153', starviewer: '129,140,248', doodlehere: '244,114,182', ridgehere: '45,212,191', partypost: '255,138,101' };
     const HL = {
       skyabove: ['Every plane over your head, live', ['Live radar, routes and altitude', '3D replays with a cockpit view', 'Encrypted Sky Link chat']],
       tankwar: ['Realistic 3D tank battles', ['8 famous tanks, 4 real battlefields', 'Driver periscope and gunner sight', 'Online battles up to 16 v 16']],
@@ -115,7 +115,7 @@
       starviewer: ['The night sky, live, wherever you are', ['Point your phone at the sky', 'Tap any star for its story', 'Chat with stargazers in 20 languages']],
       doodlehere: ['Drawing that talks back, for kids', ['Draw, colour and hear it', '9 languages to explore', 'Made for little hands']],
       ridgehere: ['Name every peak you can see', ['Point at a ridge, get its name', 'Trails, photos and Ridge Link chat', 'Works on any mountain view']],
-      partypost: ['Animated postcard invitations', ['An envelope that opens on the screen', 'Yes or no, adults and kids', 'See who opened it and who is coming']],   // partypost v1
+      partypost: ['Animated invitations & cards', ['An envelope that glows open on the screen', 'Yes, no or maybe, adults and kids', 'Greeting and gift cards too']],   // partypost v1 · glowvite v2
     };
     const rnd = (a, b) => a + Math.random() * (b - a);
     const radar0 = $('.radar', hero0);
@@ -127,7 +127,7 @@
     const PIC = {
       tankwar: '/assets/img/tankwar/hero.jpg', turbotoons: '/assets/img/turbotoons/hero.jpg', blockrush: '/assets/img/blockrush/hero.jpg',
       blockrush3d: '/assets/img/blockrush3d-hero.jpg', landlord: '/assets/img/drizzletown-hero.jpg', memorylane: '/assets/img/memorylane/hero.jpg',
-      starviewer: '/assets/img/starviewer-hero-v2.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg', partypost: '/assets/img/partypost-hero.jpg',
+      starviewer: '/assets/img/starviewer-hero-v2.jpg', doodlehere: '/assets/img/doodlehere-hero.jpg', ridgehere: '/assets/img/ridgehere-hero.jpg', partypost: '/assets/img/glowvite-hero.jpg',
     };
     const pic = (p, first) => '<div class="sc-pic"><img src="' + esc(PIC[p.id]) + '" alt="' + esc(p.name) + '" decoding="async"' + (first ? ' fetchpriority="high"' : ' fetchpriority="low"') + ' onerror="this.remove()"></div>';
     // home showcase v3.2: PrismWell 3D gets a shiny glass picture with light effects on top (glint sweep, glowing clear, rising sparkles)
