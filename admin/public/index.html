@@ -42,7 +42,7 @@ td:first-child{white-space:nowrap}.rmX{display:none}
 <header><div class="brand">X<b>RAINIER</b> ADMIN</div><span class="env" id="env">LIVE</span><span class="sp"></span><span class="who" id="who"></span><button class="btn" id="out" hidden>Sign out</button></header>
 <div id="login"><div class="lbox"><h2>XRainier admin</h2><p class="muted" style="margin:6px 0 0">Owner sign-in only.</p><div id="gbtn"></div><div id="lmsg"></div></div></div>
 <main id="app" hidden>
- <div class="tabs"><button class="tab on" data-p="site">Website</button><button class="tab" data-p="log">Activity</button></div>
+ <div class="tabs"><button class="tab on" data-p="site">Website</button><button class="tab" data-p="log">Activity</button><button class="tab" data-p="ig">📸 Instagram</button></div>
  <section class="pane on" id="p-site">
   <div class="card" id="incoming"><h3>✨ Incoming products<span class="sp"></span></h3>
    <p class="muted" style="font-size:13px;margin:0 0 6px" id="incHelp"></p><div id="incRows"></div></div>
@@ -63,6 +63,7 @@ td:first-child{white-space:nowrap}.rmX{display:none}
   </div>
  </section>
  <section class="pane" id="p-log"><div class="card"><h3>Recent changes</h3><table><thead><tr><th>When</th><th>Who</th><th>What changed</th></tr></thead><tbody id="logRows"></tbody></table></div></section>
+ <section class="pane" id="p-ig"></section>
 </main>
 <div id="toast" role="status"></div>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -127,4 +128,5 @@ $('add').onclick=()=>{const id=$('nid').value.trim().toLowerCase(),name=$('nname
 async function loadLog(){const j=await api('/api/log');$('logRows').innerHTML=j.log.map((l)=>`<tr><td>${esc(new Date(l.t).toLocaleString())}</td><td>${esc(l.by)}</td><td>${esc(l.what)}</td></tr>`).join('')||'<tr><td colspan="3" class="muted">No changes yet.</td></tr>'}
 if(token)start();else login();
 </script>
+<link rel="stylesheet" href="/ig.css"><script src="/ig.js" defer></script>
 </body></html>

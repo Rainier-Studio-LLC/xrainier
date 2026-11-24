@@ -1,0 +1,53 @@
+{
+ "about": "Instagram posts for XRainier. tools/instagram/publish.mjs (GitHub Actions) publishes them; the admin's 📸 Instagram tab shows and controls them. See docs/INSTAGRAM.md.",
+ "settings": {
+  "auto": true,
+  "maxPerDay": 3,
+  "gapMinutes": 0
+ },
+ "posts": [
+  {
+   "slug": "xrainier-lineup-carousel",
+   "title": "Our apps: PrismWell 3D, Glowvite, SkyHere",
+   "kind": "carousel",
+   "added": "2026-11-24",
+   "media": [
+    {
+     "path": "social/xrainier-lineup/slide-1.jpg",
+     "type": "image"
+    },
+    {
+     "path": "social/xrainier-lineup/slide-2.jpg",
+     "type": "image"
+    },
+    {
+     "path": "social/xrainier-lineup/slide-3.jpg",
+     "type": "image"
+    },
+    {
+     "path": "social/xrainier-lineup/slide-4.jpg",
+     "type": "image"
+    },
+    {
+     "path": "social/xrainier-lineup/slide-5.jpg",
+     "type": "image"
+    }
+   ],
+   "caption": "Play. Celebrate. Look up. ✨\n\nThree apps from our Seattle studio, all free to try right in your browser:\n\n🎮 PrismWell 3D: the daily block puzzle, in 3D. Spin every piece, drop it into a 5×5×5 well and clear lines across, deep or straight up.\n\n💌 Glowvite: animated invitations and cards. Your guests open a glowing envelope and answer yes, no or maybe.\n\n✈️ SkyHere: every plane over your head, live. Radar, routes, 3D replays and Sky Link chat with other spotters.\n\nSwipe through, then try them at xrainier.com\n\n#XRainier #MadeInSeattle #IndieDev #PuzzleGame #3DPuzzle #BrowserGames #Invitations #PartyPlanning #PlaneSpotting #Aviation #FlightTracker #Seattle #PNW"
+  },
+  {
+   "slug": "xrainier-lineup-reel",
+   "title": "Reel: 3 apps, 1 studio (25 s, original music)",
+   "kind": "reel",
+   "added": "2026-11-24",
+   "media": [
+    {
+     "path": "social/xrainier-lineup/reel.mp4",
+     "type": "video"
+    }
+   ],
+   "cover": "social/xrainier-lineup/reel-cover.jpg",
+   "caption": "3 apps. 1 studio. Made in Seattle 🏔️\n\n🎮 PrismWell 3D: spin it, aim it, drop it. A new 5×5×5 puzzle every day.\n💌 Glowvite: invitations that glow open on the screen.\n✈️ SkyHere: look up, then look at SkyHere. Every plane overhead, live.\n\nFree to try, no download: xrainier.com\n\n🎵 Original music by XRainier\n#XRainier #MadeInSeattle #IndieDev #Reels #PuzzleGame #Invitations #PlaneSpotting #Aviation #Seattle #PNW #WebApps"
+  }
+ ]
+}

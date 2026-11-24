@@ -1,0 +1,84 @@
+# XRainier → Instagram (template; the live copy is .github/workflows/instagram.yml).
+# Publishes the posts in web/social/index.json to Instagram with the repo secrets IG_USER_ID and IG_ACCESS_TOKEN, and
+# keeps the log on the social-log branch (instagram/log.json) that the admin's 📸 Instagram tab shows.
+# Runs when posts change on beta or main, every 2 hours (on the default branch) and from "Run workflow".
+name: Instagram
+
+on:
+  push:
+    branches: [beta, main]
+    paths:
+      - 'web/social/**'
+      - 'tools/instagram/**'
+      - '.github/workflows/instagram.yml'
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Post these now (slugs, comma-separated; empty = whatever is due)'
+        required: false
+      dry_run:
+        description: 'Dry run: check everything, publish nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Get the Instagram log (social-log branch)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir _log && cd _log
+          git init -q
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git fetch -q --depth=1 origin social-log; then git checkout -q -b social-log FETCH_HEAD; else git checkout -q --orphan social-log; fi
+      - name: Publish what is due
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_API_HOST: ${{ secrets.IG_API_HOST }}
+          BRANCH: ${{ github.ref_name }}
+          SITE_URL: ${{ github.ref_name == 'main' && 'https://www.xrainier.com/' || 'https://beta.xrainier.com/' }}
+          ADMIN_URL: ${{ github.ref_name == 'main' && 'https://admin.xrainier.com' || 'https://admin-beta.xrainier.com' }}
+          ONLY: ${{ inputs.only }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          INDEX: web/social/index.json
+          LOG_DIR: _log
+        run: node tools/instagram/publish.mjs
+      - name: Save the log
+        if: always()
+        run: |
+          cd _log
+          [ -f instagram/log.json ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Instagram log ($GITHUB_REF_NAME) [skip ci]"
+          for i in 1 2 3; do
+            git push -q origin HEAD:social-log && exit 0
+            sleep 5
+            # another run saved first: keep its history, put our file on top
+            cp instagram/log.json /tmp/ig-log.json
+            git fetch -q --depth=1 origin social-log && git reset -q --hard FETCH_HEAD
+            mkdir -p instagram && cp /tmp/ig-log.json instagram/log.json
+            git add -A && git commit -q -m "Instagram log ($GITHUB_REF_NAME) [skip ci]"
+          done
+          echo "::error::Could not save the Instagram log"; exit 1
