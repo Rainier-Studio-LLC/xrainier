@@ -47,17 +47,23 @@
   }
  ],
  "run": {
-  "t": 1795563051452,
-  "site": "https://beta.xrainier.com/",
-  "branch": "beta",
-  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45510548769",
+  "t": 1795596286451,
+  "site": "https://www.xrainier.com/",
+  "branch": "main",
+  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45578956911",
   "dry": false,
   "settingsFrom": "index.json",
-  "planned": [
-   "xrainier-lineup-carousel",
-   "xrainier-lineup-reel"
-  ],
-  "skipped": []
+  "planned": [],
+  "skipped": [
+   {
+    "slug": "xrainier-lineup-carousel",
+    "why": "already published"
+   },
+   {
+    "slug": "xrainier-lineup-reel",
+    "why": "already published"
+   }
+  ]
  },
  "account": {
   "ok": true,
@@ -71,7 +77,7 @@
    "used": 2,
    "total": 100
   },
-  "checkedAt": 1795563051452,
+  "checkedAt": 1795596286451,
   "tokenWarning": null
  }
 }
