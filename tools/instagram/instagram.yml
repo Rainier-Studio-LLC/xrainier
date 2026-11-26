@@ -1,12 +1,13 @@
 # XRainier → Instagram (template; the live copy is .github/workflows/instagram.yml).
 # Publishes the posts in web/social/index.json to Instagram with the repo secrets IG_USER_ID and IG_ACCESS_TOKEN, and
 # keeps the log on the social-log branch (instagram/log.json) that the admin's 📸 Instagram tab shows.
-# Runs when posts change on beta or main, every 2 hours (on the default branch) and from "Run workflow".
+# Posts go out from the RELEASE only (main → www.xrainier.com). Runs when posts reach main, every 2 hours and from
+# "Run workflow" on main. Nothing runs on beta: beta is for previewing posts before release.
 name: Instagram
 
 on:
   push:
-    branches: [beta, main]
+    branches: [main]
     paths:
       - 'web/social/**'
       - 'tools/instagram/**'
@@ -32,6 +33,7 @@ concurrency:
 
 jobs:
   publish:
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -54,8 +56,9 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_API_HOST: ${{ secrets.IG_API_HOST }}
           BRANCH: ${{ github.ref_name }}
-          SITE_URL: ${{ github.ref_name == 'main' && 'https://www.xrainier.com/' || 'https://beta.xrainier.com/' }}
-          ADMIN_URL: ${{ github.ref_name == 'main' && 'https://admin.xrainier.com' || 'https://admin-beta.xrainier.com' }}
+          RELEASE_BRANCH: main
+          SITE_URL: https://www.xrainier.com/
+          ADMIN_URL: https://admin.xrainier.com
           ONLY: ${{ inputs.only }}
           DRY_RUN: ${{ inputs.dry_run }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

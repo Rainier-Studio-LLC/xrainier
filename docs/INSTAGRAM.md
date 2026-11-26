@@ -1,7 +1,12 @@
 # 📸 Instagram posts for XRainier
 
 XRainier posts pictures, carousels and Reels to Instagram by itself, the same way Glowvite does, and logs every post in
-the admin (**admin.xrainier.com / admin-beta.xrainier.com → 📸 Instagram**).
+the admin (**admin.xrainier.com → 📸 Instagram**).
+
+**Posts go out from the release only.** The workflow publishes on `main`, with media from `https://www.xrainier.com/social/…`
+and settings from admin.xrainier.com. Beta never posts: a run on beta stops before it connects to Instagram, and
+admin-beta shows the tab read-only, with the beta posts that are *waiting for release*. Preview a post on beta, then
+release it; the release run posts it.
 
 | Piece | Where | What it does |
 |---|---|---|
@@ -20,14 +25,13 @@ The token stays in GitHub: the admin never sees it, and nothing secret is writte
    (`IGAA…` → graph.instagram.com, `EAA…` → graph.facebook.com).
 2. **Workflow**: the autopilot cannot write `.github/workflows`, so add it once by hand. Easiest: admin → 📸 Instagram →
    **Add the workflow on GitHub** (the file is pre-filled) → **Commit changes**. Or copy `tools/instagram/instagram.yml`
-   to `.github/workflows/instagram.yml` on **beta**. The commit itself starts the first run.
+   to `.github/workflows/instagram.yml` (it only runs on **main**).
 3. The first run creates the `social-log` branch. The admin tab then says *Connected as @…*.
 
 ## When posts go out
 
-The workflow runs when `web/social/**` changes on beta or main, every 2 hours (GitHub runs schedules only on the default
-branch, so after the first release to main), and from **Actions → Instagram → Run workflow** (optional: slugs to post now,
-or a dry run). Each run:
+The workflow runs when `web/social/**` is released to main, every 2 hours, and from **Actions → Instagram → Run workflow**
+on main (optional: slugs to post now, or a dry run). On any other branch it does nothing. Each run:
 
 1. reads the admin's settings (`GET /api/ig?settings=1`; until you change anything there, `settings` in index.json apply):
    **Auto** (post new ones by themselves), **posts a day** (default 3), **minutes between posts** (default 0), **Hold**,
@@ -35,9 +39,9 @@ or a dry run). Each run:
 2. waits until the site serves the files (the push may still be deploying, up to 10 minutes);
 3. publishes each due post: a container per picture / video, waits until Instagram has processed it (Reels take a minute),
    `media_publish`, then saves the permalink to the log at once. A slug that is in the log as published is never posted
-   again, from either branch. A post that fails 3 times waits for **Post next run**.
+   again. A post that fails 3 times waits for **Post next run**.
 
-Media addresses use the branch's own site: beta → `https://beta.xrainier.com/social/…`, main → `https://www.xrainier.com/social/…`.
+Media addresses always use the live site: `https://www.xrainier.com/social/…`.
 
 ## Adding a post
 
@@ -53,7 +57,8 @@ Media addresses use the branch's own site: beta → `https://beta.xrainier.com/s
    ```
    `kind`: `image`, `carousel` or `reel` (`"cover": "social/…/cover.jpg"` for a Reel). Optional `"notBefore":
    "2026-12-05T17:00:00Z"` holds an automatic post until then.
-3. `node tools/instagram/check.mjs web` must say OK. Push to beta: with Auto on, the next run posts it.
+3. `node tools/instagram/check.mjs web` must say OK. Push to beta and preview it (admin-beta → 📸 Instagram → *waiting for
+   release*). Release: with Auto on, the release run posts it.
 
 Limits: caption 2,200 characters and 30 hashtags; 50 API posts per account in 24 hours (shown in the admin).
 

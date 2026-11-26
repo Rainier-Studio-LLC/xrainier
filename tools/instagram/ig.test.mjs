@@ -68,3 +68,17 @@ test('post checks: kinds, JPEG / MP4, carousel size, caption and hashtags', () =
   assert.ok(problemsOf({ ...post('image'), caption: '#a '.repeat(31) }).some((m) => /hashtags/.test(m)));
   assert.ok(problemsOf({ ...post('image'), media: [{ path: '../x.jpg', type: 'image' }] }).length);
 });
+
+test('posts go out from the release only (main, live site)', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const { mkdtempSync, existsSync } = await import('node:fs');
+  const dir = mkdtempSync('/tmp/igrel-');
+  const run = (env) => spawnSync(process.execPath, [new URL('./publish.mjs', import.meta.url).pathname], { env: { PATH: process.env.PATH, LOG_DIR: dir, INDEX: '/nonexistent.json', ...env }, encoding: 'utf8' });
+  const beta = run({ BRANCH: 'beta', SITE_URL: 'https://beta.xrainier.com/', IG_ACCESS_TOKEN: 'EAAx' });
+  assert.equal(beta.status, 0); assert.match(beta.stdout, /release \(main\) only/);
+  const betaSite = run({ BRANCH: 'main', SITE_URL: 'https://beta.xrainier.com/', IG_ACCESS_TOKEN: 'EAAx' });
+  assert.equal(betaSite.status, 0); assert.match(betaSite.stdout, /beta site/);
+  assert.equal(existsSync(dir + '/instagram/log.json'), false);   // beta never touches the log
+  const main = run({ BRANCH: 'main' });   // the release goes on (and fails here only because the test index is missing)
+  assert.notEqual(main.status, 0); assert.match(main.stderr, /index\.json/);
+});

@@ -6,11 +6,16 @@
 //   GET /api/ig?settings=1   public, no secrets: {set, auto, maxPerDay, gapMinutes, hold:[slug], now:[slug], at}
 //   GET /api/ig              owner: settings + posts + log + set-up state
 //   PUT /api/ig              owner: {auto?, maxPerDay?, gapMinutes?, hold?:{slug:bool}, now?:{slug:bool}}
+// Posts go out from the RELEASE only (main → www.xrainier.com, settings from admin.xrainier.com). admin-beta shows the
+// same log and the release settings read-only, plus the posts on beta that are waiting for a release.
 // Optional Pages settings: GITHUB_REPO (default Rainier-Studio-LLC/xrainier), IG_LOG_BRANCH (default social-log),
-// IG_WORKFLOW_BRANCH (default beta on admin-beta, main on admin).
+// IG_WORKFLOW_BRANCH (default main), IG_LIVE_SITE (default https://www.xrainier.com/), IG_LIVE_ADMIN (default
+// https://admin.xrainier.com).
 import { json, readSession, siteUrl, isBetaSite, addLog } from "../../lib/core.js";
 const SLUG = /^[a-z0-9][a-z0-9-]{1,59}$/;
 const repoOf = (env) => env.GITHUB_REPO || "Rainier-Studio-LLC/xrainier";
+const liveSite = (env) => String(env.IG_LIVE_SITE || "https://www.xrainier.com/").replace(/\/?$/, "/");
+const liveAdmin = (env) => String(env.IG_LIVE_ADMIN || "https://admin.xrainier.com").replace(/\/+$/, "");
 const DEF = { auto: true, maxPerDay: 3, gapMinutes: 0, hold: [], now: [] };
 async function readSettings(env) {
   const v = env.SITE ? await env.SITE.get("ig", "json").catch(() => null) : null;
@@ -27,29 +32,42 @@ export async function onRequestGet({ request, env }) {
     return json({ set, auto, maxPerDay, gapMinutes, hold, now, at: at || null, by: by ? "owner" : null });
   }
   const me = await readSession(env, request); if (!me) return json({ error: "sign in required" }, 401);
-  const repo = repoOf(env), beta = isBetaSite(env, request), site = siteUrl(env, request).replace(/\/?$/, "/");
-  const wfBranch = env.IG_WORKFLOW_BRANCH || (beta ? "beta" : "main"), logBranch = env.IG_LOG_BRANCH || "social-log";
+  const repo = repoOf(env), beta = isBetaSite(env, request), here = siteUrl(env, request).replace(/\/?$/, "/"), site = liveSite(env);
+  const wfBranch = env.IG_WORKFLOW_BRANCH || "main", logBranch = env.IG_LOG_BRANCH || "social-log";
   const raw = (branch, path) => `https://raw.githubusercontent.com/${repo}/${branch}/${path}`;
-  const out = { settings: s, site, beta, repo, branch: wfBranch, posts: [], indexError: null, log: null, logError: null, workflow: { installed: null } };
-  const [idx, lg, wf, tpl] = await Promise.all([
-    getText(site + "social/index.json").catch((e) => ({ ok: false, status: e.message })),
-    getText(raw(logBranch, "instagram/log.json")).catch((e) => ({ ok: false, status: e.message })),
-    getText(raw(wfBranch, ".github/workflows/instagram.yml")).catch((e) => ({ ok: false, status: e.message })),
-    getText(raw(wfBranch, "tools/instagram/instagram.yml")).catch((e) => ({ ok: false, status: e.message })),
+  const fail = (e) => ({ ok: false, status: e.message });
+  const out = { settings: s, site, beta, readOnly: beta, liveAdmin: liveAdmin(env), repo, branch: wfBranch, posts: [], waiting: [], indexError: null, log: null, logError: null, workflow: { installed: null } };
+  const [idx, lg, wf, tpl, tplBeta, idxHere, liveSet] = await Promise.all([
+    getText(site + "social/index.json").catch(fail),
+    getText(raw(logBranch, "instagram/log.json")).catch(fail),
+    getText(raw(wfBranch, ".github/workflows/instagram.yml")).catch(fail),
+    getText(raw(wfBranch, "tools/instagram/instagram.yml")).catch(fail),
+    beta ? getText(raw("beta", "tools/instagram/instagram.yml")).catch(fail) : null,
+    beta && here !== site ? getText(here + "social/index.json").catch(fail) : null,
+    beta ? getText(liveAdmin(env) + "/api/ig?settings=1").catch(fail) : null,
   ]);
-  if (idx.ok) { try { const j = JSON.parse(idx.text); out.posts = (Array.isArray(j.posts) ? j.posts : []).map((p) => ({ ...p, base: site })); out.indexSettings = j.settings || null; } catch (e) { out.indexError = "web/social/index.json is not valid JSON"; } }
-  else out.indexError = `${site}social/index.json answered ${idx.status}`;
+  const postsOf = (r) => { const j = JSON.parse(r.text); return { posts: Array.isArray(j.posts) ? j.posts : [], settings: j.settings || null }; };
+  if (idx.ok) { try { const j = postsOf(idx); out.posts = j.posts.map((p) => ({ ...p, base: site })); out.indexSettings = j.settings; } catch (e) { out.indexError = "web/social/index.json on the live site is not valid JSON"; } }
+  else out.indexError = idx.status === 404 ? "No posts on the live site yet: they appear here once released." : `${site}social/index.json answered ${idx.status}`;
+  // admin-beta: the release decides, so show its settings, and list the beta posts that are not released yet
+  if (liveSet && liveSet.ok) { try { const j = JSON.parse(liveSet.text); out.settings = { ...DEF, ...out.indexSettings, ...(j.set ? j : {}), set: !!j.set }; } catch (e) { /* keep defaults */ } }
+  else if (beta) out.settings = { ...DEF, ...(out.indexSettings || {}), set: false };
+  if (idxHere && idxHere.ok) { try { const have = new Set(out.posts.map((p) => p.slug)); out.waiting = postsOf(idxHere).posts.filter((p) => !have.has(p.slug)).map((p) => ({ ...p, base: here })); } catch (e) { /* beta index broken: the checks catch it */ } }
   if (lg.ok) { try { out.log = JSON.parse(lg.text); } catch (e) { out.logError = "the log is not valid JSON"; } }
   else out.logError = lg.status === 404 ? "none yet" : `log answered ${lg.status}`;
   out.workflow.installed = wf.ok ? true : wf.status === 404 ? false : null;
   out.workflow.page = `https://github.com/${repo}/actions/workflows/instagram.yml`;
   out.workflow.secrets = `https://github.com/${repo}/settings/secrets/actions`;
-  if (tpl.ok) out.workflow.add = `https://github.com/${repo}/new/${wfBranch}?filename=${encodeURIComponent(".github/workflows/instagram.yml")}&value=${encodeURIComponent(tpl.text)}`;
+  const t = tpl.ok ? tpl : tplBeta && tplBeta.ok ? tplBeta : null;
+  if (t) out.workflow.add = `https://github.com/${repo}/new/${wfBranch}?filename=${encodeURIComponent(".github/workflows/instagram.yml")}&value=${encodeURIComponent(t.text)}`;
+  out.workflow.edit = `https://github.com/${repo}/edit/${wfBranch}/.github/workflows/instagram.yml`;
+  out.workflow.betaFile = `https://github.com/${repo}/blob/beta/.github/workflows/instagram.yml`;
   out.workflow.template = `https://github.com/${repo}/blob/${wfBranch}/tools/instagram/instagram.yml`;
   return json(out);
 }
 export async function onRequestPut({ request, env }) {
   const me = await readSession(env, request); if (!me) return json({ error: "sign in required" }, 401);
+  if (isBetaSite(env, request)) return json({ error: "release only", message: `Instagram posts go out from the release, so its settings are changed in ${liveAdmin(env).replace(/^https?:\/\//, "")}.` }, 409);
   if (!env.SITE) return json({ error: "not configured", message: "The SITE storage (KV) isn't connected to this admin." }, 503);
   const b = await request.json().catch(() => ({})), prev = await readSettings(env), what = [];
   const v = { auto: prev.auto, maxPerDay: prev.maxPerDay, gapMinutes: prev.gapMinutes, hold: [...prev.hold], now: [...prev.now] };

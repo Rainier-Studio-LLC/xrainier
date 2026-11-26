@@ -16,3 +16,4 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px;margin-top:6px}
 .igact{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:640px){.igpost{flex-direction:column}.igm{width:100%}.igst{margin-left:0}}
 #p-ig a:not(.btn){color:var(--acc)}
+.igrel{border-color:rgba(34,197,94,.45);background:linear-gradient(180deg,rgba(34,197,94,.08),transparent 80%),var(--card)}

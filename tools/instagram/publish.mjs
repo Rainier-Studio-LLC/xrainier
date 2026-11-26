@@ -5,16 +5,27 @@
 // (instagram/log.json), which the admin's 📸 Instagram tab shows. Secrets come from GitHub (IG_USER_ID, IG_ACCESS_TOKEN)
 // and are never written anywhere.
 //
-// Env: IG_USER_ID, IG_ACCESS_TOKEN, IG_API_HOST (optional), SITE_URL (https://beta.xrainier.com/), ADMIN_URL
-// (https://admin-beta.xrainier.com), INDEX (web/social/index.json), LOG_DIR (_log), ONLY (comma-separated slugs, a
+// Posts go out from the RELEASE only: the live site www.xrainier.com and the release branch (main). A run on any other
+// branch (beta) publishes nothing and leaves the log alone; a beta.* site address is refused too.
+//
+// Env: IG_USER_ID, IG_ACCESS_TOKEN, IG_API_HOST (optional), SITE_URL (https://www.xrainier.com/), ADMIN_URL
+// (https://admin.xrainier.com), RELEASE_BRANCH (main), INDEX (web/social/index.json), LOG_DIR (_log), ONLY (comma-separated slugs, a
 // manual run), DRY_RUN=1 (check everything, publish nothing), RUN_URL, BRANCH, WAIT_SECONDS (wait for the site deploy).
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { authFrom, whoAmI, publishingLimit, publish, plan, problemsOf, urlsOf, IgError, RULES, hashtagCount } from './ig-api.mjs';
 
 const env = process.env;
-const SITE = String(env.SITE_URL || 'https://beta.xrainier.com/').replace(/\/?$/, '/');
-const ADMIN = String(env.ADMIN_URL || '').replace(/\/+$/, '');
+const SITE = String(env.SITE_URL || 'https://www.xrainier.com/').replace(/\/?$/, '/');
+const ADMIN = String(env.ADMIN_URL || 'https://admin.xrainier.com').replace(/\/+$/, '');
+const RELEASE = env.RELEASE_BRANCH || 'main';
+/** Why this run must not publish (not the release), or null. */
+// Posts go out from the release only: branch main on the live site (www.xrainier.com). Beta never publishes.
+export function notRelease(branch, site) {
+  if (branch && branch !== RELEASE) return `this run is on ${branch}; Instagram posts go out from the release (${RELEASE}) only`;
+  if (/^https?:\/\/(beta|admin-beta)[.-]/i.test(site)) return `${site} is the beta site; Instagram posts use the live site only`;
+  return null;
+}
 const LOG_DIR = env.LOG_DIR || '_log', LOG = LOG_DIR + '/instagram/log.json';
 const ONLY = String(env.ONLY || '').split(/[,\s]+/).filter(Boolean);
 const DRY = /^(1|true|yes)$/i.test(env.DRY_RUN || '');
@@ -54,6 +65,8 @@ async function waitForFiles(urls, seconds) {
 }
 
 async function main() {
+  const stop = notRelease(env.BRANCH || '', SITE);
+  if (stop) { say(`Nothing to do: ${stop}. Release it and the run on ${RELEASE} posts it from https://www.xrainier.com/.`); return; }
   const index = await readJson(env.INDEX || 'web/social/index.json', null);
   if (!index || !Array.isArray(index.posts)) throw new Error('web/social/index.json is missing or has no "posts".');
   await mkdir(LOG_DIR + '/instagram', { recursive: true });
@@ -122,4 +135,4 @@ async function main() {
   log.run.planned = go.map((p) => p.slug); log.run.skipped = skip;
   await writeFile(LOG, JSON.stringify(log, null, 1) + '\n');
 }
-main().catch((e) => { console.error('::error::' + (e.message || e)); process.exitCode = 1; });
+if (!env.IG_NO_MAIN) main().catch((e) => { console.error('::error::' + (e.message || e)); process.exitCode = 1; });
