@@ -26,6 +26,15 @@
  },
  "events": [
   {
+   "t": 1795661597408,
+   "slug": null,
+   "what": "connect-failed",
+   "site": "https://www.xrainier.com/",
+   "branch": "main",
+   "run": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45745344620",
+   "error": "Instagram: API access blocked."
+  },
+  {
    "t": 1795563191080,
    "slug": "xrainier-lineup-reel",
    "what": "published",
@@ -47,37 +56,20 @@
   }
  ],
  "run": {
-  "t": 1795636679105,
+  "t": 1795661596010,
   "site": "https://www.xrainier.com/",
   "branch": "main",
-  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45690301573",
+  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45745344620",
   "dry": false,
-  "settingsFrom": "index.json",
-  "planned": [],
-  "skipped": [
-   {
-    "slug": "xrainier-lineup-carousel",
-    "why": "already published"
-   },
-   {
-    "slug": "xrainier-lineup-reel",
-    "why": "already published"
-   }
-  ]
+  "settingsFrom": "index.json"
  },
  "account": {
-  "ok": true,
-  "username": "xrainier.studio",
-  "userId": "17841461185843498",
+  "ok": false,
+  "error": "Instagram: API access blocked.",
   "kind": "facebook",
   "host": "https://graph.facebook.com",
   "tokenId": "2f80a87cff",
   "tokenSeen": 1795563051452,
-  "quota": {
-   "used": 2,
-   "total": 100
-  },
-  "checkedAt": 1795636679105,
-  "tokenWarning": null
+  "checkedAt": 1795661596010
  }
 }
