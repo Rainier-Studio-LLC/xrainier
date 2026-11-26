@@ -65,20 +65,37 @@
   }
  ],
  "run": {
-  "t": 1795701486618,
+  "t": 1795734140994,
   "site": "https://www.xrainier.com/",
   "branch": "main",
-  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45834252960",
+  "url": "https://github.com/Rainier-Studio-LLC/xrainier/actions/runs/45908470021",
   "dry": false,
-  "settingsFrom": "index.json"
+  "settingsFrom": "index.json",
+  "planned": [],
+  "skipped": [
+   {
+    "slug": "xrainier-lineup-carousel",
+    "why": "already published"
+   },
+   {
+    "slug": "xrainier-lineup-reel",
+    "why": "already published"
+   }
+  ]
  },
  "account": {
-  "ok": false,
-  "error": "Instagram: API access blocked.",
+  "ok": true,
+  "username": "xrainier.studio",
+  "userId": "17841461185843498",
   "kind": "facebook",
   "host": "https://graph.facebook.com",
   "tokenId": "2f80a87cff",
   "tokenSeen": 1795563051452,
-  "checkedAt": 1795701486618
+  "quota": {
+   "used": 0,
+   "total": 100
+  },
+  "checkedAt": 1795734140994,
+  "tokenWarning": null
  }
 }
