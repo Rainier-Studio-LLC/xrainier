@@ -191,3 +191,15 @@
   .kv-brand { gap: 14px; } .kv-icon { width: 64px; height: 64px; border-radius: 17px; }
   .kv-person img { width: 56px; height: 56px; } .kv-person.hl img { width: 70px; height: 70px; }
 }
+
+/* language switch */
+.kv-toprow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.kv-langsw { display: inline-flex; flex-wrap: wrap; gap: 3px; padding: 4px; border-radius: 999px; border: 1px solid var(--kv-line); background: rgba(20, 14, 6, .6); backdrop-filter: blur(6px); }
+.kv-langsw button { min-width: 36px; height: 32px; padding: 0 10px; border: 0; border-radius: 999px; background: none; color: var(--kv-mut); font: 600 13px Inter, "PingFang SC", "Hiragino Sans", sans-serif; cursor: pointer; transition: background .2s, color .2s; }
+.kv-langsw button:hover { color: var(--kv-ink); background: rgba(232, 183, 90, .12); }
+.kv-langsw button[aria-pressed="true"] { color: #2a1b08; background: linear-gradient(145deg, #f5d38a, var(--kv-gold2)); box-shadow: 0 4px 12px -6px rgba(232, 183, 90, .9); }
+/* Chinese and Japanese: serif CJK for headings, comfortable line height */
+[data-kv-lang="zh"] .kv, [data-kv-lang="zh-Hant"] .kv, [data-kv-lang="ja"] .kv { --kv-serif: "Cormorant Garamond", "Noto Serif SC", "Noto Serif TC", "Noto Serif JP", "Songti SC", "Songti TC", "Hiragino Mincho ProN", "Yu Mincho", serif; }
+[data-kv-lang="zh"] .kv h2, [data-kv-lang="zh-Hant"] .kv h2, [data-kv-lang="ja"] .kv h2 { line-height: 1.25; letter-spacing: .02em; }
+[data-kv-lang="zh"] .kv-tag, [data-kv-lang="zh-Hant"] .kv-tag, [data-kv-lang="ja"] .kv-tag { letter-spacing: .04em; }
+@media (max-width: 640px) { .kv-langsw button { min-width: 32px; padding: 0 8px; } }

@@ -11,6 +11,36 @@
     });
     fix(); addEventListener('load', fix); setTimeout(fix, 600); setTimeout(fix, 2000);
   }
+  // Language: buttons at the top switch the whole page; the choice is remembered. ?lang=xx and the
+  // browser's language pick the first one.
+  const D = window.KV_I18N || {}, LANGS = Object.keys(D);
+  const pick = () => {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (q && D[q]) return q;
+    try { const s = localStorage.getItem('kv.lang'); if (s && D[s]) return s; } catch (e) {}
+    for (const l of navigator.languages || [navigator.language || 'en']) {
+      const x = String(l).toLowerCase();
+      if (/^zh-(hant|tw|hk|mo)/.test(x)) return 'zh-Hant';
+      const b = x.split('-')[0];
+      if (D[b]) return b;
+    }
+    return 'en';
+  };
+  const HTML_LANG = { zh: 'zh-Hans', 'zh-Hant': 'zh-Hant' };
+  const apply = (lg, save) => {
+    const t = D[lg]; if (!t) return;
+    document.querySelectorAll('[data-i]').forEach((el) => { const v = t[el.dataset.i]; if (v != null) el.innerHTML = v; });
+    document.documentElement.lang = HTML_LANG[lg] || lg;
+    document.documentElement.dataset.kvLang = lg;
+    if (t.title) document.title = t.title;
+    const md = document.querySelector('meta[name=description]'); if (md && t.desc) md.setAttribute('content', t.desc);
+    document.querySelectorAll('.kv-langsw [data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lg)));
+    if (save) { try { localStorage.setItem('kv.lang', lg); } catch (e) {} const u = new URL(location.href); u.searchParams.set('lang', lg); history.replaceState(null, '', u); }
+  };
+  if (LANGS.length) {
+    const first = pick(); if (first !== 'en') apply(first, false); else apply('en', false);
+    document.querySelectorAll('.kv-langsw [data-lang]').forEach((b) => b.addEventListener('click', () => apply(b.dataset.lang, true)));
+  }
   const he = document.querySelector('.kv-he'), tip = document.getElementById('kvMeaning');
   if (he && tip) {
     he.addEventListener('click', (e) => { e.stopPropagation(); tip.classList.toggle('on'); });
