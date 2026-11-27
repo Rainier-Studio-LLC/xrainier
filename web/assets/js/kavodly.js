@@ -1,10 +1,15 @@
 // Kavodly introduction page: on beta.xrainier.com, links to the app open the beta app; tap the Hebrew word for its meaning.
 (() => {
   'use strict';
+  // On beta.xrainier.com, links to the app open the Kavodly beta app (kavodly-beta.xrainier.com). The site's general
+  // beta-link script turns app links into beta.<app>.xrainier.com, which Kavodly doesn't use, so fix any form after it runs.
   if (/(^|[.-])beta([.-]|$)/.test(location.hostname)) {
-    document.querySelectorAll('a[href^="https://kavodly.xrainier.com"]').forEach((a) => {
-      a.href = a.getAttribute('href').replace('https://kavodly.', 'https://kavodly-beta.');
+    const fix = () => document.querySelectorAll('a[href*="kavodly"]').forEach((a) => {
+      const h = a.getAttribute('href');
+      const n = h.replace(/^https:\/\/(?:beta\.)?kavodly(?:-beta)?\.xrainier\.com/, 'https://kavodly-beta.xrainier.com');
+      if (n !== h) a.setAttribute('href', n);
     });
+    fix(); addEventListener('load', fix); setTimeout(fix, 600); setTimeout(fix, 2000);
   }
   const he = document.querySelector('.kv-he'), tip = document.getElementById('kvMeaning');
   if (he && tip) {
