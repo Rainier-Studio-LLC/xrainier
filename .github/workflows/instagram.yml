@@ -37,6 +37,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
+      - name: ${{ runner.environment == 'self-hosted' && '🏠 Self-hosted runner' || '☁️ GitHub-hosted runner' }}  # runner-badge
+        run: echo "Runner $RUNNER_NAME is ${{ runner.environment }} (${{ runner.os }})"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:

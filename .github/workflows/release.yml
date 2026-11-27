@@ -29,6 +29,8 @@ jobs:
     needs: checks
     runs-on: ubuntu-latest
     steps:
+      - name: ${{ runner.environment == 'self-hosted' && '🏠 Self-hosted runner' || '☁️ GitHub-hosted runner' }}  # runner-badge
+        run: echo "Runner $RUNNER_NAME is ${{ runner.environment }} (${{ runner.os }})"
       - uses: actions/checkout@v4
         with:
           ref: beta
