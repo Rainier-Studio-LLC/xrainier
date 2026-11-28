@@ -89,7 +89,7 @@
     const host = Object.keys(count).sort((a, b) => count[b] - count[a])[0];
     if (!host) { genPriv(); return; }   // not a product page
     const old = $('footer');
-    const keep = old ? $$('a[href]', old).filter((a) => /terms|credits|licen|legal|imprint/i.test(a.textContent)) : [];
+    const keep = old ? $$('a[href]', old).filter((a) => /terms|credits|licen|legal|imprint|help/i.test(a.textContent)) : [];
     const mail = old && $('a[href^="mailto:"]', old);
     const f = document.createElement('footer');
     f.innerHTML = '<div class="wrap"><a class="logo" href="/"><img src="/assets/img/xr-emblem.png" alt="" style="width:26px"><span style="font-size:15px">XRAINIER</span></a>' +
