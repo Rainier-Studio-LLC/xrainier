@@ -11,6 +11,15 @@
     });
     fix(); addEventListener('load', fix); setTimeout(fix, 600); setTimeout(fix, 2000);
   }
+  // Kavodly's Privacy and Terms pages are on another site, where the browser hides where you came from; tell them,
+  // so their Back button returns to this page (in the language you chose).
+  const backLinks = () => document.querySelectorAll('a[href*="kavodly"][href*=".xrainier.com/"]').forEach((a) => {
+    let u; try { u = new URL(a.href); } catch (e) { return; }
+    if (!/^\/(privacy|terms)(\.html)?$|^\/legal\//.test(u.pathname)) return;
+    u.searchParams.set('back', location.href.split('#')[0]); a.href = u.toString();
+  });
+  backLinks(); addEventListener('load', backLinks); setTimeout(backLinks, 700); setTimeout(backLinks, 2100);
+  document.addEventListener('click', (e) => { if (e.target.closest?.('a[href*="kavodly"]')) backLinks(); }, true);
   // Language: buttons at the top switch the whole page; the choice is remembered. ?lang=xx and the
   // browser's language pick the first one.
   const D = window.KV_I18N || {}, LANGS = Object.keys(D);
