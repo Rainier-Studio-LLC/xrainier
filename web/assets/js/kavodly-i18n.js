@@ -1,6 +1,9 @@
 // Kavodly page wording in 7 languages (used by kavodly.js).
 window.KV_I18N = {
 "en": {
+"help": "Help",
+"help_link": "Help & troubleshooting",
+"help_linkd": "No sound, voices, sign-in, sync and more",
 "title": "Kavodly · The Bible, beautifully told · XRainier",
 "desc": "Kavodly is a Bible reader in 7 languages with natural read-aloud voices, 42 illustrated stories with original music, gentle explanations, people and family trees, and notes you keep private or share with everyone or your group.",
 "open": "Open Kavodly",
@@ -122,6 +125,9 @@ window.KV_I18N = {
 "bar": "Genesis 28"
 },
 "zh": {
+"help": "帮助",
+"help_link": "帮助与常见问题",
+"help_linkd": "没有声音、声音、登录、同步等",
 "title": "Kavodly · 圣经，娓娓道来 · XRainier",
 "desc": "Kavodly 是一款支持 7 种语言的圣经阅读应用：自然人声朗读、42 个配有原创音乐的插画故事、浅显的讲解、人物与家谱，还有可以私藏或与所有人、小组分享的笔记。",
 "open": "打开 Kavodly",
@@ -243,6 +249,9 @@ window.KV_I18N = {
 "bar": "创世记 28"
 },
 "zh-Hant": {
+"help": "幫助",
+"help_link": "幫助與常見問題",
+"help_linkd": "沒有聲音、聲音、登入、同步等",
 "title": "Kavodly · 聖經，娓娓道來 · XRainier",
 "desc": "Kavodly 是一款支持 7 種語言的聖經閱讀應用：自然人聲朗讀、42 個配有原創音樂的插畫故事、淺顯的講解、人物與家譜，還有可以私藏或與所有人、小組分享的筆記。",
 "open": "打開 Kavodly",
@@ -364,6 +373,9 @@ window.KV_I18N = {
 "bar": "創世記 28"
 },
 "es": {
+"help": "Ayuda",
+"help_link": "Ayuda y solución de problemas",
+"help_linkd": "Sin sonido, voces, acceso, sincronización y más",
 "title": "Kavodly · La Biblia, bellamente contada · XRainier",
 "desc": "Kavodly es un lector de la Biblia en 7 idiomas con voces naturales que leen en voz alta, 42 historias ilustradas con música original, explicaciones sencillas, personajes y árboles familiares, y notas privadas o compartidas con todos o con tu grupo.",
 "open": "Abrir Kavodly",
@@ -485,6 +497,9 @@ window.KV_I18N = {
 "bar": "Génesis 28"
 },
 "ja": {
+"help": "ヘルプ",
+"help_link": "ヘルプとトラブルシューティング",
+"help_linkd": "音が出ない、声、ログイン、同期など",
 "title": "Kavodly · 聖書を、美しく · XRainier",
 "desc": "Kavodly は 7 言語の聖書アプリ。自然な声の朗読、オリジナル音楽つきの 42 の絵物語、やさしい解説、人物と家系図、そして自分だけにも、みんなにも、グループにも共有できるメモ。",
 "open": "Kavodly を開く",
@@ -606,6 +621,9 @@ window.KV_I18N = {
 "bar": "創世記 28"
 },
 "fr": {
+"help": "Aide",
+"help_link": "Aide et dépannage",
+"help_linkd": "Pas de son, voix, connexion, synchronisation et plus",
 "title": "Kavodly · La Bible, merveilleusement racontée · XRainier",
 "desc": "Kavodly est un lecteur de la Bible en 7 langues avec des voix naturelles, 42 récits illustrés avec musique originale, des explications simples, les personnages et leurs arbres généalogiques, et des notes privées ou partagées avec tous ou avec votre groupe.",
 "open": "Ouvrir Kavodly",
@@ -727,6 +745,9 @@ window.KV_I18N = {
 "bar": "Genèse 28"
 },
 "de": {
+"help": "Hilfe",
+"help_link": "Hilfe und Fehlerbehebung",
+"help_linkd": "Kein Ton, Stimmen, Anmeldung, Synchronisierung und mehr",
 "title": "Kavodly · Die Bibel, wunderschön erzählt · XRainier",
 "desc": "Kavodly ist ein Bibelleser in 7 Sprachen mit natürlichen Vorlesestimmen, 42 illustrierten Geschichten mit eigener Musik, verständlichen Erklärungen, Personen und Stammbäumen sowie Notizen, die privat bleiben oder mit allen oder Ihrer Gruppe geteilt werden.",
 "open": "Kavodly öffnen",
